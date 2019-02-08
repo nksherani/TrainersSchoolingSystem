@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="0e3dc420495648019fab2a11e3ab7283" Name="Diagram1" >
+        <EntityTypeShape EntityType="TrainersModel.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" />
+        <EntityTypeShape EntityType="TrainersModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="3.625" />
+        <EntityTypeShape EntityType="TrainersModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="1" />
+        <EntityTypeShape EntityType="TrainersModel.AspNetUser" Width="1.5" PointX="3" PointY="1.375" />
+        <EntityTypeShape EntityType="TrainersModel.Class" Width="1.5" PointX="5.25" PointY="10.5" />
+        <EntityTypeShape EntityType="TrainersModel.Enrolment" Width="1.5" PointX="7.5" PointY="14.75" />
+        <EntityTypeShape EntityType="TrainersModel.Fee" Width="1.5" PointX="7.5" PointY="10" />
+        <EntityTypeShape EntityType="TrainersModel.Student" Width="1.5" PointX="3" PointY="16.125" />
+        <EntityTypeShape EntityType="TrainersModel.Teacher" Width="1.5" PointX="3" PointY="10" />
+        <EntityTypeShape EntityType="TrainersModel.TrainerUser" Width="1.5" PointX="0.75" PointY="8.75" />
+        <AssociationConnector Association="TrainersModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="TrainersModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="TrainersModel.FK__Class__ClassAdvi__2DE6D218" />
+        <AssociationConnector Association="TrainersModel.FK__Class__CreatedBy__367C1819" />
+        <AssociationConnector Association="TrainersModel.FK__Class__UpdatedBy__37703C52" />
+        <AssociationConnector Association="TrainersModel.FK__Enrolment__Class__1CBC4616" />
+        <AssociationConnector Association="TrainersModel.FK__Fee__Class__22751F6C" />
+        <AssociationConnector Association="TrainersModel.FK__Enrolment__Creat__32AB8735" />
+        <AssociationConnector Association="TrainersModel.FK__Enrolment__Stude__29221CFB" />
+        <AssociationConnector Association="TrainersModel.FK__Enrolment__Updat__339FAB6E" />
+        <AssociationConnector Association="TrainersModel.FK__Fee__CreatedBy__30C33EC3" />
+        <AssociationConnector Association="TrainersModel.FK__Fee__UpdatedBy__31B762FC" />
+        <AssociationConnector Association="TrainersModel.FK__Student__Created__3587F3E0" />
+        <AssociationConnector Association="TrainersModel.FK__Student__Updated__3493CFA7" />
+        <AssociationConnector Association="TrainersModel.FK__Teacher__Created__3A4CA8FD" />
+        <AssociationConnector Association="TrainersModel.FK__Teacher__Updated__3B40CD36" />
+        <AssociationConnector Association="TrainersModel.FK__TrainerUs__Creat__3864608B" />
+        <AssociationConnector Association="TrainersModel.FK__TrainerUs__Updat__395884C4" />
+        <AssociationConnector Association="TrainersModel.AspNetUserRoles" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

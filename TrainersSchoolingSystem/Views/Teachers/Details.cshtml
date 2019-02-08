@@ -1,0 +1,170 @@
+﻿@model TrainersSchoolingSystem.Models.Teacher
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Teacher</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Gender)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gender)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfBirth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Age)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Age)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FatherName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FatherName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MotherName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MotherName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GuardianName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GuardianName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Mobile)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Mobile)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LandLine)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LandLine)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PostalCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PostalCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StreetAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StreetAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.City)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.JoiningDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.JoiningDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpdatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrainerUser.Username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrainerUser.Username)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrainerUser1.Username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrainerUser1.Username)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TeacherId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

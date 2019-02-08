@@ -1,0 +1,1206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TrainersModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ClaimType" Type="nvarchar(max)" />
+          <Property Name="ClaimValue" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Class">
+          <Key>
+            <PropertyRef Name="ClassId" />
+          </Key>
+          <Property Name="ClassId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClassName" Type="text" />
+          <Property Name="ClassAdviser" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+        </EntityType>
+        <EntityType Name="Enrolment">
+          <Key>
+            <PropertyRef Name="EnrolmentId" />
+          </Key>
+          <Property Name="EnrolmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Student" Type="int" />
+          <Property Name="Class" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+        </EntityType>
+        <EntityType Name="Fee">
+          <Key>
+            <PropertyRef Name="FeeId" />
+          </Key>
+          <Property Name="FeeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FeeType" Type="text" />
+          <Property Name="Amount" Type="text" />
+          <Property Name="Description" Type="text" />
+          <Property Name="Year" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="Class" Type="int" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="StudentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="text" />
+          <Property Name="LastName" Type="text" />
+          <Property Name="GRNo" Type="text" />
+          <Property Name="RollNo" Type="int" />
+          <Property Name="DateOfBirth" Type="datetime" />
+          <Property Name="Age" Type="int" />
+          <Property Name="FatherName" Type="text" />
+          <Property Name="MotherName" Type="text" />
+          <Property Name="GuardianName" Type="text" />
+          <Property Name="Mobile" Type="text" />
+          <Property Name="LandLine" Type="text" />
+          <Property Name="PostalCode" Type="text" />
+          <Property Name="StreetAddress" Type="text" />
+          <Property Name="City" Type="text" />
+          <Property Name="JoiningDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+        </EntityType>
+        <EntityType Name="Teacher">
+          <Key>
+            <PropertyRef Name="TeacherId" />
+          </Key>
+          <Property Name="TeacherId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="text" />
+          <Property Name="LastName" Type="text" />
+          <Property Name="Gender" Type="text" />
+          <Property Name="DateOfBirth" Type="datetime" />
+          <Property Name="Age" Type="int" />
+          <Property Name="FatherName" Type="text" />
+          <Property Name="MotherName" Type="text" />
+          <Property Name="GuardianName" Type="text" />
+          <Property Name="Mobile" Type="text" />
+          <Property Name="LandLine" Type="text" />
+          <Property Name="PostalCode" Type="text" />
+          <Property Name="StreetAddress" Type="text" />
+          <Property Name="City" Type="text" />
+          <Property Name="JoiningDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+        </EntityType>
+        <EntityType Name="TrainerUser">
+          <Key>
+            <PropertyRef Name="TrainerUserId" />
+          </Key>
+          <Property Name="TrainerUserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar(max)" />
+          <Property Name="FIrstName" Type="text" />
+          <Property Name="LastName" Type="text" />
+          <Property Name="Email" Type="text" />
+          <Property Name="Mobile" Type="text" />
+          <Property Name="Landline" Type="text" />
+          <Property Name="Address" Type="text" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+        </EntityType>
+        <Association Name="FK__Class__ClassAdvi__2DE6D218">
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="0..1" />
+          <End Role="Class" Type="Self.Class" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="TeacherId" />
+            </Principal>
+            <Dependent Role="Class">
+              <PropertyRef Name="ClassAdviser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Class__CreatedBy__367C1819">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="Class" Type="Self.Class" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Class">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Class__UpdatedBy__37703C52">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="Class" Type="Self.Class" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Class">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Enrolment__Class__1CBC4616">
+          <End Role="Class" Type="Self.Class" Multiplicity="0..1" />
+          <End Role="Enrolment" Type="Self.Enrolment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Class">
+              <PropertyRef Name="ClassId" />
+            </Principal>
+            <Dependent Role="Enrolment">
+              <PropertyRef Name="Class" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Enrolment__Creat__32AB8735">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="Enrolment" Type="Self.Enrolment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Enrolment">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Enrolment__Stude__29221CFB">
+          <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+          <End Role="Enrolment" Type="Self.Enrolment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="Enrolment">
+              <PropertyRef Name="Student" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Enrolment__Updat__339FAB6E">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="Enrolment" Type="Self.Enrolment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Enrolment">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Fee__Class__22751F6C">
+          <End Role="Class" Type="Self.Class" Multiplicity="0..1" />
+          <End Role="Fee" Type="Self.Fee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Class">
+              <PropertyRef Name="ClassId" />
+            </Principal>
+            <Dependent Role="Fee">
+              <PropertyRef Name="Class" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Fee__CreatedBy__30C33EC3">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="Fee" Type="Self.Fee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Fee">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Fee__UpdatedBy__31B762FC">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="Fee" Type="Self.Fee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Fee">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Student__Created__3587F3E0">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Student__Updated__3493CFA7">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Teacher__Created__3A4CA8FD">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Teacher">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Teacher__Updated__3B40CD36">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Teacher">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TrainerUs__Creat__3864608B">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="TrainerUser1" Type="Self.TrainerUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="TrainerUser1">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TrainerUs__Updat__395884C4">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="TrainerUser1" Type="Self.TrainerUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="TrainerUser1">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TrainersModelStoreContainer">
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Class" EntityType="Self.Class" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Enrolment" EntityType="Self.Enrolment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Fee" EntityType="Self.Fee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TrainerUser" EntityType="Self.TrainerUser" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Class__ClassAdvi__2DE6D218" Association="Self.FK__Class__ClassAdvi__2DE6D218">
+            <End Role="Teacher" EntitySet="Teacher" />
+            <End Role="Class" EntitySet="Class" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Class__CreatedBy__367C1819" Association="Self.FK__Class__CreatedBy__367C1819">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="Class" EntitySet="Class" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Class__UpdatedBy__37703C52" Association="Self.FK__Class__UpdatedBy__37703C52">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="Class" EntitySet="Class" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Enrolment__Class__1CBC4616" Association="Self.FK__Enrolment__Class__1CBC4616">
+            <End Role="Class" EntitySet="Class" />
+            <End Role="Enrolment" EntitySet="Enrolment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Enrolment__Creat__32AB8735" Association="Self.FK__Enrolment__Creat__32AB8735">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="Enrolment" EntitySet="Enrolment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Enrolment__Stude__29221CFB" Association="Self.FK__Enrolment__Stude__29221CFB">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="Enrolment" EntitySet="Enrolment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Enrolment__Updat__339FAB6E" Association="Self.FK__Enrolment__Updat__339FAB6E">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="Enrolment" EntitySet="Enrolment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Fee__Class__22751F6C" Association="Self.FK__Fee__Class__22751F6C">
+            <End Role="Class" EntitySet="Class" />
+            <End Role="Fee" EntitySet="Fee" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Fee__CreatedBy__30C33EC3" Association="Self.FK__Fee__CreatedBy__30C33EC3">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="Fee" EntitySet="Fee" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Fee__UpdatedBy__31B762FC" Association="Self.FK__Fee__UpdatedBy__31B762FC">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="Fee" EntitySet="Fee" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Student__Created__3587F3E0" Association="Self.FK__Student__Created__3587F3E0">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="Student" EntitySet="Student" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Student__Updated__3493CFA7" Association="Self.FK__Student__Updated__3493CFA7">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="Student" EntitySet="Student" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Teacher__Created__3A4CA8FD" Association="Self.FK__Teacher__Created__3A4CA8FD">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="Teacher" EntitySet="Teacher" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Teacher__Updated__3B40CD36" Association="Self.FK__Teacher__Updated__3B40CD36">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="Teacher" EntitySet="Teacher" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TrainerUs__Creat__3864608B" Association="Self.FK__TrainerUs__Creat__3864608B">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="TrainerUser1" EntitySet="TrainerUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TrainerUs__Updat__395884C4" Association="Self.FK__TrainerUs__Updat__395884C4">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="TrainerUser1" EntitySet="TrainerUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TrainersModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TrainersEntities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="AspNetRoles" EntityType="TrainersModel.AspNetRole" />
+          <EntitySet Name="AspNetUserClaims" EntityType="TrainersModel.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="TrainersModel.AspNetUserLogin" />
+          <EntitySet Name="AspNetUsers" EntityType="TrainersModel.AspNetUser" />
+          <EntitySet Name="Classes" EntityType="TrainersModel.Class" />
+          <EntitySet Name="Enrolments" EntityType="TrainersModel.Enrolment" />
+          <EntitySet Name="Fees" EntityType="TrainersModel.Fee" />
+          <EntitySet Name="Students" EntityType="TrainersModel.Student" />
+          <EntitySet Name="Teachers" EntityType="TrainersModel.Teacher" />
+          <EntitySet Name="TrainerUsers" EntityType="TrainersModel.TrainerUser" />
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="TrainersModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="TrainersModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Class__ClassAdvi__2DE6D218" Association="TrainersModel.FK__Class__ClassAdvi__2DE6D218">
+            <End Role="Teacher" EntitySet="Teachers" />
+            <End Role="Class" EntitySet="Classes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Class__CreatedBy__367C1819" Association="TrainersModel.FK__Class__CreatedBy__367C1819">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="Class" EntitySet="Classes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Class__UpdatedBy__37703C52" Association="TrainersModel.FK__Class__UpdatedBy__37703C52">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="Class" EntitySet="Classes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Enrolment__Class__1CBC4616" Association="TrainersModel.FK__Enrolment__Class__1CBC4616">
+            <End Role="Class" EntitySet="Classes" />
+            <End Role="Enrolment" EntitySet="Enrolments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Fee__Class__22751F6C" Association="TrainersModel.FK__Fee__Class__22751F6C">
+            <End Role="Class" EntitySet="Classes" />
+            <End Role="Fee" EntitySet="Fees" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Enrolment__Creat__32AB8735" Association="TrainersModel.FK__Enrolment__Creat__32AB8735">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="Enrolment" EntitySet="Enrolments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Enrolment__Stude__29221CFB" Association="TrainersModel.FK__Enrolment__Stude__29221CFB">
+            <End Role="Student" EntitySet="Students" />
+            <End Role="Enrolment" EntitySet="Enrolments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Enrolment__Updat__339FAB6E" Association="TrainersModel.FK__Enrolment__Updat__339FAB6E">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="Enrolment" EntitySet="Enrolments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Fee__CreatedBy__30C33EC3" Association="TrainersModel.FK__Fee__CreatedBy__30C33EC3">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="Fee" EntitySet="Fees" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Fee__UpdatedBy__31B762FC" Association="TrainersModel.FK__Fee__UpdatedBy__31B762FC">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="Fee" EntitySet="Fees" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Student__Created__3587F3E0" Association="TrainersModel.FK__Student__Created__3587F3E0">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="Student" EntitySet="Students" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Student__Updated__3493CFA7" Association="TrainersModel.FK__Student__Updated__3493CFA7">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="Student" EntitySet="Students" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Teacher__Created__3A4CA8FD" Association="TrainersModel.FK__Teacher__Created__3A4CA8FD">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="Teacher" EntitySet="Teachers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Teacher__Updated__3B40CD36" Association="TrainersModel.FK__Teacher__Updated__3B40CD36">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="Teacher" EntitySet="Teachers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TrainerUs__Creat__3864608B" Association="TrainersModel.FK__TrainerUs__Creat__3864608B">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="TrainerUser1" EntitySet="TrainerUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TrainerUs__Updat__395884C4" Association="TrainersModel.FK__TrainerUs__Updat__395884C4">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="TrainerUser1" EntitySet="TrainerUsers" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUserRoles" Association="TrainersModel.AspNetUserRoles">
+            <End Role="AspNetRole" EntitySet="AspNetRoles" />
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="AspNetRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="TrainersModel.AspNetUserRoles" FromRole="AspNetRole" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="TrainersModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogin">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="TrainersModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="TrainersModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="TrainersModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+          <NavigationProperty Name="AspNetRoles" Relationship="TrainersModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+        </EntityType>
+        <EntityType Name="Class">
+          <Key>
+            <PropertyRef Name="ClassId" />
+          </Key>
+          <Property Name="ClassId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClassName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ClassAdviser" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <NavigationProperty Name="Teacher" Relationship="TrainersModel.FK__Class__ClassAdvi__2DE6D218" FromRole="Class" ToRole="Teacher" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Class__CreatedBy__367C1819" FromRole="Class" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Class__UpdatedBy__37703C52" FromRole="Class" ToRole="TrainerUser" />
+          <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Class__1CBC4616" FromRole="Class" ToRole="Enrolment" />
+          <NavigationProperty Name="Fees" Relationship="TrainersModel.FK__Fee__Class__22751F6C" FromRole="Class" ToRole="Fee" />
+        </EntityType>
+        <EntityType Name="Enrolment">
+          <Key>
+            <PropertyRef Name="EnrolmentId" />
+          </Key>
+          <Property Name="EnrolmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Student" Type="Int32" />
+          <Property Name="Class" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <NavigationProperty Name="Class1" Relationship="TrainersModel.FK__Enrolment__Class__1CBC4616" FromRole="Enrolment" ToRole="Class" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Enrolment__Creat__32AB8735" FromRole="Enrolment" ToRole="TrainerUser" />
+          <NavigationProperty Name="Student1" Relationship="TrainersModel.FK__Enrolment__Stude__29221CFB" FromRole="Enrolment" ToRole="Student" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Enrolment__Updat__339FAB6E" FromRole="Enrolment" ToRole="TrainerUser" />
+        </EntityType>
+        <EntityType Name="Fee">
+          <Key>
+            <PropertyRef Name="FeeId" />
+          </Key>
+          <Property Name="FeeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FeeType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="Class" Type="Int32" />
+          <NavigationProperty Name="Class1" Relationship="TrainersModel.FK__Fee__Class__22751F6C" FromRole="Fee" ToRole="Class" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Fee__CreatedBy__30C33EC3" FromRole="Fee" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Fee__UpdatedBy__31B762FC" FromRole="Fee" ToRole="TrainerUser" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="StudentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="GRNo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RollNo" Type="Int32" />
+          <Property Name="DateOfBirth" Type="DateTime" Precision="3" />
+          <Property Name="Age" Type="Int32" />
+          <Property Name="FatherName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MotherName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="GuardianName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Mobile" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LandLine" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="StreetAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="JoiningDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Stude__29221CFB" FromRole="Student" ToRole="Enrolment" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Student__Created__3587F3E0" FromRole="Student" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Student__Updated__3493CFA7" FromRole="Student" ToRole="TrainerUser" />
+        </EntityType>
+        <EntityType Name="Teacher">
+          <Key>
+            <PropertyRef Name="TeacherId" />
+          </Key>
+          <Property Name="TeacherId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DateOfBirth" Type="DateTime" Precision="3" />
+          <Property Name="Age" Type="Int32" />
+          <Property Name="FatherName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MotherName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="GuardianName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Mobile" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LandLine" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="StreetAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="JoiningDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <NavigationProperty Name="Classes" Relationship="TrainersModel.FK__Class__ClassAdvi__2DE6D218" FromRole="Teacher" ToRole="Class" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Teacher__Created__3A4CA8FD" FromRole="Teacher" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Teacher__Updated__3B40CD36" FromRole="Teacher" ToRole="TrainerUser" />
+        </EntityType>
+        <EntityType Name="TrainerUser">
+          <Key>
+            <PropertyRef Name="TrainerUserId" />
+          </Key>
+          <Property Name="TrainerUserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FIrstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Mobile" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Landline" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <NavigationProperty Name="Classes" Relationship="TrainersModel.FK__Class__CreatedBy__367C1819" FromRole="TrainerUser" ToRole="Class" />
+          <NavigationProperty Name="Classes1" Relationship="TrainersModel.FK__Class__UpdatedBy__37703C52" FromRole="TrainerUser" ToRole="Class" />
+          <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Creat__32AB8735" FromRole="TrainerUser" ToRole="Enrolment" />
+          <NavigationProperty Name="Enrolments1" Relationship="TrainersModel.FK__Enrolment__Updat__339FAB6E" FromRole="TrainerUser" ToRole="Enrolment" />
+          <NavigationProperty Name="Fees" Relationship="TrainersModel.FK__Fee__CreatedBy__30C33EC3" FromRole="TrainerUser" ToRole="Fee" />
+          <NavigationProperty Name="Fees1" Relationship="TrainersModel.FK__Fee__UpdatedBy__31B762FC" FromRole="TrainerUser" ToRole="Fee" />
+          <NavigationProperty Name="Students" Relationship="TrainersModel.FK__Student__Created__3587F3E0" FromRole="TrainerUser" ToRole="Student" />
+          <NavigationProperty Name="Students1" Relationship="TrainersModel.FK__Student__Updated__3493CFA7" FromRole="TrainerUser" ToRole="Student" />
+          <NavigationProperty Name="Teachers" Relationship="TrainersModel.FK__Teacher__Created__3A4CA8FD" FromRole="TrainerUser" ToRole="Teacher" />
+          <NavigationProperty Name="Teachers1" Relationship="TrainersModel.FK__Teacher__Updated__3B40CD36" FromRole="TrainerUser" ToRole="Teacher" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__TrainerUs__Creat__3864608B" FromRole="TrainerUser" ToRole="TrainerUser1" />
+          <NavigationProperty Name="TrainerUser2" Relationship="TrainersModel.FK__TrainerUs__Creat__3864608B" FromRole="TrainerUser1" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser11" Relationship="TrainersModel.FK__TrainerUs__Updat__395884C4" FromRole="TrainerUser" ToRole="TrainerUser1" />
+          <NavigationProperty Name="TrainerUser3" Relationship="TrainersModel.FK__TrainerUs__Updat__395884C4" FromRole="TrainerUser1" ToRole="TrainerUser" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Type="TrainersModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TrainersModel.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaim">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Type="TrainersModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TrainersModel.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogin">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Class__ClassAdvi__2DE6D218">
+          <End Type="TrainersModel.Teacher" Role="Teacher" Multiplicity="0..1" />
+          <End Type="TrainersModel.Class" Role="Class" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="TeacherId" />
+            </Principal>
+            <Dependent Role="Class">
+              <PropertyRef Name="ClassAdviser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Class__CreatedBy__367C1819">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.Class" Role="Class" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Class">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Class__UpdatedBy__37703C52">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.Class" Role="Class" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Class">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Enrolment__Class__1CBC4616">
+          <End Type="TrainersModel.Class" Role="Class" Multiplicity="0..1" />
+          <End Type="TrainersModel.Enrolment" Role="Enrolment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Class">
+              <PropertyRef Name="ClassId" />
+            </Principal>
+            <Dependent Role="Enrolment">
+              <PropertyRef Name="Class" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Fee__Class__22751F6C">
+          <End Type="TrainersModel.Class" Role="Class" Multiplicity="0..1" />
+          <End Type="TrainersModel.Fee" Role="Fee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Class">
+              <PropertyRef Name="ClassId" />
+            </Principal>
+            <Dependent Role="Fee">
+              <PropertyRef Name="Class" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Enrolment__Creat__32AB8735">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.Enrolment" Role="Enrolment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Enrolment">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Enrolment__Stude__29221CFB">
+          <End Type="TrainersModel.Student" Role="Student" Multiplicity="0..1" />
+          <End Type="TrainersModel.Enrolment" Role="Enrolment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="Enrolment">
+              <PropertyRef Name="Student" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Enrolment__Updat__339FAB6E">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.Enrolment" Role="Enrolment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Enrolment">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Fee__CreatedBy__30C33EC3">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.Fee" Role="Fee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Fee">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Fee__UpdatedBy__31B762FC">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.Fee" Role="Fee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Fee">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Student__Created__3587F3E0">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.Student" Role="Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Student__Updated__3493CFA7">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.Student" Role="Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Teacher__Created__3A4CA8FD">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.Teacher" Role="Teacher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Teacher">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Teacher__Updated__3B40CD36">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.Teacher" Role="Teacher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Teacher">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TrainerUs__Creat__3864608B">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="TrainerUser1">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TrainerUs__Updat__395884C4">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="TrainerUser1">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AspNetUserRoles">
+          <End Type="TrainersModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
+          <End Type="TrainersModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TrainersModelStoreContainer" CdmEntityContainer="TrainersEntities" >
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="TrainersModel.AspNetRole">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserClaims">
+            <EntityTypeMapping TypeName="TrainersModel.AspNetUserClaim">
+              <MappingFragment StoreEntitySet="AspNetUserClaims">
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="TrainersModel.AspNetUserLogin">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="TrainersModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Classes">
+            <EntityTypeMapping TypeName="TrainersModel.Class">
+              <MappingFragment StoreEntitySet="Class">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ClassAdviser" ColumnName="ClassAdviser" />
+                <ScalarProperty Name="ClassName" ColumnName="ClassName" />
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Enrolments">
+            <EntityTypeMapping TypeName="TrainersModel.Enrolment">
+              <MappingFragment StoreEntitySet="Enrolment">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Class" ColumnName="Class" />
+                <ScalarProperty Name="Student" ColumnName="Student" />
+                <ScalarProperty Name="EnrolmentId" ColumnName="EnrolmentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Fees">
+            <EntityTypeMapping TypeName="TrainersModel.Fee">
+              <MappingFragment StoreEntitySet="Fee">
+                <ScalarProperty Name="Class" ColumnName="Class" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="FeeType" ColumnName="FeeType" />
+                <ScalarProperty Name="FeeId" ColumnName="FeeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Students">
+            <EntityTypeMapping TypeName="TrainersModel.Student">
+              <MappingFragment StoreEntitySet="Student">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="StreetAddress" ColumnName="StreetAddress" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="LandLine" ColumnName="LandLine" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="GuardianName" ColumnName="GuardianName" />
+                <ScalarProperty Name="MotherName" ColumnName="MotherName" />
+                <ScalarProperty Name="FatherName" ColumnName="FatherName" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="RollNo" ColumnName="RollNo" />
+                <ScalarProperty Name="GRNo" ColumnName="GRNo" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Teachers">
+            <EntityTypeMapping TypeName="TrainersModel.Teacher">
+              <MappingFragment StoreEntitySet="Teacher">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="StreetAddress" ColumnName="StreetAddress" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="LandLine" ColumnName="LandLine" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="GuardianName" ColumnName="GuardianName" />
+                <ScalarProperty Name="MotherName" ColumnName="MotherName" />
+                <ScalarProperty Name="FatherName" ColumnName="FatherName" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrainerUsers">
+            <EntityTypeMapping TypeName="TrainersModel.TrainerUser">
+              <MappingFragment StoreEntitySet="TrainerUser">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Landline" ColumnName="Landline" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FIrstName" ColumnName="FIrstName" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="TrainerUserId" ColumnName="TrainerUserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="TrainersModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+            <EndProperty Name="AspNetUser">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="AspNetRole">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
