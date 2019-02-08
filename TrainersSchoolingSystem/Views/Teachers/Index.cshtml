@@ -21,35 +21,13 @@
             @Html.DisplayNameFor(model => model.Gender)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Age)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FatherName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MotherName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.GuardianName)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.Mobile)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LandLine)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PostalCode)
-        </th>
+        
         <th>
             @Html.DisplayNameFor(model => model.StreetAddress)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.City)
-        </th>
+        
         <th>
             @Html.DisplayNameFor(model => model.JoiningDate)
         </th>
@@ -60,13 +38,13 @@
             @Html.DisplayNameFor(model => model.CreatedDate)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.UpdatedDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TrainerUser.Username)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TrainerUser1.Username)
+            @Html.DisplayNameFor(model => model.UpdatedBy)
         </th>
         <th></th>
     </tr>
@@ -82,36 +60,15 @@
         <td>
             @Html.DisplayFor(modelItem => item.Gender)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateOfBirth)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Age)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FatherName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MotherName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.GuardianName)
-        </td>
+        
         <td>
             @Html.DisplayFor(modelItem => item.Mobile)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LandLine)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PostalCode)
-        </td>
+        
         <td>
             @Html.DisplayFor(modelItem => item.StreetAddress)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.City)
-        </td>
+        
         <td>
             @Html.DisplayFor(modelItem => item.JoiningDate)
         </td>
@@ -122,18 +79,18 @@
             @Html.DisplayFor(modelItem => item.CreatedDate)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.UpdatedDate)
+            @Html.DisplayFor(modelItem => item.TrainerUser.Username)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.TrainerUser.Username)
+            @Html.DisplayFor(modelItem => item.UpdatedDate)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.TrainerUser1.Username)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.TeacherId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.TeacherId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.TeacherId })
+            @Html.ActionLink("Edit", "Edit", new { id = item.TeacherId }) |
+            @Html.ActionLink("Details", "Details", new { id = item.TeacherId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.TeacherId })
         </td>
     </tr>
 }

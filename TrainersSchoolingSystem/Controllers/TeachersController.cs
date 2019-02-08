@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -53,6 +54,11 @@ namespace TrainersSchoolingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
+                teacher.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                teacher.CreatedDate = DateTime.Now;
+                if (teacher.DateOfBirth.HasValue)
+                    teacher.Age = (DateTime.Now.Year - teacher.DateOfBirth.Value.Year);
+
                 db.Teachers.Add(teacher);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -89,7 +95,29 @@ namespace TrainersSchoolingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(teacher).State = EntityState.Modified;
+                var dbTeacher = db.Teachers.Where(x => x.TeacherId == teacher.TeacherId).FirstOrDefault();
+                dbTeacher.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                dbTeacher.UpdatedDate = DateTime.Now;
+                dbTeacher.FirstName = teacher.FirstName;
+                dbTeacher.LastName = teacher.LastName;
+                dbTeacher.Gender = teacher.Gender;
+                dbTeacher.DateOfBirth = teacher.DateOfBirth;
+                if (teacher.DateOfBirth.HasValue)
+                    dbTeacher.Age = (DateTime.Now.Year - teacher.DateOfBirth.Value.Year);
+                dbTeacher.FatherName = teacher.FatherName;
+                dbTeacher.MotherName = teacher.MotherName;
+                dbTeacher.GuardianName = teacher.GuardianName;
+                dbTeacher.Mobile = teacher.Mobile;
+                dbTeacher.LandLine = teacher.LandLine;
+                dbTeacher.PostalCode = teacher.PostalCode;
+                dbTeacher.StreetAddress = teacher.StreetAddress;
+                dbTeacher.City = teacher.City;
+                dbTeacher.JoiningDate = teacher.JoiningDate;
+                dbTeacher.EndDate = teacher.EndDate;
+                dbTeacher.UpdatedDate = DateTime.Now;
+                dbTeacher.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                db.Teachers.AddOrUpdate(dbTeacher);
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
