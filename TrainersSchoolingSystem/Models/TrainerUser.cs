@@ -23,10 +23,18 @@ namespace TrainersSchoolingSystem.Models
             this.Enrolments1 = new HashSet<Enrolment>();
             this.Fees = new HashSet<Fee>();
             this.Fees1 = new HashSet<Fee>();
+            this.Lookups = new HashSet<Lookup>();
+            this.Lookups1 = new HashSet<Lookup>();
+            this.LookupTypes = new HashSet<LookupType>();
+            this.LookupTypes1 = new HashSet<LookupType>();
+            this.Staffs = new HashSet<Staff>();
+            this.Staffs1 = new HashSet<Staff>();
             this.Students = new HashSet<Student>();
             this.Students1 = new HashSet<Student>();
-            this.Teachers = new HashSet<Teacher>();
-            this.Teachers1 = new HashSet<Teacher>();
+            this.Subjects = new HashSet<Subject>();
+            this.Subjects1 = new HashSet<Subject>();
+            this.SubjectAssignments = new HashSet<SubjectAssignment>();
+            this.SubjectAssignments1 = new HashSet<SubjectAssignment>();
             this.TrainerUser1 = new HashSet<TrainerUser>();
             this.TrainerUser11 = new HashSet<TrainerUser>();
         }
@@ -57,13 +65,29 @@ namespace TrainersSchoolingSystem.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Fee> Fees1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Lookup> Lookups { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Lookup> Lookups1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LookupType> LookupTypes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LookupType> LookupTypes1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Staff> Staffs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Staff> Staffs1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Student> Students { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Student> Students1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Teacher> Teachers { get; set; }
+        public virtual ICollection<Subject> Subjects { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Teacher> Teachers1 { get; set; }
+        public virtual ICollection<Subject> Subjects1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SubjectAssignment> SubjectAssignments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SubjectAssignment> SubjectAssignments1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TrainerUser> TrainerUser1 { get; set; }
         public virtual TrainerUser TrainerUser2 { get; set; }

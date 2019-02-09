@@ -12,31 +12,23 @@ namespace TrainersSchoolingSystem.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Class
+    public partial class Subject
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Class()
+        public Subject()
         {
-            this.Enrolments = new HashSet<Enrolment>();
-            this.Fees = new HashSet<Fee>();
             this.SubjectAssignments = new HashSet<SubjectAssignment>();
         }
     
-        public int ClassId { get; set; }
-        public string ClassName { get; set; }
-        public Nullable<int> ClassAdvisor { get; set; }
+        public int SubjectId { get; set; }
+        public string SubjectName { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public Nullable<int> UpdatedBy { get; set; }
     
-        public virtual Staff Staff { get; set; }
         public virtual TrainerUser TrainerUser { get; set; }
         public virtual TrainerUser TrainerUser1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Enrolment> Enrolments { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Fee> Fees { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubjectAssignment> SubjectAssignments { get; set; }
     }

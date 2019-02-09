@@ -39,7 +39,7 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: Classes/Create
         public ActionResult Create()
         {
-            ViewBag.ClassAdvisor = new SelectList(db.Teachers, "TeacherId", "FirstName");
+            ViewBag.ClassAdvisor = new SelectList(db.Staffs, "StaffId", "FirstName");
 
             return View();
         }
@@ -75,7 +75,7 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ClassAdvisor = new SelectList(db.Teachers, "TeacherId", "FirstName");
+            ViewBag.ClassAdvisor = new SelectList(db.Staffs, "StaffId", "FirstName");
 
             return View(@class);
         }
