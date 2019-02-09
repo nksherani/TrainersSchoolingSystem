@@ -5,23 +5,23 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="0e3dc420495648019fab2a11e3ab7283" Name="Diagram1" >
-        <EntityTypeShape EntityType="TrainersModel.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" />
-        <EntityTypeShape EntityType="TrainersModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="3.625" />
-        <EntityTypeShape EntityType="TrainersModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="1" />
-        <EntityTypeShape EntityType="TrainersModel.AspNetUser" Width="1.5" PointX="3" PointY="1.375" />
-        <EntityTypeShape EntityType="TrainersModel.Class" Width="1.5" PointX="5.25" PointY="10.5" />
-        <EntityTypeShape EntityType="TrainersModel.Enrolment" Width="1.5" PointX="7.5" PointY="14.75" />
-        <EntityTypeShape EntityType="TrainersModel.Fee" Width="1.5" PointX="7.5" PointY="10" />
-        <EntityTypeShape EntityType="TrainersModel.Student" Width="1.5" PointX="3" PointY="16.125" />
-        <EntityTypeShape EntityType="TrainersModel.Teacher" Width="1.5" PointX="3" PointY="10" />
+        <EntityTypeShape EntityType="TrainersModel.AspNetRole" Width="1.5" PointX="5.75" PointY="2.5" />
+        <EntityTypeShape EntityType="TrainersModel.AspNetUserClaim" Width="1.5" PointX="10.25" PointY="3.625" />
+        <EntityTypeShape EntityType="TrainersModel.AspNetUserLogin" Width="1.5" PointX="10.25" PointY="1" />
+        <EntityTypeShape EntityType="TrainersModel.AspNetUser" Width="1.5" PointX="8" PointY="1.375" />
+        <EntityTypeShape EntityType="TrainersModel.Class" Width="1.5" PointX="5.25" PointY="13.625" />
+        <EntityTypeShape EntityType="TrainersModel.Enrolment" Width="1.5" PointX="7.5" PointY="9.875" />
+        <EntityTypeShape EntityType="TrainersModel.Fee" Width="1.5" PointX="7.5" PointY="14.125" />
+        <EntityTypeShape EntityType="TrainersModel.Student" Width="1.5" PointX="3" PointY="5.875" />
+        <EntityTypeShape EntityType="TrainersModel.Teacher" Width="1.5" PointX="3" PointY="16.375" />
         <EntityTypeShape EntityType="TrainersModel.TrainerUser" Width="1.5" PointX="0.75" PointY="8.75" />
         <AssociationConnector Association="TrainersModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="TrainersModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
-        <AssociationConnector Association="TrainersModel.FK__Class__ClassAdvi__2DE6D218" />
-        <AssociationConnector Association="TrainersModel.FK__Class__CreatedBy__367C1819" />
-        <AssociationConnector Association="TrainersModel.FK__Class__UpdatedBy__37703C52" />
-        <AssociationConnector Association="TrainersModel.FK__Enrolment__Class__1CBC4616" />
-        <AssociationConnector Association="TrainersModel.FK__Fee__Class__22751F6C" />
+        <AssociationConnector Association="TrainersModel.FK__Class__ClassAdvi__0880433F" />
+        <AssociationConnector Association="TrainersModel.FK__Class__CreatedBy__09746778" />
+        <AssociationConnector Association="TrainersModel.FK__Class__UpdatedBy__0A688BB1" />
+        <AssociationConnector Association="TrainersModel.FK__Enrolment__Class__0B5CAFEA" />
+        <AssociationConnector Association="TrainersModel.FK__Fee__Class__0C50D423" />
         <AssociationConnector Association="TrainersModel.FK__Enrolment__Creat__32AB8735" />
         <AssociationConnector Association="TrainersModel.FK__Enrolment__Stude__29221CFB" />
         <AssociationConnector Association="TrainersModel.FK__Enrolment__Updat__339FAB6E" />

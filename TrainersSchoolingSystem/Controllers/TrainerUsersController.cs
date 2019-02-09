@@ -68,7 +68,7 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "TrainerUserId,Username,FIrstName,LastName,Email,Mobile,Landline,Address,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] TrainerUser trainerUser)
+        public async Task<ActionResult> Create([Bind(Include = "TrainerUserId,Username,FirstName,LastName,Email,Mobile,Landline,Address,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] TrainerUser trainerUser)
         {
             if (ModelState.IsValid)
             {
@@ -104,14 +104,14 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TrainerUserId,Username,FIrstName,LastName,Email,Mobile,Landline,Address,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] TrainerUser trainerUser)
+        public ActionResult Edit([Bind(Include = "TrainerUserId,Username,FirstName,LastName,Email,Mobile,Landline,Address,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] TrainerUser trainerUser)
         {
             if (ModelState.IsValid)
             {
                 var dbuser = db.TrainerUsers.Where(x => x.Username == trainerUser.Username).FirstOrDefault();
                 dbuser.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 dbuser.UpdatedDate = DateTime.Now;
-                dbuser.FIrstName = trainerUser.FIrstName;
+                dbuser.FirstName = trainerUser.FirstName;
                 dbuser.LastName = trainerUser.LastName;
                 dbuser.Mobile = trainerUser.Mobile;
                 dbuser.Landline = trainerUser.Landline;

@@ -39,6 +39,8 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: Classes/Create
         public ActionResult Create()
         {
+            ViewBag.ClassAdvisor = new SelectList(db.Teachers, "TeacherId", "FirstName");
+
             return View();
         }
 
@@ -47,7 +49,7 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ClassId,ClassName,ClassAdviser,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Class @class)
+        public ActionResult Create([Bind(Include = "ClassId,ClassName,ClassAdvisor,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Class @class)
         {
             if (ModelState.IsValid)
             {
@@ -73,6 +75,8 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.ClassAdvisor = new SelectList(db.Teachers, "TeacherId", "FirstName");
+
             return View(@class);
         }
 
@@ -81,7 +85,7 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ClassId,ClassName,ClassAdviser,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Class @class)
+        public ActionResult Edit([Bind(Include = "ClassId,ClassName,ClassAdvisor,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Class @class)
         {
             if (ModelState.IsValid)
             {
@@ -89,7 +93,7 @@ namespace TrainersSchoolingSystem.Controllers
                 dbClass.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 dbClass.UpdatedDate = DateTime.Now;
                 dbClass.ClassName = @class.ClassName;
-                dbClass.ClassAdviser = @class.ClassAdviser;
+                dbClass.ClassAdvisor = @class.ClassAdvisor;
                 db.Classes.AddOrUpdate(dbClass);
                 db.SaveChanges();
                 return RedirectToAction("Index");
