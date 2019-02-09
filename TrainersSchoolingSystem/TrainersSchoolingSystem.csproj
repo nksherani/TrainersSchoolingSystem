@@ -215,8 +215,10 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LookupsController.cs" />
     <Compile Include="Controllers\LookupTypesController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\StaffsController.cs" />
     <Compile Include="Controllers\TrainerUsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -395,6 +397,16 @@
     <Content Include="Views\LookupTypes\Details.cshtml" />
     <Content Include="Views\LookupTypes\Edit.cshtml" />
     <Content Include="Views\LookupTypes\Index.cshtml" />
+    <Content Include="Views\Lookups\Create.cshtml" />
+    <Content Include="Views\Lookups\Delete.cshtml" />
+    <Content Include="Views\Lookups\Details.cshtml" />
+    <Content Include="Views\Lookups\Edit.cshtml" />
+    <Content Include="Views\Lookups\Index.cshtml" />
+    <Content Include="Views\Staffs\Create.cshtml" />
+    <Content Include="Views\Staffs\Delete.cshtml" />
+    <Content Include="Views\Staffs\Details.cshtml" />
+    <Content Include="Views\Staffs\Edit.cshtml" />
+    <Content Include="Views\Staffs\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

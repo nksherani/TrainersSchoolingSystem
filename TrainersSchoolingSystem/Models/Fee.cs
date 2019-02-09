@@ -16,7 +16,7 @@ namespace TrainersSchoolingSystem.Models
     {
         public int FeeId { get; set; }
         public string FeeType { get; set; }
-        public string Amount { get; set; }
+        public Nullable<int> Amount { get; set; }
         public string Description { get; set; }
         public Nullable<int> Year { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }

@@ -61,7 +61,7 @@
             <PropertyRef Name="ClassId" />
           </Key>
           <Property Name="ClassId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ClassName" Type="text" />
+          <Property Name="ClassName" Type="varchar(max)" />
           <Property Name="ClassAdvisor" Type="int" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
@@ -85,9 +85,9 @@
             <PropertyRef Name="FeeId" />
           </Key>
           <Property Name="FeeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FeeType" Type="text" />
-          <Property Name="Amount" Type="text" />
-          <Property Name="Description" Type="text" />
+          <Property Name="FeeType" Type="varchar(max)" />
+          <Property Name="Amount" Type="int" />
+          <Property Name="Description" Type="varchar(max)" />
           <Property Name="Year" Type="int" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
@@ -101,7 +101,7 @@
           </Key>
           <Property Name="LookupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="LookupTypeId" Type="int" />
-          <Property Name="LookupText" Type="text" />
+          <Property Name="LookupText" Type="varchar(max)" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="UpdatedDate" Type="datetime" />
@@ -112,7 +112,7 @@
             <PropertyRef Name="LookupTypeId" />
           </Key>
           <Property Name="LookupTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="LookupTypeName" Type="text" />
+          <Property Name="LookupTypeName" Type="varchar(max)" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="UpdatedDate" Type="datetime" />
@@ -123,19 +123,19 @@
             <PropertyRef Name="StaffId" />
           </Key>
           <Property Name="StaffId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FirstName" Type="text" />
-          <Property Name="LastName" Type="text" />
-          <Property Name="Designation" Type="text" />
-          <Property Name="Gender" Type="text" />
+          <Property Name="FirstName" Type="varchar(max)" />
+          <Property Name="LastName" Type="varchar(max)" />
+          <Property Name="Designation" Type="varchar(max)" />
+          <Property Name="Gender" Type="varchar(max)" />
           <Property Name="DateOfBirth" Type="datetime" />
           <Property Name="Age" Type="int" />
-          <Property Name="FatherName" Type="text" />
-          <Property Name="SpouseName" Type="text" />
-          <Property Name="Mobile" Type="text" />
-          <Property Name="LandLine" Type="text" />
-          <Property Name="PostalCode" Type="text" />
-          <Property Name="StreetAddress" Type="text" />
-          <Property Name="City" Type="text" />
+          <Property Name="FatherName" Type="varchar(max)" />
+          <Property Name="SpouseName" Type="varchar(max)" />
+          <Property Name="Mobile" Type="varchar(max)" />
+          <Property Name="LandLine" Type="varchar(max)" />
+          <Property Name="PostalCode" Type="varchar(max)" />
+          <Property Name="StreetAddress" Type="varchar(max)" />
+          <Property Name="City" Type="varchar(max)" />
           <Property Name="JoiningDate" Type="datetime" />
           <Property Name="EndDate" Type="datetime" />
           <Property Name="CreatedDate" Type="datetime" />
@@ -148,20 +148,20 @@
             <PropertyRef Name="StudentId" />
           </Key>
           <Property Name="StudentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FirstName" Type="text" />
-          <Property Name="LastName" Type="text" />
-          <Property Name="GRNo" Type="text" />
+          <Property Name="FirstName" Type="varchar(max)" />
+          <Property Name="LastName" Type="varchar(max)" />
+          <Property Name="GRNo" Type="varchar(max)" />
           <Property Name="RollNo" Type="int" />
           <Property Name="DateOfBirth" Type="datetime" />
           <Property Name="Age" Type="int" />
-          <Property Name="FatherName" Type="text" />
-          <Property Name="MotherName" Type="text" />
-          <Property Name="GuardianName" Type="text" />
-          <Property Name="Mobile" Type="text" />
-          <Property Name="LandLine" Type="text" />
-          <Property Name="PostalCode" Type="text" />
-          <Property Name="StreetAddress" Type="text" />
-          <Property Name="City" Type="text" />
+          <Property Name="FatherName" Type="varchar(max)" />
+          <Property Name="MotherName" Type="varchar(max)" />
+          <Property Name="GuardianName" Type="varchar(max)" />
+          <Property Name="Mobile" Type="varchar(max)" />
+          <Property Name="LandLine" Type="varchar(max)" />
+          <Property Name="PostalCode" Type="varchar(max)" />
+          <Property Name="StreetAddress" Type="varchar(max)" />
+          <Property Name="City" Type="varchar(max)" />
           <Property Name="JoiningDate" Type="datetime" />
           <Property Name="EndDate" Type="datetime" />
           <Property Name="CreatedDate" Type="datetime" />
@@ -174,7 +174,7 @@
             <PropertyRef Name="SubjectId" />
           </Key>
           <Property Name="SubjectId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SubjectName" Type="text" />
+          <Property Name="SubjectName" Type="varchar(max)" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="UpdatedDate" Type="datetime" />
@@ -185,7 +185,7 @@
             <PropertyRef Name="SubjectAssignmentId" />
           </Key>
           <Property Name="SubjectAssignmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Description" Type="text" />
+          <Property Name="Description" Type="varchar(max)" />
           <Property Name="Teacher" Type="int" />
           <Property Name="Subject" Type="int" />
           <Property Name="Class" Type="int" />
@@ -200,12 +200,12 @@
           </Key>
           <Property Name="TrainerUserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Username" Type="varchar(max)" />
-          <Property Name="FirstName" Type="text" />
-          <Property Name="LastName" Type="text" />
-          <Property Name="Email" Type="text" />
-          <Property Name="Mobile" Type="text" />
-          <Property Name="Landline" Type="text" />
-          <Property Name="Address" Type="text" />
+          <Property Name="FirstName" Type="varchar(max)" />
+          <Property Name="LastName" Type="varchar(max)" />
+          <Property Name="Email" Type="varchar(max)" />
+          <Property Name="Mobile" Type="varchar(max)" />
+          <Property Name="Landline" Type="varchar(max)" />
+          <Property Name="Address" Type="varchar(max)" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="UpdatedDate" Type="datetime" />
@@ -295,7 +295,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Fee__Class__0C50D423">
+        <Association Name="FK__Fee__Class__6F7F8B4B">
           <End Role="Class" Type="Self.Class" Multiplicity="0..1" />
           <End Role="Fee" Type="Self.Fee" Multiplicity="*" />
           <ReferentialConstraint>
@@ -307,7 +307,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Fee__CreatedBy__2CBDA3B5">
+        <Association Name="FK__Fee__CreatedBy__7073AF84">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="Fee" Type="Self.Fee" Multiplicity="*" />
           <ReferentialConstraint>
@@ -319,7 +319,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Fee__UpdatedBy__2DB1C7EE">
+        <Association Name="FK__Fee__UpdatedBy__7167D3BD">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="Fee" Type="Self.Fee" Multiplicity="*" />
           <ReferentialConstraint>
@@ -647,15 +647,15 @@
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Enrolment" EntitySet="Enrolment" />
           </AssociationSet>
-          <AssociationSet Name="FK__Fee__Class__0C50D423" Association="Self.FK__Fee__Class__0C50D423">
+          <AssociationSet Name="FK__Fee__Class__6F7F8B4B" Association="Self.FK__Fee__Class__6F7F8B4B">
             <End Role="Class" EntitySet="Class" />
             <End Role="Fee" EntitySet="Fee" />
           </AssociationSet>
-          <AssociationSet Name="FK__Fee__CreatedBy__2CBDA3B5" Association="Self.FK__Fee__CreatedBy__2CBDA3B5">
+          <AssociationSet Name="FK__Fee__CreatedBy__7073AF84" Association="Self.FK__Fee__CreatedBy__7073AF84">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Fee" EntitySet="Fee" />
           </AssociationSet>
-          <AssociationSet Name="FK__Fee__UpdatedBy__2DB1C7EE" Association="Self.FK__Fee__UpdatedBy__2DB1C7EE">
+          <AssociationSet Name="FK__Fee__UpdatedBy__7167D3BD" Association="Self.FK__Fee__UpdatedBy__7167D3BD">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Fee" EntitySet="Fee" />
           </AssociationSet>
@@ -791,7 +791,7 @@
             <End Role="Class" EntitySet="Classes" />
             <End Role="Enrolment" EntitySet="Enrolments" />
           </AssociationSet>
-          <AssociationSet Name="FK__Fee__Class__0C50D423" Association="TrainersModel.FK__Fee__Class__0C50D423">
+          <AssociationSet Name="FK__Fee__Class__6F7F8B4B" Association="TrainersModel.FK__Fee__Class__6F7F8B4B">
             <End Role="Class" EntitySet="Classes" />
             <End Role="Fee" EntitySet="Fees" />
           </AssociationSet>
@@ -811,11 +811,11 @@
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Enrolment" EntitySet="Enrolments" />
           </AssociationSet>
-          <AssociationSet Name="FK__Fee__CreatedBy__2CBDA3B5" Association="TrainersModel.FK__Fee__CreatedBy__2CBDA3B5">
+          <AssociationSet Name="FK__Fee__CreatedBy__7073AF84" Association="TrainersModel.FK__Fee__CreatedBy__7073AF84">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Fee" EntitySet="Fees" />
           </AssociationSet>
-          <AssociationSet Name="FK__Fee__UpdatedBy__2DB1C7EE" Association="TrainersModel.FK__Fee__UpdatedBy__2DB1C7EE">
+          <AssociationSet Name="FK__Fee__UpdatedBy__7167D3BD" Association="TrainersModel.FK__Fee__UpdatedBy__7167D3BD">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Fee" EntitySet="Fees" />
           </AssociationSet>
@@ -956,7 +956,7 @@
           <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Class__CreatedBy__28ED12D1" FromRole="Class" ToRole="TrainerUser" />
           <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Class__UpdatedBy__29E1370A" FromRole="Class" ToRole="TrainerUser" />
           <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Class__0B5CAFEA" FromRole="Class" ToRole="Enrolment" />
-          <NavigationProperty Name="Fees" Relationship="TrainersModel.FK__Fee__Class__0C50D423" FromRole="Class" ToRole="Fee" />
+          <NavigationProperty Name="Fees" Relationship="TrainersModel.FK__Fee__Class__6F7F8B4B" FromRole="Class" ToRole="Fee" />
           <NavigationProperty Name="SubjectAssignments" Relationship="TrainersModel.FK__SubjectAs__Class__69C6B1F5" FromRole="Class" ToRole="SubjectAssignment" />
         </EntityType>
         <EntityType Name="Enrolment">
@@ -981,7 +981,7 @@
           </Key>
           <Property Name="FeeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FeeType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Amount" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Int32" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Year" Type="Int32" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
@@ -989,9 +989,9 @@
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
           <Property Name="Class" Type="Int32" />
-          <NavigationProperty Name="Class1" Relationship="TrainersModel.FK__Fee__Class__0C50D423" FromRole="Fee" ToRole="Class" />
-          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Fee__CreatedBy__2CBDA3B5" FromRole="Fee" ToRole="TrainerUser" />
-          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Fee__UpdatedBy__2DB1C7EE" FromRole="Fee" ToRole="TrainerUser" />
+          <NavigationProperty Name="Class1" Relationship="TrainersModel.FK__Fee__Class__6F7F8B4B" FromRole="Fee" ToRole="Class" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Fee__CreatedBy__7073AF84" FromRole="Fee" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Fee__UpdatedBy__7167D3BD" FromRole="Fee" ToRole="TrainerUser" />
         </EntityType>
         <EntityType Name="Lookup">
           <Key>
@@ -1133,8 +1133,8 @@
           <NavigationProperty Name="Classes1" Relationship="TrainersModel.FK__Class__UpdatedBy__29E1370A" FromRole="TrainerUser" ToRole="Class" />
           <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Creat__2AD55B43" FromRole="TrainerUser" ToRole="Enrolment" />
           <NavigationProperty Name="Enrolments1" Relationship="TrainersModel.FK__Enrolment__Updat__2BC97F7C" FromRole="TrainerUser" ToRole="Enrolment" />
-          <NavigationProperty Name="Fees" Relationship="TrainersModel.FK__Fee__CreatedBy__2CBDA3B5" FromRole="TrainerUser" ToRole="Fee" />
-          <NavigationProperty Name="Fees1" Relationship="TrainersModel.FK__Fee__UpdatedBy__2DB1C7EE" FromRole="TrainerUser" ToRole="Fee" />
+          <NavigationProperty Name="Fees" Relationship="TrainersModel.FK__Fee__CreatedBy__7073AF84" FromRole="TrainerUser" ToRole="Fee" />
+          <NavigationProperty Name="Fees1" Relationship="TrainersModel.FK__Fee__UpdatedBy__7167D3BD" FromRole="TrainerUser" ToRole="Fee" />
           <NavigationProperty Name="Lookups" Relationship="TrainersModel.FK__Lookup__CreatedB__5B78929E" FromRole="TrainerUser" ToRole="Lookup" />
           <NavigationProperty Name="Lookups1" Relationship="TrainersModel.FK__Lookup__UpdatedB__5C6CB6D7" FromRole="TrainerUser" ToRole="Lookup" />
           <NavigationProperty Name="LookupTypes" Relationship="TrainersModel.FK__LookupTyp__Creat__5F492382" FromRole="TrainerUser" ToRole="LookupType" />
@@ -1228,7 +1228,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Fee__Class__0C50D423">
+        <Association Name="FK__Fee__Class__6F7F8B4B">
           <End Type="TrainersModel.Class" Role="Class" Multiplicity="0..1" />
           <End Type="TrainersModel.Fee" Role="Fee" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1288,7 +1288,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Fee__CreatedBy__2CBDA3B5">
+        <Association Name="FK__Fee__CreatedBy__7073AF84">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.Fee" Role="Fee" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1300,7 +1300,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Fee__UpdatedBy__2DB1C7EE">
+        <Association Name="FK__Fee__UpdatedBy__7167D3BD">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.Fee" Role="Fee" Multiplicity="*" />
           <ReferentialConstraint>

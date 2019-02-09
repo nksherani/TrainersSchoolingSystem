@@ -94,6 +94,8 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 var lookup = db.LookupTypes.Find(lookupType.LookupTypeId);
                 lookup.LookupTypeName = lookupType.LookupTypeName;
+                lookup.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                lookup.UpdatedDate = DateTime.Now;
                 db.LookupTypes.AddOrUpdate(lookup);
                 db.SaveChanges();
                 return RedirectToAction("Index");
