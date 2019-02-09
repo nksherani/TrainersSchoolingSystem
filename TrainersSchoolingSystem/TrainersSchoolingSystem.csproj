@@ -215,6 +215,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LookupTypesController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TrainerUsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -389,6 +390,11 @@
     <Content Include="Views\Classes\Details.cshtml" />
     <Content Include="Views\Classes\Edit.cshtml" />
     <Content Include="Views\Classes\Index.cshtml" />
+    <Content Include="Views\LookupTypes\Create.cshtml" />
+    <Content Include="Views\LookupTypes\Delete.cshtml" />
+    <Content Include="Views\LookupTypes\Details.cshtml" />
+    <Content Include="Views\LookupTypes\Edit.cshtml" />
+    <Content Include="Views\LookupTypes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

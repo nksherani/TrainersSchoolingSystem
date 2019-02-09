@@ -99,7 +99,7 @@
           <Key>
             <PropertyRef Name="LookupId" />
           </Key>
-          <Property Name="LookupId" Type="int" Nullable="false" />
+          <Property Name="LookupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="LookupTypeId" Type="int" />
           <Property Name="LookupText" Type="text" />
           <Property Name="CreatedDate" Type="datetime" />
@@ -111,7 +111,7 @@
           <Key>
             <PropertyRef Name="LookupTypeId" />
           </Key>
-          <Property Name="LookupTypeId" Type="int" Nullable="false" />
+          <Property Name="LookupTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="LookupTypeName" Type="text" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
@@ -173,7 +173,7 @@
           <Key>
             <PropertyRef Name="SubjectId" />
           </Key>
-          <Property Name="SubjectId" Type="int" Nullable="false" />
+          <Property Name="SubjectId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SubjectName" Type="text" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
@@ -184,7 +184,7 @@
           <Key>
             <PropertyRef Name="SubjectAssignmentId" />
           </Key>
-          <Property Name="SubjectAssignmentId" Type="int" Nullable="false" />
+          <Property Name="SubjectAssignmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Description" Type="text" />
           <Property Name="Teacher" Type="int" />
           <Property Name="Subject" Type="int" />
@@ -331,7 +331,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Lookup__CreatedB__56B3DD81">
+        <Association Name="FK__Lookup__CreatedB__5B78929E">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="Lookup" Type="Self.Lookup" Multiplicity="*" />
           <ReferentialConstraint>
@@ -343,7 +343,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Lookup__LookupTy__4A4E069C">
+        <Association Name="FK__Lookup__LookupTy__61316BF4">
           <End Role="LookupType" Type="Self.LookupType" Multiplicity="0..1" />
           <End Role="Lookup" Type="Self.Lookup" Multiplicity="*" />
           <ReferentialConstraint>
@@ -355,7 +355,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Lookup__UpdatedB__57A801BA">
+        <Association Name="FK__Lookup__UpdatedB__5C6CB6D7">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="Lookup" Type="Self.Lookup" Multiplicity="*" />
           <ReferentialConstraint>
@@ -367,7 +367,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__LookupTyp__Creat__54CB950F">
+        <Association Name="FK__LookupTyp__Creat__5F492382">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="LookupType" Type="Self.LookupType" Multiplicity="*" />
           <ReferentialConstraint>
@@ -379,7 +379,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__LookupTyp__Updat__55BFB948">
+        <Association Name="FK__LookupTyp__Updat__603D47BB">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="LookupType" Type="Self.LookupType" Multiplicity="*" />
           <ReferentialConstraint>
@@ -439,7 +439,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Subject__Created__3FD07829">
+        <Association Name="FK__Subject__Created__640DD89F">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="Subject" Type="Self.Subject" Multiplicity="*" />
           <ReferentialConstraint>
@@ -451,7 +451,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Subject__Updated__40C49C62">
+        <Association Name="FK__Subject__Updated__6501FCD8">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="Subject" Type="Self.Subject" Multiplicity="*" />
           <ReferentialConstraint>
@@ -463,7 +463,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SubjectAs__Class__4589517F">
+        <Association Name="FK__SubjectAs__Class__69C6B1F5">
           <End Role="Class" Type="Self.Class" Multiplicity="0..1" />
           <End Role="SubjectAssignment" Type="Self.SubjectAssignment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -475,7 +475,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SubjectAs__Creat__52E34C9D">
+        <Association Name="FK__SubjectAs__Creat__6ABAD62E">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="SubjectAssignment" Type="Self.SubjectAssignment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -487,7 +487,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SubjectAs__Subje__44952D46">
+        <Association Name="FK__SubjectAs__Subje__6CA31EA0">
           <End Role="Subject" Type="Self.Subject" Multiplicity="0..1" />
           <End Role="SubjectAssignment" Type="Self.SubjectAssignment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -499,7 +499,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SubjectAs__Teach__43A1090D">
+        <Association Name="FK__SubjectAs__Teach__68D28DBC">
           <End Role="Staff" Type="Self.Staff" Multiplicity="0..1" />
           <End Role="SubjectAssignment" Type="Self.SubjectAssignment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -511,7 +511,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SubjectAs__Updat__53D770D6">
+        <Association Name="FK__SubjectAs__Updat__6BAEFA67">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="SubjectAssignment" Type="Self.SubjectAssignment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -659,23 +659,23 @@
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Fee" EntitySet="Fee" />
           </AssociationSet>
-          <AssociationSet Name="FK__Lookup__CreatedB__56B3DD81" Association="Self.FK__Lookup__CreatedB__56B3DD81">
+          <AssociationSet Name="FK__Lookup__CreatedB__5B78929E" Association="Self.FK__Lookup__CreatedB__5B78929E">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Lookup" EntitySet="Lookup" />
           </AssociationSet>
-          <AssociationSet Name="FK__Lookup__LookupTy__4A4E069C" Association="Self.FK__Lookup__LookupTy__4A4E069C">
+          <AssociationSet Name="FK__Lookup__LookupTy__61316BF4" Association="Self.FK__Lookup__LookupTy__61316BF4">
             <End Role="LookupType" EntitySet="LookupType" />
             <End Role="Lookup" EntitySet="Lookup" />
           </AssociationSet>
-          <AssociationSet Name="FK__Lookup__UpdatedB__57A801BA" Association="Self.FK__Lookup__UpdatedB__57A801BA">
+          <AssociationSet Name="FK__Lookup__UpdatedB__5C6CB6D7" Association="Self.FK__Lookup__UpdatedB__5C6CB6D7">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Lookup" EntitySet="Lookup" />
           </AssociationSet>
-          <AssociationSet Name="FK__LookupTyp__Creat__54CB950F" Association="Self.FK__LookupTyp__Creat__54CB950F">
+          <AssociationSet Name="FK__LookupTyp__Creat__5F492382" Association="Self.FK__LookupTyp__Creat__5F492382">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="LookupType" EntitySet="LookupType" />
           </AssociationSet>
-          <AssociationSet Name="FK__LookupTyp__Updat__55BFB948" Association="Self.FK__LookupTyp__Updat__55BFB948">
+          <AssociationSet Name="FK__LookupTyp__Updat__603D47BB" Association="Self.FK__LookupTyp__Updat__603D47BB">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="LookupType" EntitySet="LookupType" />
           </AssociationSet>
@@ -695,31 +695,31 @@
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Student" EntitySet="Student" />
           </AssociationSet>
-          <AssociationSet Name="FK__Subject__Created__3FD07829" Association="Self.FK__Subject__Created__3FD07829">
+          <AssociationSet Name="FK__Subject__Created__640DD89F" Association="Self.FK__Subject__Created__640DD89F">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Subject" EntitySet="Subject" />
           </AssociationSet>
-          <AssociationSet Name="FK__Subject__Updated__40C49C62" Association="Self.FK__Subject__Updated__40C49C62">
+          <AssociationSet Name="FK__Subject__Updated__6501FCD8" Association="Self.FK__Subject__Updated__6501FCD8">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Subject" EntitySet="Subject" />
           </AssociationSet>
-          <AssociationSet Name="FK__SubjectAs__Class__4589517F" Association="Self.FK__SubjectAs__Class__4589517F">
+          <AssociationSet Name="FK__SubjectAs__Class__69C6B1F5" Association="Self.FK__SubjectAs__Class__69C6B1F5">
             <End Role="Class" EntitySet="Class" />
             <End Role="SubjectAssignment" EntitySet="SubjectAssignment" />
           </AssociationSet>
-          <AssociationSet Name="FK__SubjectAs__Creat__52E34C9D" Association="Self.FK__SubjectAs__Creat__52E34C9D">
+          <AssociationSet Name="FK__SubjectAs__Creat__6ABAD62E" Association="Self.FK__SubjectAs__Creat__6ABAD62E">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="SubjectAssignment" EntitySet="SubjectAssignment" />
           </AssociationSet>
-          <AssociationSet Name="FK__SubjectAs__Subje__44952D46" Association="Self.FK__SubjectAs__Subje__44952D46">
+          <AssociationSet Name="FK__SubjectAs__Subje__6CA31EA0" Association="Self.FK__SubjectAs__Subje__6CA31EA0">
             <End Role="Subject" EntitySet="Subject" />
             <End Role="SubjectAssignment" EntitySet="SubjectAssignment" />
           </AssociationSet>
-          <AssociationSet Name="FK__SubjectAs__Teach__43A1090D" Association="Self.FK__SubjectAs__Teach__43A1090D">
+          <AssociationSet Name="FK__SubjectAs__Teach__68D28DBC" Association="Self.FK__SubjectAs__Teach__68D28DBC">
             <End Role="Staff" EntitySet="Staff" />
             <End Role="SubjectAssignment" EntitySet="SubjectAssignment" />
           </AssociationSet>
-          <AssociationSet Name="FK__SubjectAs__Updat__53D770D6" Association="Self.FK__SubjectAs__Updat__53D770D6">
+          <AssociationSet Name="FK__SubjectAs__Updat__6BAEFA67" Association="Self.FK__SubjectAs__Updat__6BAEFA67">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="SubjectAssignment" EntitySet="SubjectAssignment" />
           </AssociationSet>
@@ -795,7 +795,7 @@
             <End Role="Class" EntitySet="Classes" />
             <End Role="Fee" EntitySet="Fees" />
           </AssociationSet>
-          <AssociationSet Name="FK__SubjectAs__Class__4589517F" Association="TrainersModel.FK__SubjectAs__Class__4589517F">
+          <AssociationSet Name="FK__SubjectAs__Class__69C6B1F5" Association="TrainersModel.FK__SubjectAs__Class__69C6B1F5">
             <End Role="Class" EntitySet="Classes" />
             <End Role="SubjectAssignment" EntitySet="SubjectAssignments" />
           </AssociationSet>
@@ -819,23 +819,23 @@
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Fee" EntitySet="Fees" />
           </AssociationSet>
-          <AssociationSet Name="FK__Lookup__CreatedB__56B3DD81" Association="TrainersModel.FK__Lookup__CreatedB__56B3DD81">
+          <AssociationSet Name="FK__Lookup__CreatedB__5B78929E" Association="TrainersModel.FK__Lookup__CreatedB__5B78929E">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Lookup" EntitySet="Lookups" />
           </AssociationSet>
-          <AssociationSet Name="FK__Lookup__LookupTy__4A4E069C" Association="TrainersModel.FK__Lookup__LookupTy__4A4E069C">
+          <AssociationSet Name="FK__Lookup__LookupTy__61316BF4" Association="TrainersModel.FK__Lookup__LookupTy__61316BF4">
             <End Role="LookupType" EntitySet="LookupTypes" />
             <End Role="Lookup" EntitySet="Lookups" />
           </AssociationSet>
-          <AssociationSet Name="FK__Lookup__UpdatedB__57A801BA" Association="TrainersModel.FK__Lookup__UpdatedB__57A801BA">
+          <AssociationSet Name="FK__Lookup__UpdatedB__5C6CB6D7" Association="TrainersModel.FK__Lookup__UpdatedB__5C6CB6D7">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Lookup" EntitySet="Lookups" />
           </AssociationSet>
-          <AssociationSet Name="FK__LookupTyp__Creat__54CB950F" Association="TrainersModel.FK__LookupTyp__Creat__54CB950F">
+          <AssociationSet Name="FK__LookupTyp__Creat__5F492382" Association="TrainersModel.FK__LookupTyp__Creat__5F492382">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="LookupType" EntitySet="LookupTypes" />
           </AssociationSet>
-          <AssociationSet Name="FK__LookupTyp__Updat__55BFB948" Association="TrainersModel.FK__LookupTyp__Updat__55BFB948">
+          <AssociationSet Name="FK__LookupTyp__Updat__603D47BB" Association="TrainersModel.FK__LookupTyp__Updat__603D47BB">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="LookupType" EntitySet="LookupTypes" />
           </AssociationSet>
@@ -847,7 +847,7 @@
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Staff" EntitySet="Staffs" />
           </AssociationSet>
-          <AssociationSet Name="FK__SubjectAs__Teach__43A1090D" Association="TrainersModel.FK__SubjectAs__Teach__43A1090D">
+          <AssociationSet Name="FK__SubjectAs__Teach__68D28DBC" Association="TrainersModel.FK__SubjectAs__Teach__68D28DBC">
             <End Role="Staff" EntitySet="Staffs" />
             <End Role="SubjectAssignment" EntitySet="SubjectAssignments" />
           </AssociationSet>
@@ -859,23 +859,23 @@
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Student" EntitySet="Students" />
           </AssociationSet>
-          <AssociationSet Name="FK__Subject__Created__3FD07829" Association="TrainersModel.FK__Subject__Created__3FD07829">
+          <AssociationSet Name="FK__Subject__Created__640DD89F" Association="TrainersModel.FK__Subject__Created__640DD89F">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Subject" EntitySet="Subjects" />
           </AssociationSet>
-          <AssociationSet Name="FK__Subject__Updated__40C49C62" Association="TrainersModel.FK__Subject__Updated__40C49C62">
+          <AssociationSet Name="FK__Subject__Updated__6501FCD8" Association="TrainersModel.FK__Subject__Updated__6501FCD8">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Subject" EntitySet="Subjects" />
           </AssociationSet>
-          <AssociationSet Name="FK__SubjectAs__Subje__44952D46" Association="TrainersModel.FK__SubjectAs__Subje__44952D46">
+          <AssociationSet Name="FK__SubjectAs__Subje__6CA31EA0" Association="TrainersModel.FK__SubjectAs__Subje__6CA31EA0">
             <End Role="Subject" EntitySet="Subjects" />
             <End Role="SubjectAssignment" EntitySet="SubjectAssignments" />
           </AssociationSet>
-          <AssociationSet Name="FK__SubjectAs__Creat__52E34C9D" Association="TrainersModel.FK__SubjectAs__Creat__52E34C9D">
+          <AssociationSet Name="FK__SubjectAs__Creat__6ABAD62E" Association="TrainersModel.FK__SubjectAs__Creat__6ABAD62E">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="SubjectAssignment" EntitySet="SubjectAssignments" />
           </AssociationSet>
-          <AssociationSet Name="FK__SubjectAs__Updat__53D770D6" Association="TrainersModel.FK__SubjectAs__Updat__53D770D6">
+          <AssociationSet Name="FK__SubjectAs__Updat__6BAEFA67" Association="TrainersModel.FK__SubjectAs__Updat__6BAEFA67">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="SubjectAssignment" EntitySet="SubjectAssignments" />
           </AssociationSet>
@@ -957,7 +957,7 @@
           <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Class__UpdatedBy__29E1370A" FromRole="Class" ToRole="TrainerUser" />
           <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Class__0B5CAFEA" FromRole="Class" ToRole="Enrolment" />
           <NavigationProperty Name="Fees" Relationship="TrainersModel.FK__Fee__Class__0C50D423" FromRole="Class" ToRole="Fee" />
-          <NavigationProperty Name="SubjectAssignments" Relationship="TrainersModel.FK__SubjectAs__Class__4589517F" FromRole="Class" ToRole="SubjectAssignment" />
+          <NavigationProperty Name="SubjectAssignments" Relationship="TrainersModel.FK__SubjectAs__Class__69C6B1F5" FromRole="Class" ToRole="SubjectAssignment" />
         </EntityType>
         <EntityType Name="Enrolment">
           <Key>
@@ -997,30 +997,30 @@
           <Key>
             <PropertyRef Name="LookupId" />
           </Key>
-          <Property Name="LookupId" Type="Int32" Nullable="false" />
+          <Property Name="LookupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="LookupTypeId" Type="Int32" />
           <Property Name="LookupText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
-          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Lookup__CreatedB__56B3DD81" FromRole="Lookup" ToRole="TrainerUser" />
-          <NavigationProperty Name="LookupType" Relationship="TrainersModel.FK__Lookup__LookupTy__4A4E069C" FromRole="Lookup" ToRole="LookupType" />
-          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Lookup__UpdatedB__57A801BA" FromRole="Lookup" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Lookup__CreatedB__5B78929E" FromRole="Lookup" ToRole="TrainerUser" />
+          <NavigationProperty Name="LookupType" Relationship="TrainersModel.FK__Lookup__LookupTy__61316BF4" FromRole="Lookup" ToRole="LookupType" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Lookup__UpdatedB__5C6CB6D7" FromRole="Lookup" ToRole="TrainerUser" />
         </EntityType>
         <EntityType Name="LookupType">
           <Key>
             <PropertyRef Name="LookupTypeId" />
           </Key>
-          <Property Name="LookupTypeId" Type="Int32" Nullable="false" />
+          <Property Name="LookupTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="LookupTypeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
-          <NavigationProperty Name="Lookups" Relationship="TrainersModel.FK__Lookup__LookupTy__4A4E069C" FromRole="LookupType" ToRole="Lookup" />
-          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__LookupTyp__Creat__54CB950F" FromRole="LookupType" ToRole="TrainerUser" />
-          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__LookupTyp__Updat__55BFB948" FromRole="LookupType" ToRole="TrainerUser" />
+          <NavigationProperty Name="Lookups" Relationship="TrainersModel.FK__Lookup__LookupTy__61316BF4" FromRole="LookupType" ToRole="Lookup" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__LookupTyp__Creat__5F492382" FromRole="LookupType" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__LookupTyp__Updat__603D47BB" FromRole="LookupType" ToRole="TrainerUser" />
         </EntityType>
         <EntityType Name="Staff">
           <Key>
@@ -1049,7 +1049,7 @@
           <NavigationProperty Name="Classes" Relationship="TrainersModel.FK__Class__ClassAdvi__3CF40B7E" FromRole="Staff" ToRole="Class" />
           <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Staff__CreatedBy__3B0BC30C" FromRole="Staff" ToRole="TrainerUser" />
           <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Staff__UpdatedBy__3BFFE745" FromRole="Staff" ToRole="TrainerUser" />
-          <NavigationProperty Name="SubjectAssignments" Relationship="TrainersModel.FK__SubjectAs__Teach__43A1090D" FromRole="Staff" ToRole="SubjectAssignment" />
+          <NavigationProperty Name="SubjectAssignments" Relationship="TrainersModel.FK__SubjectAs__Teach__68D28DBC" FromRole="Staff" ToRole="SubjectAssignment" />
         </EntityType>
         <EntityType Name="Student">
           <Key>
@@ -1084,21 +1084,21 @@
           <Key>
             <PropertyRef Name="SubjectId" />
           </Key>
-          <Property Name="SubjectId" Type="Int32" Nullable="false" />
+          <Property Name="SubjectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SubjectName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
-          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Subject__Created__3FD07829" FromRole="Subject" ToRole="TrainerUser" />
-          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Subject__Updated__40C49C62" FromRole="Subject" ToRole="TrainerUser" />
-          <NavigationProperty Name="SubjectAssignments" Relationship="TrainersModel.FK__SubjectAs__Subje__44952D46" FromRole="Subject" ToRole="SubjectAssignment" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Subject__Created__640DD89F" FromRole="Subject" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Subject__Updated__6501FCD8" FromRole="Subject" ToRole="TrainerUser" />
+          <NavigationProperty Name="SubjectAssignments" Relationship="TrainersModel.FK__SubjectAs__Subje__6CA31EA0" FromRole="Subject" ToRole="SubjectAssignment" />
         </EntityType>
         <EntityType Name="SubjectAssignment">
           <Key>
             <PropertyRef Name="SubjectAssignmentId" />
           </Key>
-          <Property Name="SubjectAssignmentId" Type="Int32" Nullable="false" />
+          <Property Name="SubjectAssignmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Teacher" Type="Int32" />
           <Property Name="Subject" Type="Int32" />
@@ -1107,11 +1107,11 @@
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
-          <NavigationProperty Name="Class1" Relationship="TrainersModel.FK__SubjectAs__Class__4589517F" FromRole="SubjectAssignment" ToRole="Class" />
-          <NavigationProperty Name="Staff" Relationship="TrainersModel.FK__SubjectAs__Teach__43A1090D" FromRole="SubjectAssignment" ToRole="Staff" />
-          <NavigationProperty Name="Subject1" Relationship="TrainersModel.FK__SubjectAs__Subje__44952D46" FromRole="SubjectAssignment" ToRole="Subject" />
-          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__SubjectAs__Creat__52E34C9D" FromRole="SubjectAssignment" ToRole="TrainerUser" />
-          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__SubjectAs__Updat__53D770D6" FromRole="SubjectAssignment" ToRole="TrainerUser" />
+          <NavigationProperty Name="Class1" Relationship="TrainersModel.FK__SubjectAs__Class__69C6B1F5" FromRole="SubjectAssignment" ToRole="Class" />
+          <NavigationProperty Name="Staff" Relationship="TrainersModel.FK__SubjectAs__Teach__68D28DBC" FromRole="SubjectAssignment" ToRole="Staff" />
+          <NavigationProperty Name="Subject1" Relationship="TrainersModel.FK__SubjectAs__Subje__6CA31EA0" FromRole="SubjectAssignment" ToRole="Subject" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__SubjectAs__Creat__6ABAD62E" FromRole="SubjectAssignment" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__SubjectAs__Updat__6BAEFA67" FromRole="SubjectAssignment" ToRole="TrainerUser" />
         </EntityType>
         <EntityType Name="TrainerUser">
           <Key>
@@ -1135,18 +1135,18 @@
           <NavigationProperty Name="Enrolments1" Relationship="TrainersModel.FK__Enrolment__Updat__2BC97F7C" FromRole="TrainerUser" ToRole="Enrolment" />
           <NavigationProperty Name="Fees" Relationship="TrainersModel.FK__Fee__CreatedBy__2CBDA3B5" FromRole="TrainerUser" ToRole="Fee" />
           <NavigationProperty Name="Fees1" Relationship="TrainersModel.FK__Fee__UpdatedBy__2DB1C7EE" FromRole="TrainerUser" ToRole="Fee" />
-          <NavigationProperty Name="Lookups" Relationship="TrainersModel.FK__Lookup__CreatedB__56B3DD81" FromRole="TrainerUser" ToRole="Lookup" />
-          <NavigationProperty Name="Lookups1" Relationship="TrainersModel.FK__Lookup__UpdatedB__57A801BA" FromRole="TrainerUser" ToRole="Lookup" />
-          <NavigationProperty Name="LookupTypes" Relationship="TrainersModel.FK__LookupTyp__Creat__54CB950F" FromRole="TrainerUser" ToRole="LookupType" />
-          <NavigationProperty Name="LookupTypes1" Relationship="TrainersModel.FK__LookupTyp__Updat__55BFB948" FromRole="TrainerUser" ToRole="LookupType" />
+          <NavigationProperty Name="Lookups" Relationship="TrainersModel.FK__Lookup__CreatedB__5B78929E" FromRole="TrainerUser" ToRole="Lookup" />
+          <NavigationProperty Name="Lookups1" Relationship="TrainersModel.FK__Lookup__UpdatedB__5C6CB6D7" FromRole="TrainerUser" ToRole="Lookup" />
+          <NavigationProperty Name="LookupTypes" Relationship="TrainersModel.FK__LookupTyp__Creat__5F492382" FromRole="TrainerUser" ToRole="LookupType" />
+          <NavigationProperty Name="LookupTypes1" Relationship="TrainersModel.FK__LookupTyp__Updat__603D47BB" FromRole="TrainerUser" ToRole="LookupType" />
           <NavigationProperty Name="Staffs" Relationship="TrainersModel.FK__Staff__CreatedBy__3B0BC30C" FromRole="TrainerUser" ToRole="Staff" />
           <NavigationProperty Name="Staffs1" Relationship="TrainersModel.FK__Staff__UpdatedBy__3BFFE745" FromRole="TrainerUser" ToRole="Staff" />
           <NavigationProperty Name="Students" Relationship="TrainersModel.FK__Student__Created__2F9A1060" FromRole="TrainerUser" ToRole="Student" />
           <NavigationProperty Name="Students1" Relationship="TrainersModel.FK__Student__Updated__2EA5EC27" FromRole="TrainerUser" ToRole="Student" />
-          <NavigationProperty Name="Subjects" Relationship="TrainersModel.FK__Subject__Created__3FD07829" FromRole="TrainerUser" ToRole="Subject" />
-          <NavigationProperty Name="Subjects1" Relationship="TrainersModel.FK__Subject__Updated__40C49C62" FromRole="TrainerUser" ToRole="Subject" />
-          <NavigationProperty Name="SubjectAssignments" Relationship="TrainersModel.FK__SubjectAs__Creat__52E34C9D" FromRole="TrainerUser" ToRole="SubjectAssignment" />
-          <NavigationProperty Name="SubjectAssignments1" Relationship="TrainersModel.FK__SubjectAs__Updat__53D770D6" FromRole="TrainerUser" ToRole="SubjectAssignment" />
+          <NavigationProperty Name="Subjects" Relationship="TrainersModel.FK__Subject__Created__640DD89F" FromRole="TrainerUser" ToRole="Subject" />
+          <NavigationProperty Name="Subjects1" Relationship="TrainersModel.FK__Subject__Updated__6501FCD8" FromRole="TrainerUser" ToRole="Subject" />
+          <NavigationProperty Name="SubjectAssignments" Relationship="TrainersModel.FK__SubjectAs__Creat__6ABAD62E" FromRole="TrainerUser" ToRole="SubjectAssignment" />
+          <NavigationProperty Name="SubjectAssignments1" Relationship="TrainersModel.FK__SubjectAs__Updat__6BAEFA67" FromRole="TrainerUser" ToRole="SubjectAssignment" />
           <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__TrainerUs__Creat__32767D0B" FromRole="TrainerUser" ToRole="TrainerUser1" />
           <NavigationProperty Name="TrainerUser2" Relationship="TrainersModel.FK__TrainerUs__Creat__32767D0B" FromRole="TrainerUser1" ToRole="TrainerUser" />
           <NavigationProperty Name="TrainerUser11" Relationship="TrainersModel.FK__TrainerUs__Updat__336AA144" FromRole="TrainerUser" ToRole="TrainerUser1" />
@@ -1240,7 +1240,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SubjectAs__Class__4589517F">
+        <Association Name="FK__SubjectAs__Class__69C6B1F5">
           <End Type="TrainersModel.Class" Role="Class" Multiplicity="0..1" />
           <End Type="TrainersModel.SubjectAssignment" Role="SubjectAssignment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1312,7 +1312,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Lookup__CreatedB__56B3DD81">
+        <Association Name="FK__Lookup__CreatedB__5B78929E">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.Lookup" Role="Lookup" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1324,7 +1324,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Lookup__LookupTy__4A4E069C">
+        <Association Name="FK__Lookup__LookupTy__61316BF4">
           <End Type="TrainersModel.LookupType" Role="LookupType" Multiplicity="0..1" />
           <End Type="TrainersModel.Lookup" Role="Lookup" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1336,7 +1336,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Lookup__UpdatedB__57A801BA">
+        <Association Name="FK__Lookup__UpdatedB__5C6CB6D7">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.Lookup" Role="Lookup" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1348,7 +1348,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__LookupTyp__Creat__54CB950F">
+        <Association Name="FK__LookupTyp__Creat__5F492382">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.LookupType" Role="LookupType" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1360,7 +1360,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__LookupTyp__Updat__55BFB948">
+        <Association Name="FK__LookupTyp__Updat__603D47BB">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.LookupType" Role="LookupType" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1396,7 +1396,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SubjectAs__Teach__43A1090D">
+        <Association Name="FK__SubjectAs__Teach__68D28DBC">
           <End Type="TrainersModel.Staff" Role="Staff" Multiplicity="0..1" />
           <End Type="TrainersModel.SubjectAssignment" Role="SubjectAssignment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1432,7 +1432,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Subject__Created__3FD07829">
+        <Association Name="FK__Subject__Created__640DD89F">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.Subject" Role="Subject" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1444,7 +1444,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Subject__Updated__40C49C62">
+        <Association Name="FK__Subject__Updated__6501FCD8">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.Subject" Role="Subject" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1456,7 +1456,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SubjectAs__Subje__44952D46">
+        <Association Name="FK__SubjectAs__Subje__6CA31EA0">
           <End Type="TrainersModel.Subject" Role="Subject" Multiplicity="0..1" />
           <End Type="TrainersModel.SubjectAssignment" Role="SubjectAssignment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1468,7 +1468,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SubjectAs__Creat__52E34C9D">
+        <Association Name="FK__SubjectAs__Creat__6ABAD62E">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.SubjectAssignment" Role="SubjectAssignment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1480,7 +1480,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SubjectAs__Updat__53D770D6">
+        <Association Name="FK__SubjectAs__Updat__6BAEFA67">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.SubjectAssignment" Role="SubjectAssignment" Multiplicity="*" />
           <ReferentialConstraint>

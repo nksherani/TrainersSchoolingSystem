@@ -1,0 +1,58 @@
+﻿@model TrainersSchoolingSystem.Models.LookupType
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>LookupType</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.LookupTypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LookupTypeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpdatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrainerUser.Username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrainerUser.Username)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrainerUser1.Username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrainerUser1.Username)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.LookupTypeId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
