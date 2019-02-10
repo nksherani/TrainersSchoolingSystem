@@ -27,9 +27,17 @@ namespace TrainersSchoolingSystem.Models
         public Nullable<int> RollNo { get; set; }
         public Nullable<System.DateTime> DateOfBirth { get; set; }
         public Nullable<int> Age { get; set; }
-        public string FatherName { get; set; }
-        public string MotherName { get; set; }
-        public string GuardianName { get; set; }
+        public string PlaceOfBirth { get; set; }
+        public string Religion { get; set; }
+        public string Nationality { get; set; }
+        public string MotherTongue { get; set; }
+        public string BloodGroup { get; set; }
+        public string BFormNo { get; set; }
+        public string PaymentMode { get; set; }
+        public string AdmissionBasis { get; set; }
+        public Nullable<int> Father { get; set; }
+        public Nullable<int> Mother { get; set; }
+        public Nullable<int> Guardian { get; set; }
         public string Mobile { get; set; }
         public string LandLine { get; set; }
         public string PostalCode { get; set; }
@@ -44,6 +52,9 @@ namespace TrainersSchoolingSystem.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Enrolment> Enrolments { get; set; }
+        public virtual Parent Parent { get; set; }
+        public virtual Parent Parent1 { get; set; }
+        public virtual Parent Parent2 { get; set; }
         public virtual TrainerUser TrainerUser { get; set; }
         public virtual TrainerUser TrainerUser1 { get; set; }
     }

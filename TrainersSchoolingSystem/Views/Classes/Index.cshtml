@@ -15,6 +15,9 @@
             @Html.DisplayNameFor(model => model.ClassName)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Section)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.ClassAdvisor)
         </th>
         <th>
@@ -38,6 +41,9 @@
             @Html.DisplayFor(modelItem => item.ClassName)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.Section)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.Staff.FirstName)
         </td>
         <td>
@@ -53,9 +59,9 @@
             @Html.DisplayFor(modelItem => item.TrainerUser1.Username)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ClassId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ClassId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ClassId })
+            @Html.ActionLink("Edit", "Edit", new { id = item.ClassId }) |
+            @Html.ActionLink("Details", "Details", new { id = item.ClassId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ClassId })
         </td>
     </tr>
 }

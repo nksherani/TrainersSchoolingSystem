@@ -40,6 +40,7 @@ namespace TrainersSchoolingSystem.Controllers
         public ActionResult Create()
         {
             ViewBag.ClassAdvisor = new SelectList(db.Staffs, "StaffId", "FirstName");
+            ViewBag.Section = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Section"), "LookupText", "LookupText");
 
             return View();
         }
@@ -49,7 +50,7 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ClassId,ClassName,ClassAdvisor,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Class @class)
+        public ActionResult Create([Bind(Include = "ClassId,ClassName,Section,ClassAdvisor,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Class @class)
         {
             if (ModelState.IsValid)
             {
@@ -59,6 +60,8 @@ namespace TrainersSchoolingSystem.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.ClassAdvisor = new SelectList(db.Staffs, "StaffId", "FirstName");
+            ViewBag.Section = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Section"), "LookupText", "LookupText");
 
             return View(@class);
         }
@@ -75,7 +78,8 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ClassAdvisor = new SelectList(db.Staffs, "StaffId", "FirstName");
+            ViewBag.ClassAdvisor = new SelectList(db.Staffs, "StaffId", "FirstName", @class.ClassAdvisor);
+            ViewBag.Section = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Section"), "LookupText", "LookupText", @class.Section);
 
             return View(@class);
         }
@@ -85,7 +89,7 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ClassId,ClassName,ClassAdvisor,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Class @class)
+        public ActionResult Edit([Bind(Include = "ClassId,ClassName,Section,ClassAdvisor,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Class @class)
         {
             if (ModelState.IsValid)
             {
@@ -93,11 +97,14 @@ namespace TrainersSchoolingSystem.Controllers
                 dbClass.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 dbClass.UpdatedDate = DateTime.Now;
                 dbClass.ClassName = @class.ClassName;
+                dbClass.Section = @class.Section;
                 dbClass.ClassAdvisor = @class.ClassAdvisor;
                 db.Classes.AddOrUpdate(dbClass);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.ClassAdvisor = new SelectList(db.Staffs, "StaffId", "FirstName", @class.ClassAdvisor);
+            ViewBag.Section = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Section"), "LookupText", "LookupText", @class.Section);
             return View(@class);
         }
 

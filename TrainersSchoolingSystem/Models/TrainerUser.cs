@@ -27,6 +27,8 @@ namespace TrainersSchoolingSystem.Models
             this.Lookups1 = new HashSet<Lookup>();
             this.LookupTypes = new HashSet<LookupType>();
             this.LookupTypes1 = new HashSet<LookupType>();
+            this.Parents = new HashSet<Parent>();
+            this.Parents1 = new HashSet<Parent>();
             this.Staffs = new HashSet<Staff>();
             this.Staffs1 = new HashSet<Staff>();
             this.Students = new HashSet<Student>();
@@ -72,6 +74,10 @@ namespace TrainersSchoolingSystem.Models
         public virtual ICollection<LookupType> LookupTypes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LookupType> LookupTypes1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Parent> Parents { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Parent> Parents1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Staff> Staffs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

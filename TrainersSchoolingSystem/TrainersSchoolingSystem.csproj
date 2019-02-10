@@ -214,11 +214,13 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
+    <Compile Include="Controllers\EnrolmentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LookupsController.cs" />
     <Compile Include="Controllers\LookupTypesController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StaffsController.cs" />
+    <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Controllers\SubjectAssignmentsController.cs" />
     <Compile Include="Controllers\SubjectsController.cs" />
     <Compile Include="Controllers\TrainerUsersController.cs" />
@@ -269,6 +271,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Parent.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Staff.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -419,6 +424,16 @@
     <Content Include="Views\SubjectAssignments\Details.cshtml" />
     <Content Include="Views\SubjectAssignments\Edit.cshtml" />
     <Content Include="Views\SubjectAssignments\Index.cshtml" />
+    <Content Include="Views\Students\Create.cshtml" />
+    <Content Include="Views\Students\Delete.cshtml" />
+    <Content Include="Views\Students\Details.cshtml" />
+    <Content Include="Views\Students\Edit.cshtml" />
+    <Content Include="Views\Students\Index.cshtml" />
+    <Content Include="Views\Enrolments\Create.cshtml" />
+    <Content Include="Views\Enrolments\Delete.cshtml" />
+    <Content Include="Views\Enrolments\Details.cshtml" />
+    <Content Include="Views\Enrolments\Edit.cshtml" />
+    <Content Include="Views\Enrolments\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

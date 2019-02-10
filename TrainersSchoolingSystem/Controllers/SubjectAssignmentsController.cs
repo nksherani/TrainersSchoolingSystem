@@ -40,7 +40,13 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: SubjectAssignments/Create
         public ActionResult Create()
         {
-            ViewBag.Class = new SelectList(db.Classes, "ClassId", "ClassName");
+            List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
+            foreach (var item in db.Classes)
+            {
+                var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
+                classes.Add(pair);
+            }
+            ViewBag.Class = new SelectList(classes, "Key", "Value");
             ViewBag.Teacher = new SelectList(db.Staffs, "StaffId", "FirstName");
             ViewBag.Subject = new SelectList(db.Subjects, "SubjectId", "SubjectName");
             return View();
@@ -62,7 +68,13 @@ namespace TrainersSchoolingSystem.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Class = new SelectList(db.Classes, "ClassId", "ClassName", subjectAssignment.Class);
+            List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
+            foreach (var item in db.Classes)
+            {
+                var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
+                classes.Add(pair);
+            }
+            ViewBag.Class = new SelectList(classes, "Key", "Value", subjectAssignment.Class);
             ViewBag.Teacher = new SelectList(db.Staffs, "StaffId", "FirstName", subjectAssignment.Teacher);
             ViewBag.Subject = new SelectList(db.Subjects, "SubjectId", "SubjectName", subjectAssignment.Subject);
             return View(subjectAssignment);
@@ -80,7 +92,13 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Class = new SelectList(db.Classes, "ClassId", "ClassName", subjectAssignment.Class);
+            List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
+            foreach (var item in db.Classes)
+            {
+                var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName+item.Section);
+                classes.Add(pair);
+            }
+            ViewBag.Class = new SelectList(classes, "Key", "Value", subjectAssignment.Class);
             ViewBag.Teacher = new SelectList(db.Staffs, "StaffId", "FirstName", subjectAssignment.Teacher);
             ViewBag.Subject = new SelectList(db.Subjects, "SubjectId", "SubjectName", subjectAssignment.Subject);
             return View(subjectAssignment);
@@ -106,7 +124,13 @@ namespace TrainersSchoolingSystem.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Class = new SelectList(db.Classes, "ClassId", "ClassName", subjectAssignment.Class);
+            List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
+            foreach (var item in db.Classes)
+            {
+                var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
+                classes.Add(pair);
+            }
+            ViewBag.Class = new SelectList(classes, "Key", "Value", subjectAssignment.Class);
             ViewBag.Teacher = new SelectList(db.Staffs, "StaffId", "FirstName", subjectAssignment.Teacher);
             ViewBag.Subject = new SelectList(db.Subjects, "SubjectId", "SubjectName", subjectAssignment.Subject);
             return View(subjectAssignment);

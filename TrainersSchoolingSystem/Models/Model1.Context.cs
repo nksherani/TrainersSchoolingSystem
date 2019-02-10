@@ -34,6 +34,7 @@ namespace TrainersSchoolingSystem.Models
         public virtual DbSet<Fee> Fees { get; set; }
         public virtual DbSet<Lookup> Lookups { get; set; }
         public virtual DbSet<LookupType> LookupTypes { get; set; }
+        public virtual DbSet<Parent> Parents { get; set; }
         public virtual DbSet<Staff> Staffs { get; set; }
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }

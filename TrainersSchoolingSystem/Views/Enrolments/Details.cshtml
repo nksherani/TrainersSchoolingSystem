@@ -1,0 +1,82 @@
+﻿@model TrainersSchoolingSystem.Models.Enrolment
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Enrolment</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.LastClass)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastClass)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastInstitude)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastInstitude)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpdatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Class1.ClassName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Class1.ClassName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrainerUser.Username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrainerUser.Username)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Student1.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Student1.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrainerUser1.Username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrainerUser1.Username)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.EnrolmentId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
