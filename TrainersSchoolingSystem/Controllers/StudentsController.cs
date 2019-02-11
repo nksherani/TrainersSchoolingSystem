@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -42,8 +43,6 @@ namespace TrainersSchoolingSystem.Controllers
             ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name");
             ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name");
             ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name");
-            ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username");
-            ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username");
             return View();
         }
 
@@ -56,6 +55,8 @@ namespace TrainersSchoolingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
+                student.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                student.CreatedDate = DateTime.Now;
                 db.Students.Add(student);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -64,8 +65,6 @@ namespace TrainersSchoolingSystem.Controllers
             ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name", student.Father);
             ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name", student.Guardian);
             ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name", student.Mother);
-            ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", student.CreatedBy);
-            ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", student.UpdatedBy);
             return View(student);
         }
 
@@ -84,8 +83,6 @@ namespace TrainersSchoolingSystem.Controllers
             ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name", student.Father);
             ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name", student.Guardian);
             ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name", student.Mother);
-            ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", student.CreatedBy);
-            ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", student.UpdatedBy);
             return View(student);
         }
 
@@ -98,15 +95,40 @@ namespace TrainersSchoolingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(student).State = EntityState.Modified;
+                var studentdb = db.Students.Find(student.StudentId);
+                studentdb.FirstName = student.FirstName;
+                studentdb.LastName = student.LastName;
+                studentdb.GRNo = student.GRNo;
+                studentdb.RollNo = student.RollNo;
+                studentdb.DateOfBirth = student.DateOfBirth;
+                studentdb.Age = DateTime.Now.Year - studentdb.DateOfBirth.Value.Year;
+                studentdb.PlaceOfBirth = student.PlaceOfBirth;
+                studentdb.Religion = student.Religion;
+                studentdb.Nationality = student.Nationality;
+                studentdb.MotherTongue = student.MotherTongue;
+                studentdb.BloodGroup = student.BloodGroup;
+                studentdb.BFormNo = student.BFormNo;
+                studentdb.PaymentMode = student.PaymentMode;
+                studentdb.AdmissionBasis = student.AdmissionBasis;
+                studentdb.Father = student.Father;
+                studentdb.Mother = student.Mother;
+                studentdb.Guardian = student.Guardian;
+                studentdb.Mobile = student.Mobile;
+                studentdb.LandLine = student.LandLine;
+                studentdb.PostalCode = student.PostalCode;
+                studentdb.StreetAddress = student.StreetAddress;
+                studentdb.City = student.City;
+                studentdb.JoiningDate = student.JoiningDate;
+                studentdb.EndDate = student.EndDate;
+                studentdb.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                studentdb.UpdatedDate = DateTime.Now;
+                db.Students.AddOrUpdate(studentdb);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name", student.Father);
             ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name", student.Guardian);
             ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name", student.Mother);
-            ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", student.CreatedBy);
-            ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", student.UpdatedBy);
             return View(student);
         }
 

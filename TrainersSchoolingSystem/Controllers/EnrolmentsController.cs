@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -39,10 +40,14 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: Enrolments/Create
         public ActionResult Create()
         {
-            ViewBag.Class = new SelectList(db.Classes, "ClassId", "ClassName");
-            ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username");
+            List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
+            foreach (var item in db.Classes)
+            {
+                var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
+                classes.Add(pair);
+            }
+            ViewBag.Class = new SelectList(classes, "Key", "Value");
             ViewBag.Student = new SelectList(db.Students, "StudentId", "FirstName");
-            ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username");
             return View();
         }
 
@@ -55,15 +60,21 @@ namespace TrainersSchoolingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
+                enrolment.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                enrolment.CreatedDate = DateTime.Now;
                 db.Enrolments.Add(enrolment);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Class = new SelectList(db.Classes, "ClassId", "ClassName", enrolment.Class);
-            ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", enrolment.CreatedBy);
+            List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
+            foreach (var item in db.Classes)
+            {
+                var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
+                classes.Add(pair);
+            }
+            ViewBag.Class = new SelectList(classes, "Key", "Value");
             ViewBag.Student = new SelectList(db.Students, "StudentId", "FirstName", enrolment.Student);
-            ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", enrolment.UpdatedBy);
             return View(enrolment);
         }
 
@@ -79,10 +90,14 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Class = new SelectList(db.Classes, "ClassId", "ClassName", enrolment.Class);
-            ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", enrolment.CreatedBy);
+            List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
+            foreach (var item in db.Classes)
+            {
+                var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
+                classes.Add(pair);
+            }
+            ViewBag.Class = new SelectList(classes, "Key", "Value");
             ViewBag.Student = new SelectList(db.Students, "StudentId", "FirstName", enrolment.Student);
-            ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", enrolment.UpdatedBy);
             return View(enrolment);
         }
 
@@ -95,14 +110,26 @@ namespace TrainersSchoolingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(enrolment).State = EntityState.Modified;
+                var enrolmentdb = db.Enrolments.Find(enrolment.EnrolmentId);
+                enrolmentdb.Class = enrolment.Class;
+                enrolmentdb.LastClass = enrolment.LastClass;
+                enrolmentdb.LastInstitude = enrolment.LastInstitude;
+                enrolmentdb.Student = enrolment.Student;
+                enrolmentdb.Class = enrolment.Class;
+                enrolmentdb.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                enrolmentdb.UpdatedDate = DateTime.Now;
+                db.Enrolments.AddOrUpdate(enrolmentdb);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Class = new SelectList(db.Classes, "ClassId", "ClassName", enrolment.Class);
-            ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", enrolment.CreatedBy);
+            List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
+            foreach (var item in db.Classes)
+            {
+                var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
+                classes.Add(pair);
+            }
+            ViewBag.Class = new SelectList(classes, "Key", "Value");
             ViewBag.Student = new SelectList(db.Students, "StudentId", "FirstName", enrolment.Student);
-            ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", enrolment.UpdatedBy);
             return View(enrolment);
         }
 

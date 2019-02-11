@@ -12,6 +12,13 @@
 <table class="table">
     <tr>
         <th>
+            @Html.DisplayNameFor(model => model.Student1.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Class1.ClassName)
+            @Html.DisplayNameFor(model => model.Class1.Section)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.LastClass)
         </th>
         <th>
@@ -23,23 +30,26 @@
         <th>
             @Html.DisplayNameFor(model => model.UpdatedDate)
         </th>
+
         <th>
-            @Html.DisplayNameFor(model => model.Class1.ClassName)
+            @Html.DisplayNameFor(model => model.CreatedBy)
         </th>
+
         <th>
-            @Html.DisplayNameFor(model => model.TrainerUser.Username)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Student1.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TrainerUser1.Username)
+            @Html.DisplayNameFor(model => model.UpdatedBy)
         </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Student1.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Class1.ClassName)
+            @Html.DisplayFor(modelItem => item.Class1.Section)
+        </td>
         <td>
             @Html.DisplayFor(modelItem => item.LastClass)
         </td>
@@ -52,22 +62,18 @@
         <td>
             @Html.DisplayFor(modelItem => item.UpdatedDate)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Class1.ClassName)
-        </td>
+
         <td>
             @Html.DisplayFor(modelItem => item.TrainerUser.Username)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Student1.FirstName)
-        </td>
+
         <td>
             @Html.DisplayFor(modelItem => item.TrainerUser1.Username)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.EnrolmentId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.EnrolmentId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.EnrolmentId })
+            @Html.ActionLink("Edit", "Edit", new { id = item.EnrolmentId }) |
+            @Html.ActionLink("Details", "Details", new { id = item.EnrolmentId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.EnrolmentId })
         </td>
     </tr>
 }

@@ -11,6 +11,21 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
+            @Html.DisplayNameFor(model => model.Student1.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Student1.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Class1.ClassName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Class1.ClassName)
+            @Html.DisplayFor(model => model.Class1.Section)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.LastClass)
         </dt>
 
@@ -42,32 +57,20 @@
             @Html.DisplayFor(model => model.UpdatedDate)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Class1.ClassName)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Class1.ClassName)
-        </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TrainerUser.Username)
+            @Html.DisplayNameFor(model => model.CreatedBy)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.TrainerUser.Username)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Student1.FirstName)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Student1.FirstName)
-        </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TrainerUser1.Username)
+            @Html.DisplayNameFor(model => model.UpdatedBy)
         </dt>
 
         <dd>
