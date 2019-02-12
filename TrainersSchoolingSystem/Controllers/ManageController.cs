@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Kendo.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -18,12 +19,20 @@ namespace TrainersSchoolingSystem.Controllers
 
         public ManageController()
         {
+            if (!SiteMapManager.SiteMaps.ContainsKey("TMXMAP"))
+            {
+                SiteMapManager.SiteMaps.Register<XmlSiteMap>("TMXMAP", sitmap => sitmap.LoadFrom("~/Content/TMX.sitemap"));
+            }
         }
 
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            if (!SiteMapManager.SiteMaps.ContainsKey("TMXMAP"))
+            {
+                SiteMapManager.SiteMaps.Register<XmlSiteMap>("TMXMAP", sitmap => sitmap.LoadFrom("~/Content/TMX.sitemap"));
+            }
         }
 
         public ApplicationSignInManager SignInManager

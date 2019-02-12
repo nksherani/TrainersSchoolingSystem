@@ -48,6 +48,9 @@
     <Reference Include="AutoMapper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.8.0.0\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="Kendo.Mvc">
+      <HintPath>..\packages\Kendo.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
@@ -779,6 +782,7 @@
     <Content Include="Content\kendo\2017.2.621\kendo.silver.mobile.min.css.map" />
     <Content Include="Content\kendo\2017.2.621\kendo.uniform.min.css.map" />
     <Content Include="Content\kendo\2017.2.621\kendo.uniform.mobile.min.css.map" />
+    <Content Include="Content\TMX.sitemap" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Kendo.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,11 +14,18 @@ using TrainersSchoolingSystem.Models.DTOs;
 
 namespace TrainersSchoolingSystem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
+    [Authorize]
     public class StudentsController : Controller
     {
         private TrainersEntities db = new TrainersEntities();
-
+        public StudentsController()
+        {
+            if (!SiteMapManager.SiteMaps.ContainsKey("TMXMAP"))
+            {
+                SiteMapManager.SiteMaps.Register<XmlSiteMap>("TMXMAP", sitmap => sitmap.LoadFrom("~/Content/TMX.sitemap"));
+            }
+        }
         // GET: Students
         public ActionResult Index()
         {
@@ -72,6 +80,7 @@ namespace TrainersSchoolingSystem.Controllers
             return View(student);
         }
         // GET: Students/Create
+        //[Authorize(Roles ="Admin,Moderator")]
         public ActionResult NewAdmission()
         {
             List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();

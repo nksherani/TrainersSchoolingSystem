@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<siteMap>
+  <siteMapNode title="Home" controller="Home" action="Index">
+    <siteMapNode title="Dashboard" controller="Home" action="Index"/>
+    <siteMapNode title="Admin">
+      <siteMapNode title="User Management" controller="TrainerUsers" action="Index"/>
+      <siteMapNode title="Staff Management" controller="Staffs" action="Index"/>
+      <siteMapNode title="Subjects Management" controller="Subjects" action="Index"/>
+      <siteMapNode title="Subject Assignment" controller="SubjectAssignments" action="Index"/>
+      <siteMapNode title="Class Management" controller="Classes" action="Index"/>
+      <siteMapNode title="Enrolment Management" controller="Enrolments" action="Index"/>
+      <siteMapNode title="Student Management" controller="Students" action="Index"/>
+      <siteMapNode title="Parents Management" controller="Parents" action="Index"/>
+      <siteMapNode title="Lookup Types" controller="LookupTypes" action="Index"/>
+      <siteMapNode title="Lookup Management" controller="Lookups" action="Index"/>
+    </siteMapNode>
+    <siteMapNode title="Registration">
+      <siteMapNode title="New Admission" controller="Students" action="NewAdmission"/>
+    </siteMapNode>
+  </siteMapNode>
+</siteMap>

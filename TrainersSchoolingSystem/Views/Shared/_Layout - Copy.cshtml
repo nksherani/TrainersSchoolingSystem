@@ -1,5 +1,4 @@
 ﻿<!DOCTYPE html>
-@using Kendo.Mvc.UI;
 <html>
 <head>
     <meta charset="utf-8" />
@@ -11,15 +10,8 @@
     <link href="~/Content/kendo/2017.2.621/kendo.common.min.css" rel="stylesheet" />
     <link href="~/Content/kendo/2017.2.621/kendo.default.min.css" rel="stylesheet" />
     <link href="~/Content/kendo/2017.2.621/kendo.default.mobile.min.css" rel="stylesheet" />
-    @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
-    @(Html.Kendo().Menu()
-        .Name("menu")
-        .BindTo("TMXMAP")
-        .SecurityTrimming(s => s.HideParent(true))
-    )
-
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -28,15 +20,54 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Dashboard", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
+                <ul id="tmenu" class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Portal Settings
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("User Management", "Index", "TrainerUsers")</li>
+                            <li>@Html.ActionLink("LookupTypes Management", "Index", "LookupTypes")</li>
+                            <li>@Html.ActionLink("Lookups Management", "Index", "Lookups")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            School Admin
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Staff", "Index", "Staffs")</li>
+                            <li>@Html.ActionLink("Class", "Index", "Classes")</li>
+                            <li>@Html.ActionLink("Subjects", "Index", "Subjects")</li>
+                            <li>@Html.ActionLink("Subjects Assignment", "Index", "SubjectAssignments")</li>
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Student Section
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Students Management", "Index", "Students")</li>
+                            <li>@Html.ActionLink("Parents", "Index", "Parents")</li>
+                            <li>@Html.ActionLink("Enrolments", "Index", "Enrolments")</li>
+
+                        </ul>
+                    </li>
+                    @*<li><a href="#">Page 2</a></li>
+                        <li><a href="#">Page 3</a></li>*@
+                </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
-        
     </nav>
-
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -45,7 +76,7 @@
         </footer>
     </div>
 
-   
+    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
     <script src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
@@ -53,7 +84,7 @@
     <script>
         $(function () {
 
-            //$("#tmenu").kendoMenu();
+            $("#tmenu").kendoMenu();
 
             $("#DateOfBirth").datepicker();
             $("#JoiningDate").datepicker();
@@ -85,7 +116,7 @@
                 source: admissionBasis_
             });
             var paymentModes = ["Monthly", "Quarterly", "Semi Annually", "Annually"];
-            $("#Enrolment_PaymentMode").autocomplete({
+            $("#PaymentMode").autocomplete({
                 source: paymentModes
             });
             var cities = ["Karachi", "Hyderabad"];
@@ -111,17 +142,6 @@
             });
             $("#Guardian__OrganizationType").autocomplete({
                 source: orgtypes
-            });
-
-            var education_ = ["Matric", "Inter", "Graduation","Masters","Ph.D","BE","ME","BS","MS","MBBS"];
-            $("#Father__Education").autocomplete({
-                source: education_
-            });
-            $("#Mother__Education").autocomplete({
-                source: education_
-            });
-            $("#Guardian__Education").autocomplete({
-                source: education_
             });
         });
     </script>

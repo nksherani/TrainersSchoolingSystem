@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kendo.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,6 +12,13 @@ namespace TrainersSchoolingSystem.Controllers
     public class TestController : Controller
     {
         TrainersEntities db = new TrainersEntities();
+        public TestController()
+        {
+            if (!SiteMapManager.SiteMaps.ContainsKey("TMXMAP"))
+            {
+                SiteMapManager.SiteMaps.Register<XmlSiteMap>("TMXMAP", sitmap => sitmap.LoadFrom("~/Content/TMX.sitemap"));
+            }
+        }
         // GET: Test
         public ActionResult Index()
         {
