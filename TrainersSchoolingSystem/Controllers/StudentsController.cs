@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -8,6 +9,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using TrainersSchoolingSystem.Models;
+using TrainersSchoolingSystem.Models.DTOs;
 
 namespace TrainersSchoolingSystem.Controllers
 {
@@ -51,12 +53,13 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StudentId,FirstName,LastName,GRNo,RollNo,DateOfBirth,Age,PlaceOfBirth,Religion,Nationality,MotherTongue,BloodGroup,BFormNo,PaymentMode,AdmissionBasis,Father,Mother,Guardian,Mobile,LandLine,PostalCode,StreetAddress,City,JoiningDate,EndDate,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Student student)
+        public ActionResult Create(Student student)
         {
             if (ModelState.IsValid)
             {
                 student.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 student.CreatedDate = DateTime.Now;
+                //var std = Mapper.Map<StudentViewModel, Student>(student);
                 db.Students.Add(student);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -67,7 +70,33 @@ namespace TrainersSchoolingSystem.Controllers
             ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name", student.Mother);
             return View(student);
         }
+        // GET: Students/Create
+        public ActionResult NewAdmission()
+        {
+            ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name");
+            ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name");
+            ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name");
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult NewAdmission(StudentViewModel student)
+        {
+            if (ModelState.IsValid)
+            {
+                student.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                student.CreatedDate = DateTime.Now;
+                var std = Mapper.Map<StudentViewModel, Student>(student);
+                db.Students.Add(std);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
 
+            ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name", student.Father);
+            ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name", student.Guardian);
+            ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name", student.Mother);
+            return View(student);
+        }
         // GET: Students/Edit/5
         public ActionResult Edit(int? id)
         {

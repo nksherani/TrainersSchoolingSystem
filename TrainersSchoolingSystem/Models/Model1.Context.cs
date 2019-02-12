@@ -40,5 +40,7 @@ namespace TrainersSchoolingSystem.Models
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<SubjectAssignment> SubjectAssignments { get; set; }
         public virtual DbSet<TrainerUser> TrainerUsers { get; set; }
+
+        public System.Data.Entity.DbSet<TrainersSchoolingSystem.Models.DTOs.StudentViewModel> StudentViewModels { get; set; }
     }
 }
