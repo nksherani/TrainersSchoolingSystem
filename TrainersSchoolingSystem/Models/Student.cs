@@ -23,8 +23,6 @@ namespace TrainersSchoolingSystem.Models
         public int StudentId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string GRNo { get; set; }
-        public Nullable<int> RollNo { get; set; }
         public Nullable<System.DateTime> DateOfBirth { get; set; }
         public Nullable<int> Age { get; set; }
         public string PlaceOfBirth { get; set; }

@@ -73,6 +73,13 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: Students/Create
         public ActionResult NewAdmission()
         {
+            List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
+            foreach (var item in db.Classes)
+            {
+                var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
+                classes.Add(pair);
+            }
+            ViewBag.Class = new SelectList(classes, "Key", "Value");
             ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name");
             ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name");
             ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name");
@@ -82,16 +89,47 @@ namespace TrainersSchoolingSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult NewAdmission(StudentViewModel student)
         {
+            bool needGuardian = false;
+            if (student.Guardian_.Name == "")
+            {
+                student.Guardian_ = student.Father_;
+            }
+            else
+            {
+                needGuardian = true;
+            }
             if (ModelState.IsValid)
             {
                 student.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 student.CreatedDate = DateTime.Now;
                 var std = Mapper.Map<StudentViewModel, Student>(student);
                 db.Students.Add(std);
+                var father = Mapper.Map<ParentViewModel, Parent>(student.Father_);
+                var mother = Mapper.Map<ParentViewModel, Parent>(student.Mother_);
+                var guardian = Mapper.Map<ParentViewModel, Parent>(student.Guardian_);
+                db.Parents.Add(father);
+                std.Father = father.ParentId;
+                db.Parents.Add(mother);
+                std.Mother = mother.ParentId;
+
+                if (needGuardian)
+                {
+                    db.Parents.Add(guardian);
+                    std.Guardian = guardian.ParentId;
+                }
+                var enrolment = Mapper.Map<EnrolmentViewModel, Enrolment>(student.Enrolment);
+                enrolment.Student = std.StudentId;
+                db.Enrolments.Add(enrolment);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
+            foreach (var item in db.Classes)
+            {
+                var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
+                classes.Add(pair);
+            }
+            ViewBag.Class = new SelectList(classes, "Key", "Value");
             ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name", student.Father);
             ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name", student.Guardian);
             ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name", student.Mother);
@@ -120,15 +158,13 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "StudentId,FirstName,LastName,GRNo,RollNo,DateOfBirth,Age,PlaceOfBirth,Religion,Nationality,MotherTongue,BloodGroup,BFormNo,PaymentMode,AdmissionBasis,Father,Mother,Guardian,Mobile,LandLine,PostalCode,StreetAddress,City,JoiningDate,EndDate,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Student student)
+        public ActionResult Edit(Student student)
         {
             if (ModelState.IsValid)
             {
                 var studentdb = db.Students.Find(student.StudentId);
                 studentdb.FirstName = student.FirstName;
                 studentdb.LastName = student.LastName;
-                studentdb.GRNo = student.GRNo;
-                studentdb.RollNo = student.RollNo;
                 studentdb.DateOfBirth = student.DateOfBirth;
                 studentdb.Age = DateTime.Now.Year - studentdb.DateOfBirth.Value.Year;
                 studentdb.PlaceOfBirth = student.PlaceOfBirth;

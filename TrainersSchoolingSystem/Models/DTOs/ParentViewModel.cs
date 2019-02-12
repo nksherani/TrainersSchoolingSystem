@@ -17,6 +17,8 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public string CNIC { get; set; }
         [Required]
         public string Profession { get; set; }
+        [Display(Name = "Organization Type")]
+        public string OrganizationType { get; set; }
         [Required]
         public string Education { get; set; }
         [Required]

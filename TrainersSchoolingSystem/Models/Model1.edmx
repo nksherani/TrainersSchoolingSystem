@@ -75,6 +75,8 @@
           </Key>
           <Property Name="EnrolmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Student" Type="int" />
+          <Property Name="GRNo" Type="varchar(max)" />
+          <Property Name="RollNo" Type="int" />
           <Property Name="Class" Type="int" />
           <Property Name="LastClass" Type="varchar(max)" />
           <Property Name="LastInstitude" Type="varchar(max)" />
@@ -129,6 +131,7 @@
           <Property Name="Name" Type="varchar(max)" />
           <Property Name="CNIC" Type="varchar(max)" />
           <Property Name="Profession" Type="varchar(max)" />
+          <Property Name="OrganizationType" Type="varchar(max)" />
           <Property Name="Education" Type="varchar(max)" />
           <Property Name="MonthlyIncome" Type="varchar(max)" />
           <Property Name="Mobile" Type="varchar(max)" />
@@ -175,8 +178,6 @@
           <Property Name="StudentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FirstName" Type="varchar(max)" />
           <Property Name="LastName" Type="varchar(max)" />
-          <Property Name="GRNo" Type="varchar(max)" />
-          <Property Name="RollNo" Type="int" />
           <Property Name="DateOfBirth" Type="datetime" />
           <Property Name="Age" Type="int" />
           <Property Name="PlaceOfBirth" Type="varchar(max)" />
@@ -280,7 +281,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Enrolment__Class__0EF836A4">
+        <Association Name="FK__Enrolment__Class__1B5E0D89">
           <End Role="Class" Type="Self.Class" Multiplicity="0..1" />
           <End Role="Enrolment" Type="Self.Enrolment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -292,7 +293,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Enrolment__Creat__0D0FEE32">
+        <Association Name="FK__Enrolment__Creat__1975C517">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="Enrolment" Type="Self.Enrolment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -304,7 +305,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Enrolment__Stude__11D4A34F">
+        <Association Name="FK__Enrolment__Stude__1C5231C2">
           <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
           <End Role="Enrolment" Type="Self.Enrolment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -316,7 +317,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Enrolment__Updat__0E04126B">
+        <Association Name="FK__Enrolment__Updat__1A69E950">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="Enrolment" Type="Self.Enrolment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -424,7 +425,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Parent__CreatedB__019E3B86">
+        <Association Name="FK__Parent__CreatedB__29AC2CE0">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="Parent" Type="Self.Parent" Multiplicity="*" />
           <ReferentialConstraint>
@@ -436,7 +437,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Parent__UpdatedB__00AA174D">
+        <Association Name="FK__Parent__UpdatedB__28B808A7">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="Parent" Type="Self.Parent" Multiplicity="*" />
           <ReferentialConstraint>
@@ -484,7 +485,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Student__Father__14B10FFA">
+        <Association Name="FK__Student__Father__25DB9BFC">
           <End Role="Parent" Type="Self.Parent" Multiplicity="0..1" />
           <End Role="Student" Type="Self.Student" Multiplicity="*" />
           <ReferentialConstraint>
@@ -496,7 +497,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Student__Guardia__1699586C">
+        <Association Name="FK__Student__Guardia__27C3E46E">
           <End Role="Parent" Type="Self.Parent" Multiplicity="0..1" />
           <End Role="Student" Type="Self.Student" Multiplicity="*" />
           <ReferentialConstraint>
@@ -508,7 +509,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Student__Mother__15A53433">
+        <Association Name="FK__Student__Mother__26CFC035">
           <End Role="Parent" Type="Self.Parent" Multiplicity="0..1" />
           <End Role="Student" Type="Self.Student" Multiplicity="*" />
           <ReferentialConstraint>
@@ -725,19 +726,19 @@
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Class" EntitySet="Class" />
           </AssociationSet>
-          <AssociationSet Name="FK__Enrolment__Class__0EF836A4" Association="Self.FK__Enrolment__Class__0EF836A4">
+          <AssociationSet Name="FK__Enrolment__Class__1B5E0D89" Association="Self.FK__Enrolment__Class__1B5E0D89">
             <End Role="Class" EntitySet="Class" />
             <End Role="Enrolment" EntitySet="Enrolment" />
           </AssociationSet>
-          <AssociationSet Name="FK__Enrolment__Creat__0D0FEE32" Association="Self.FK__Enrolment__Creat__0D0FEE32">
+          <AssociationSet Name="FK__Enrolment__Creat__1975C517" Association="Self.FK__Enrolment__Creat__1975C517">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Enrolment" EntitySet="Enrolment" />
           </AssociationSet>
-          <AssociationSet Name="FK__Enrolment__Stude__11D4A34F" Association="Self.FK__Enrolment__Stude__11D4A34F">
+          <AssociationSet Name="FK__Enrolment__Stude__1C5231C2" Association="Self.FK__Enrolment__Stude__1C5231C2">
             <End Role="Student" EntitySet="Student" />
             <End Role="Enrolment" EntitySet="Enrolment" />
           </AssociationSet>
-          <AssociationSet Name="FK__Enrolment__Updat__0E04126B" Association="Self.FK__Enrolment__Updat__0E04126B">
+          <AssociationSet Name="FK__Enrolment__Updat__1A69E950" Association="Self.FK__Enrolment__Updat__1A69E950">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Enrolment" EntitySet="Enrolment" />
           </AssociationSet>
@@ -773,11 +774,11 @@
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="LookupType" EntitySet="LookupType" />
           </AssociationSet>
-          <AssociationSet Name="FK__Parent__CreatedB__019E3B86" Association="Self.FK__Parent__CreatedB__019E3B86">
+          <AssociationSet Name="FK__Parent__CreatedB__29AC2CE0" Association="Self.FK__Parent__CreatedB__29AC2CE0">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Parent" EntitySet="Parent" />
           </AssociationSet>
-          <AssociationSet Name="FK__Parent__UpdatedB__00AA174D" Association="Self.FK__Parent__UpdatedB__00AA174D">
+          <AssociationSet Name="FK__Parent__UpdatedB__28B808A7" Association="Self.FK__Parent__UpdatedB__28B808A7">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Parent" EntitySet="Parent" />
           </AssociationSet>
@@ -793,15 +794,15 @@
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Student" EntitySet="Student" />
           </AssociationSet>
-          <AssociationSet Name="FK__Student__Father__14B10FFA" Association="Self.FK__Student__Father__14B10FFA">
+          <AssociationSet Name="FK__Student__Father__25DB9BFC" Association="Self.FK__Student__Father__25DB9BFC">
             <End Role="Parent" EntitySet="Parent" />
             <End Role="Student" EntitySet="Student" />
           </AssociationSet>
-          <AssociationSet Name="FK__Student__Guardia__1699586C" Association="Self.FK__Student__Guardia__1699586C">
+          <AssociationSet Name="FK__Student__Guardia__27C3E46E" Association="Self.FK__Student__Guardia__27C3E46E">
             <End Role="Parent" EntitySet="Parent" />
             <End Role="Student" EntitySet="Student" />
           </AssociationSet>
-          <AssociationSet Name="FK__Student__Mother__15A53433" Association="Self.FK__Student__Mother__15A53433">
+          <AssociationSet Name="FK__Student__Mother__26CFC035" Association="Self.FK__Student__Mother__26CFC035">
             <End Role="Parent" EntitySet="Parent" />
             <End Role="Student" EntitySet="Student" />
           </AssociationSet>
@@ -902,7 +903,7 @@
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Class" EntitySet="Classes" />
           </AssociationSet>
-          <AssociationSet Name="FK__Enrolment__Class__0EF836A4" Association="TrainersModel.FK__Enrolment__Class__0EF836A4">
+          <AssociationSet Name="FK__Enrolment__Class__1B5E0D89" Association="TrainersModel.FK__Enrolment__Class__1B5E0D89">
             <End Role="Class" EntitySet="Classes" />
             <End Role="Enrolment" EntitySet="Enrolments" />
           </AssociationSet>
@@ -914,15 +915,15 @@
             <End Role="Class" EntitySet="Classes" />
             <End Role="SubjectAssignment" EntitySet="SubjectAssignments" />
           </AssociationSet>
-          <AssociationSet Name="FK__Enrolment__Creat__0D0FEE32" Association="TrainersModel.FK__Enrolment__Creat__0D0FEE32">
+          <AssociationSet Name="FK__Enrolment__Creat__1975C517" Association="TrainersModel.FK__Enrolment__Creat__1975C517">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Enrolment" EntitySet="Enrolments" />
           </AssociationSet>
-          <AssociationSet Name="FK__Enrolment__Stude__11D4A34F" Association="TrainersModel.FK__Enrolment__Stude__11D4A34F">
+          <AssociationSet Name="FK__Enrolment__Stude__1C5231C2" Association="TrainersModel.FK__Enrolment__Stude__1C5231C2">
             <End Role="Student" EntitySet="Students" />
             <End Role="Enrolment" EntitySet="Enrolments" />
           </AssociationSet>
-          <AssociationSet Name="FK__Enrolment__Updat__0E04126B" Association="TrainersModel.FK__Enrolment__Updat__0E04126B">
+          <AssociationSet Name="FK__Enrolment__Updat__1A69E950" Association="TrainersModel.FK__Enrolment__Updat__1A69E950">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Enrolment" EntitySet="Enrolments" />
           </AssociationSet>
@@ -954,23 +955,23 @@
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="LookupType" EntitySet="LookupTypes" />
           </AssociationSet>
-          <AssociationSet Name="FK__Parent__CreatedB__019E3B86" Association="TrainersModel.FK__Parent__CreatedB__019E3B86">
+          <AssociationSet Name="FK__Parent__CreatedB__29AC2CE0" Association="TrainersModel.FK__Parent__CreatedB__29AC2CE0">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Parent" EntitySet="Parents" />
           </AssociationSet>
-          <AssociationSet Name="FK__Parent__UpdatedB__00AA174D" Association="TrainersModel.FK__Parent__UpdatedB__00AA174D">
+          <AssociationSet Name="FK__Parent__UpdatedB__28B808A7" Association="TrainersModel.FK__Parent__UpdatedB__28B808A7">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Parent" EntitySet="Parents" />
           </AssociationSet>
-          <AssociationSet Name="FK__Student__Father__14B10FFA" Association="TrainersModel.FK__Student__Father__14B10FFA">
+          <AssociationSet Name="FK__Student__Father__25DB9BFC" Association="TrainersModel.FK__Student__Father__25DB9BFC">
             <End Role="Parent" EntitySet="Parents" />
             <End Role="Student" EntitySet="Students" />
           </AssociationSet>
-          <AssociationSet Name="FK__Student__Guardia__1699586C" Association="TrainersModel.FK__Student__Guardia__1699586C">
+          <AssociationSet Name="FK__Student__Guardia__27C3E46E" Association="TrainersModel.FK__Student__Guardia__27C3E46E">
             <End Role="Parent" EntitySet="Parents" />
             <End Role="Student" EntitySet="Students" />
           </AssociationSet>
-          <AssociationSet Name="FK__Student__Mother__15A53433" Association="TrainersModel.FK__Student__Mother__15A53433">
+          <AssociationSet Name="FK__Student__Mother__26CFC035" Association="TrainersModel.FK__Student__Mother__26CFC035">
             <End Role="Parent" EntitySet="Parents" />
             <End Role="Student" EntitySet="Students" />
           </AssociationSet>
@@ -1091,7 +1092,7 @@
           <NavigationProperty Name="Staff" Relationship="TrainersModel.FK__Class__ClassAdvi__7814D14C" FromRole="Class" ToRole="Staff" />
           <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Class__CreatedBy__762C88DA" FromRole="Class" ToRole="TrainerUser" />
           <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Class__UpdatedBy__7720AD13" FromRole="Class" ToRole="TrainerUser" />
-          <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Class__0EF836A4" FromRole="Class" ToRole="Enrolment" />
+          <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Class__1B5E0D89" FromRole="Class" ToRole="Enrolment" />
           <NavigationProperty Name="Fees" Relationship="TrainersModel.FK__Fee__Class__7908F585" FromRole="Class" ToRole="Fee" />
           <NavigationProperty Name="SubjectAssignments" Relationship="TrainersModel.FK__SubjectAs__Class__753864A1" FromRole="Class" ToRole="SubjectAssignment" />
         </EntityType>
@@ -1101,6 +1102,8 @@
           </Key>
           <Property Name="EnrolmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Student" Type="Int32" />
+          <Property Name="GRNo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RollNo" Type="Int32" />
           <Property Name="Class" Type="Int32" />
           <Property Name="LastClass" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="LastInstitude" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -1108,10 +1111,10 @@
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
-          <NavigationProperty Name="Class1" Relationship="TrainersModel.FK__Enrolment__Class__0EF836A4" FromRole="Enrolment" ToRole="Class" />
-          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Enrolment__Creat__0D0FEE32" FromRole="Enrolment" ToRole="TrainerUser" />
-          <NavigationProperty Name="Student1" Relationship="TrainersModel.FK__Enrolment__Stude__11D4A34F" FromRole="Enrolment" ToRole="Student" />
-          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Enrolment__Updat__0E04126B" FromRole="Enrolment" ToRole="TrainerUser" />
+          <NavigationProperty Name="Class1" Relationship="TrainersModel.FK__Enrolment__Class__1B5E0D89" FromRole="Enrolment" ToRole="Class" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Enrolment__Creat__1975C517" FromRole="Enrolment" ToRole="TrainerUser" />
+          <NavigationProperty Name="Student1" Relationship="TrainersModel.FK__Enrolment__Stude__1C5231C2" FromRole="Enrolment" ToRole="Student" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Enrolment__Updat__1A69E950" FromRole="Enrolment" ToRole="TrainerUser" />
         </EntityType>
         <EntityType Name="Fee">
           <Key>
@@ -1168,6 +1171,7 @@
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="CNIC" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Profession" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OrganizationType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Education" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="MonthlyIncome" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Mobile" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -1181,11 +1185,11 @@
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
-          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Parent__CreatedB__019E3B86" FromRole="Parent" ToRole="TrainerUser" />
-          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Parent__UpdatedB__00AA174D" FromRole="Parent" ToRole="TrainerUser" />
-          <NavigationProperty Name="Students" Relationship="TrainersModel.FK__Student__Father__14B10FFA" FromRole="Parent" ToRole="Student" />
-          <NavigationProperty Name="Students1" Relationship="TrainersModel.FK__Student__Guardia__1699586C" FromRole="Parent" ToRole="Student" />
-          <NavigationProperty Name="Students2" Relationship="TrainersModel.FK__Student__Mother__15A53433" FromRole="Parent" ToRole="Student" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Parent__CreatedB__29AC2CE0" FromRole="Parent" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Parent__UpdatedB__28B808A7" FromRole="Parent" ToRole="TrainerUser" />
+          <NavigationProperty Name="Students" Relationship="TrainersModel.FK__Student__Father__25DB9BFC" FromRole="Parent" ToRole="Student" />
+          <NavigationProperty Name="Students1" Relationship="TrainersModel.FK__Student__Guardia__27C3E46E" FromRole="Parent" ToRole="Student" />
+          <NavigationProperty Name="Students2" Relationship="TrainersModel.FK__Student__Mother__26CFC035" FromRole="Parent" ToRole="Student" />
         </EntityType>
         <EntityType Name="Staff">
           <Key>
@@ -1223,8 +1227,6 @@
           <Property Name="StudentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="GRNo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="RollNo" Type="Int32" />
           <Property Name="DateOfBirth" Type="DateTime" Precision="3" />
           <Property Name="Age" Type="Int32" />
           <Property Name="PlaceOfBirth" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -1249,10 +1251,10 @@
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
-          <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Stude__11D4A34F" FromRole="Student" ToRole="Enrolment" />
-          <NavigationProperty Name="Parent" Relationship="TrainersModel.FK__Student__Father__14B10FFA" FromRole="Student" ToRole="Parent" />
-          <NavigationProperty Name="Parent1" Relationship="TrainersModel.FK__Student__Guardia__1699586C" FromRole="Student" ToRole="Parent" />
-          <NavigationProperty Name="Parent2" Relationship="TrainersModel.FK__Student__Mother__15A53433" FromRole="Student" ToRole="Parent" />
+          <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Stude__1C5231C2" FromRole="Student" ToRole="Enrolment" />
+          <NavigationProperty Name="Parent" Relationship="TrainersModel.FK__Student__Father__25DB9BFC" FromRole="Student" ToRole="Parent" />
+          <NavigationProperty Name="Parent1" Relationship="TrainersModel.FK__Student__Guardia__27C3E46E" FromRole="Student" ToRole="Parent" />
+          <NavigationProperty Name="Parent2" Relationship="TrainersModel.FK__Student__Mother__26CFC035" FromRole="Student" ToRole="Parent" />
           <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Student__Created__13BCEBC1" FromRole="Student" ToRole="TrainerUser" />
           <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Student__Updated__12C8C788" FromRole="Student" ToRole="TrainerUser" />
         </EntityType>
@@ -1307,16 +1309,16 @@
           <Property Name="UpdatedBy" Type="Int32" />
           <NavigationProperty Name="Classes" Relationship="TrainersModel.FK__Class__CreatedBy__762C88DA" FromRole="TrainerUser" ToRole="Class" />
           <NavigationProperty Name="Classes1" Relationship="TrainersModel.FK__Class__UpdatedBy__7720AD13" FromRole="TrainerUser" ToRole="Class" />
-          <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Creat__0D0FEE32" FromRole="TrainerUser" ToRole="Enrolment" />
-          <NavigationProperty Name="Enrolments1" Relationship="TrainersModel.FK__Enrolment__Updat__0E04126B" FromRole="TrainerUser" ToRole="Enrolment" />
+          <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Creat__1975C517" FromRole="TrainerUser" ToRole="Enrolment" />
+          <NavigationProperty Name="Enrolments1" Relationship="TrainersModel.FK__Enrolment__Updat__1A69E950" FromRole="TrainerUser" ToRole="Enrolment" />
           <NavigationProperty Name="Fees" Relationship="TrainersModel.FK__Fee__CreatedBy__7073AF84" FromRole="TrainerUser" ToRole="Fee" />
           <NavigationProperty Name="Fees1" Relationship="TrainersModel.FK__Fee__UpdatedBy__7167D3BD" FromRole="TrainerUser" ToRole="Fee" />
           <NavigationProperty Name="Lookups" Relationship="TrainersModel.FK__Lookup__CreatedB__5B78929E" FromRole="TrainerUser" ToRole="Lookup" />
           <NavigationProperty Name="Lookups1" Relationship="TrainersModel.FK__Lookup__UpdatedB__5C6CB6D7" FromRole="TrainerUser" ToRole="Lookup" />
           <NavigationProperty Name="LookupTypes" Relationship="TrainersModel.FK__LookupTyp__Creat__5F492382" FromRole="TrainerUser" ToRole="LookupType" />
           <NavigationProperty Name="LookupTypes1" Relationship="TrainersModel.FK__LookupTyp__Updat__603D47BB" FromRole="TrainerUser" ToRole="LookupType" />
-          <NavigationProperty Name="Parents" Relationship="TrainersModel.FK__Parent__CreatedB__019E3B86" FromRole="TrainerUser" ToRole="Parent" />
-          <NavigationProperty Name="Parents1" Relationship="TrainersModel.FK__Parent__UpdatedB__00AA174D" FromRole="TrainerUser" ToRole="Parent" />
+          <NavigationProperty Name="Parents" Relationship="TrainersModel.FK__Parent__CreatedB__29AC2CE0" FromRole="TrainerUser" ToRole="Parent" />
+          <NavigationProperty Name="Parents1" Relationship="TrainersModel.FK__Parent__UpdatedB__28B808A7" FromRole="TrainerUser" ToRole="Parent" />
           <NavigationProperty Name="Staffs" Relationship="TrainersModel.FK__Staff__CreatedBy__3B0BC30C" FromRole="TrainerUser" ToRole="Staff" />
           <NavigationProperty Name="Staffs1" Relationship="TrainersModel.FK__Staff__UpdatedBy__3BFFE745" FromRole="TrainerUser" ToRole="Staff" />
           <NavigationProperty Name="Students" Relationship="TrainersModel.FK__Student__Created__13BCEBC1" FromRole="TrainerUser" ToRole="Student" />
@@ -1394,7 +1396,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Enrolment__Class__0EF836A4">
+        <Association Name="FK__Enrolment__Class__1B5E0D89">
           <End Type="TrainersModel.Class" Role="Class" Multiplicity="0..1" />
           <End Type="TrainersModel.Enrolment" Role="Enrolment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1430,7 +1432,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Enrolment__Creat__0D0FEE32">
+        <Association Name="FK__Enrolment__Creat__1975C517">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.Enrolment" Role="Enrolment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1442,7 +1444,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Enrolment__Stude__11D4A34F">
+        <Association Name="FK__Enrolment__Stude__1C5231C2">
           <End Type="TrainersModel.Student" Role="Student" Multiplicity="0..1" />
           <End Type="TrainersModel.Enrolment" Role="Enrolment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1454,7 +1456,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Enrolment__Updat__0E04126B">
+        <Association Name="FK__Enrolment__Updat__1A69E950">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.Enrolment" Role="Enrolment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1550,7 +1552,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Parent__CreatedB__019E3B86">
+        <Association Name="FK__Parent__CreatedB__29AC2CE0">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.Parent" Role="Parent" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1562,7 +1564,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Parent__UpdatedB__00AA174D">
+        <Association Name="FK__Parent__UpdatedB__28B808A7">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.Parent" Role="Parent" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1574,7 +1576,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Student__Father__14B10FFA">
+        <Association Name="FK__Student__Father__25DB9BFC">
           <End Type="TrainersModel.Parent" Role="Parent" Multiplicity="0..1" />
           <End Type="TrainersModel.Student" Role="Student" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1586,7 +1588,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Student__Guardia__1699586C">
+        <Association Name="FK__Student__Guardia__27C3E46E">
           <End Type="TrainersModel.Parent" Role="Parent" Multiplicity="0..1" />
           <End Type="TrainersModel.Student" Role="Student" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1598,7 +1600,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Student__Mother__15A53433">
+        <Association Name="FK__Student__Mother__26CFC035">
           <End Type="TrainersModel.Parent" Role="Parent" Multiplicity="0..1" />
           <End Type="TrainersModel.Student" Role="Student" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1833,6 +1835,8 @@
                 <ScalarProperty Name="LastInstitude" ColumnName="LastInstitude" />
                 <ScalarProperty Name="LastClass" ColumnName="LastClass" />
                 <ScalarProperty Name="Class" ColumnName="Class" />
+                <ScalarProperty Name="RollNo" ColumnName="RollNo" />
+                <ScalarProperty Name="GRNo" ColumnName="GRNo" />
                 <ScalarProperty Name="Student" ColumnName="Student" />
                 <ScalarProperty Name="EnrolmentId" ColumnName="EnrolmentId" />
               </MappingFragment>
@@ -1895,6 +1899,7 @@
                 <ScalarProperty Name="Mobile" ColumnName="Mobile" />
                 <ScalarProperty Name="MonthlyIncome" ColumnName="MonthlyIncome" />
                 <ScalarProperty Name="Education" ColumnName="Education" />
+                <ScalarProperty Name="OrganizationType" ColumnName="OrganizationType" />
                 <ScalarProperty Name="Profession" ColumnName="Profession" />
                 <ScalarProperty Name="CNIC" ColumnName="CNIC" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1955,8 +1960,6 @@
                 <ScalarProperty Name="PlaceOfBirth" ColumnName="PlaceOfBirth" />
                 <ScalarProperty Name="Age" ColumnName="Age" />
                 <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
-                <ScalarProperty Name="RollNo" ColumnName="RollNo" />
-                <ScalarProperty Name="GRNo" ColumnName="GRNo" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="StudentId" ColumnName="StudentId" />

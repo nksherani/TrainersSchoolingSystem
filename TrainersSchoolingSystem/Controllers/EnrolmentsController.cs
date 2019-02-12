@@ -106,11 +106,13 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EnrolmentId,Student,Class,LastClass,LastInstitude,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Enrolment enrolment)
+        public ActionResult Edit(Enrolment enrolment)
         {
             if (ModelState.IsValid)
             {
                 var enrolmentdb = db.Enrolments.Find(enrolment.EnrolmentId);
+                enrolmentdb.RollNo = enrolment.RollNo;
+                enrolmentdb.GRNo = enrolment.GRNo;
                 enrolmentdb.Class = enrolment.Class;
                 enrolmentdb.LastClass = enrolment.LastClass;
                 enrolmentdb.LastInstitude = enrolment.LastInstitude;

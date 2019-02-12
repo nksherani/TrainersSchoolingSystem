@@ -108,6 +108,52 @@
             $("#DateOfBirth").datepicker();
             $("#JoiningDate").datepicker();
             $("#EndDate").datepicker();
+
+            var places = ["District East Karachi", "District West Karachi", "District Central Karachi", "District Korangi", "District South Karachi"];
+            $("#PlaceOfBirth").autocomplete({
+                source: places
+            });
+
+            var religions = ["Islam", "Christianity", "Hinduism"];
+            $("#Religion").autocomplete({
+                source: religions
+            });
+            var nationalities = ["Pakistani",];
+            $("#Nationality").autocomplete({
+                source: nationalities
+            });
+            var admissionBasis_ = ["Merit Based","Need Based"];
+            $("#AdmissionBasis").autocomplete({
+                source: admissionBasis_
+            });
+            var paymentModes = ["Monthly", "Quarterly", "Semi Annually","Annually"];
+            $("#PaymentMode").autocomplete({
+                source: paymentModes
+            });
+            var cities = ["Karachi", "Hyderabad"];
+            $("#City").autocomplete({
+                source: cities
+            });
+            var professions = ["Doctor", "Engineer","Teacher","Businessman","No Profession","Factory Worker","Government Servant"];
+            $("#Father__Profession").autocomplete({
+                source: professions
+            });
+            $("#Mother__Profession").autocomplete({
+                source: professions
+            });
+            $("#Guardian__Profession").autocomplete({
+                source: professions
+            });
+            var orgtypes = ["Public Sector", "Private Sector","Semi-Government"];
+            $("#Father__OrganizationType").autocomplete({
+                source: orgtypes
+            });
+            $("#Mother__OrganizationType").autocomplete({
+                source: orgtypes
+            });
+            $("#Guardian__OrganizationType").autocomplete({
+                source: orgtypes
+            });
         });
     </script>
 </body>

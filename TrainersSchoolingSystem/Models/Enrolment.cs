@@ -16,6 +16,8 @@ namespace TrainersSchoolingSystem.Models
     {
         public int EnrolmentId { get; set; }
         public Nullable<int> Student { get; set; }
+        public string GRNo { get; set; }
+        public Nullable<int> RollNo { get; set; }
         public Nullable<int> Class { get; set; }
         public string LastClass { get; set; }
         public string LastInstitude { get; set; }

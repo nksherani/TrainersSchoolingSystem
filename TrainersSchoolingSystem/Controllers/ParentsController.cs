@@ -90,6 +90,7 @@ namespace TrainersSchoolingSystem.Controllers
                 parentdb.Name = parent.Name;
                 parentdb.CNIC = parent.CNIC;
                 parentdb.Profession = parent.Profession;
+                parentdb.OrganizationType = parent.OrganizationType;
                 parentdb.Education = parent.Education;
                 parentdb.MonthlyIncome = parent.MonthlyIncome;
                 parentdb.Mobile = parent.Mobile;

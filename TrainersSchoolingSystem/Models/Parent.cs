@@ -26,6 +26,7 @@ namespace TrainersSchoolingSystem.Models
         public string Name { get; set; }
         public string CNIC { get; set; }
         public string Profession { get; set; }
+        public string OrganizationType { get; set; }
         public string Education { get; set; }
         public string MonthlyIncome { get; set; }
         public string Mobile { get; set; }

@@ -6,10 +6,19 @@
     <tr>
         <td>
             <div class="form-group">
-                @Html.LabelFor(model => model.Student, "Student", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.RollNo, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownList("Student", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Student, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.RollNo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.RollNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="form-group">
+                @Html.LabelFor(model => model.GRNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.GRNo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.GRNo, "", new { @class = "text-danger" })
                 </div>
             </div>
         </td>
@@ -22,6 +31,8 @@
                 </div>
             </div>
         </td>
+    </tr>
+    <tr>
         <td>
             <div class="form-group">
                 @Html.LabelFor(model => model.LastClass, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -31,8 +42,7 @@
                 </div>
             </div>
         </td>
-    </tr>
-    <tr>
+
         <td>
             <div class="form-group">
                 @Html.LabelFor(model => model.LastInstitude, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -42,7 +52,6 @@
                 </div>
             </div>
         </td>
-        <td></td>
         <td></td>
     </tr>
 

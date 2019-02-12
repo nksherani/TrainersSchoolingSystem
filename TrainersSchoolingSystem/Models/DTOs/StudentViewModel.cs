@@ -15,12 +15,6 @@ namespace TrainersSchoolingSystem.Models.DTOs
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
         [Required]
-        [Display(Name = "G.R No.")]
-        public string GRNo { get; set; }
-        [Required]
-        [Display(Name = "Roll No.")]
-        public Nullable<int> RollNo { get; set; }
-        [Required]
         [Display(Name = "Date of Birth")]
         public Nullable<DateTime> DateOfBirth { get; set; }
         public Nullable<int> Age { get; set; }
@@ -49,8 +43,9 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public Nullable<int> Mother { get; set; }
         public Nullable<int> Guardian { get; set; }
         public string Mobile { get; set; }
+        [Display(Name = "Land Line")]
         public string LandLine { get; set; }
-        [Display(Name = "Postal Address")]
+        [Display(Name = "Postal Code")]
         public string PostalCode { get; set; }
         [Required]
         [Display(Name = "Address")]
