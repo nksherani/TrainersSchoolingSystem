@@ -13,6 +13,7 @@ using TrainersSchoolingSystem.Models;
 
 namespace TrainersSchoolingSystem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class TrainerUsersController : Controller
     {
         private TrainersEntities db = new TrainersEntities();

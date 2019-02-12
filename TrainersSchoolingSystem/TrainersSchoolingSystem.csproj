@@ -221,6 +221,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\EnrolmentsController.cs" />
+    <Compile Include="Controllers\FeesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LookupsController.cs" />
     <Compile Include="Controllers\LookupTypesController.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Controllers\SubjectAssignmentsController.cs" />
     <Compile Include="Controllers\SubjectsController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\TrainerUsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -252,6 +254,7 @@
     </Compile>
     <Compile Include="Models\DTOs\ClassViewModel.cs" />
     <Compile Include="Models\DTOs\EnrolmentViewModel.cs" />
+    <Compile Include="Models\DTOs\FeeViewModel.cs" />
     <Compile Include="Models\DTOs\ParentViewModel.cs" />
     <Compile Include="Models\DTOs\StaffViewModel.cs" />
     <Compile Include="Models\DTOs\StudentViewModel.cs" />
@@ -308,6 +311,8 @@
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utils\Constants.cs" />
+    <Compile Include="Utils\RegularExpressions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -457,9 +462,16 @@
     <Content Include="Views\Students\NewAdmission.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ParentViewModel.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\EnrolmentViewModel.cshtml" />
+    <Content Include="Views\Fees\Create.cshtml" />
+    <Content Include="Views\Fees\Delete.cshtml" />
+    <Content Include="Views\Fees\Details.cshtml" />
+    <Content Include="Views\Fees\Edit.cshtml" />
+    <Content Include="Views\Fees\Index.cshtml" />
+    <Content Include="Views\Account\Unauthorized.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Test\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

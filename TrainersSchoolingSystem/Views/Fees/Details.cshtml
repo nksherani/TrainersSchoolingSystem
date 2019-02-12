@@ -1,4 +1,4 @@
-﻿@model TrainersSchoolingSystem.Models.Enrolment
+﻿@model TrainersSchoolingSystem.Models.Fee
 
 @{
     ViewBag.Title = "Details";
@@ -7,29 +7,9 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Enrolment</h4>
+    <h4>Fee</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Student1.FirstName)
-        </dt>
-        <dt>
-            @Html.DisplayNameFor(model => model.RollNo)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.RollNo)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.GRNo)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.GRNo)
-        </dd>
-        <dd>
-            @Html.DisplayFor(model => model.Student1.FirstName)
-        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Class1.ClassName)
         </dt>
@@ -38,34 +18,37 @@
             @Html.DisplayFor(model => model.Class1.ClassName)
             @Html.DisplayFor(model => model.Class1.Section)
         </dd>
+
         <dt>
-            @Html.DisplayNameFor(model => model.LastClass)
+            @Html.DisplayNameFor(model => model.FeeType)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.LastClass)
+            @Html.DisplayFor(model => model.FeeType)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.LastInstitude)
+            @Html.DisplayNameFor(model => model.Amount)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.LastInstitude)
+            @Html.DisplayFor(model => model.Amount)
         </dd>
+
         <dt>
-            @Html.DisplayNameFor(model => model.Fee)
+            @Html.DisplayNameFor(model => model.Description)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Fee)
+            @Html.DisplayFor(model => model.Description)
         </dd>
+
         <dt>
-            @Html.DisplayNameFor(model => model.PaymentMode)
+            @Html.DisplayNameFor(model => model.Year)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.PaymentMode)
+            @Html.DisplayFor(model => model.Year)
         </dd>
 
         <dt>
@@ -83,8 +66,6 @@
         <dd>
             @Html.DisplayFor(model => model.UpdatedDate)
         </dd>
-
-
 
         <dt>
             @Html.DisplayNameFor(model => model.CreatedBy)
@@ -107,6 +88,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.EnrolmentId }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.FeeId }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

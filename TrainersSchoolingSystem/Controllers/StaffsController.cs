@@ -11,6 +11,7 @@ using TrainersSchoolingSystem.Models;
 
 namespace TrainersSchoolingSystem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class StaffsController : Controller
     {
         private TrainersEntities db = new TrainersEntities();

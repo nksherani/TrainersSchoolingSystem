@@ -6,17 +6,18 @@ using System.Web;
 
 namespace TrainersSchoolingSystem.Models.DTOs
 {
-    public class SubjectViewModel
+    public class FeeViewModel
     {
-        public int SubjectId { get; set; }
-        [Display(Name = "Subject")]
-        public string SubjectName { get; set; }
+        [Key]
+        public int FeeId { get; set; }
+        public Nullable<int> Class { get; set; }
+        public string FeeType { get; set; }
+        public Nullable<int> Amount { get; set; }
+        public string Description { get; set; }
+        public Nullable<int> Year { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public Nullable<int> UpdatedBy { get; set; }
-
-        public TrainerUserViewModel CreatedBy_ { get; set; }
-        public TrainerUserViewModel UpdatedBy_ { get; set; }
     }
 }

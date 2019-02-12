@@ -33,16 +33,18 @@ namespace TrainersSchoolingSystem.Models.DTOs
         [Required]
         [Display(Name = "Form B No.")]
         public string BFormNo { get; set; }
-        [Required]
-        [Display(Name = "Payment Mode")]
-        public string PaymentMode { get; set; }
+        
         [Required]
         [Display(Name = "Admission Based on")]
         public string AdmissionBasis { get; set; }
         public Nullable<int> Father { get; set; }
         public Nullable<int> Mother { get; set; }
         public Nullable<int> Guardian { get; set; }
+        [RegularExpression("^\\+[0-9]{12}$", ErrorMessage = "Enter Mobile No. in proper format like +923331234567")]
+        [MaxLength(13, ErrorMessage = "Maximum characters limit exceeded")]
         public string Mobile { get; set; }
+        [RegularExpression("(^\\+[0-9]{11}$)|(^\\+[0-9]{12}$)", ErrorMessage = "Enter Phone No. in proper format like +92211234567 or +922112345678")]
+        [MaxLength(13, ErrorMessage = "Maximum characters limit exceeded")]
         [Display(Name = "Land Line")]
         public string LandLine { get; set; }
         [Display(Name = "Postal Code")]
@@ -70,6 +72,9 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public ParentViewModel Guardian_ { get; set; }
         public TrainerUserViewModel CreatedBy_ { get; set; }
         public TrainerUserViewModel UpdatedBy_ { get; set; }
+
+
+        public ParentViewModel Fee { get; set; }
 
 
     }

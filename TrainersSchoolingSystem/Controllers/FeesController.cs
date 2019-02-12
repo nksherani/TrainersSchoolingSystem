@@ -12,33 +12,33 @@ using TrainersSchoolingSystem.Models;
 namespace TrainersSchoolingSystem.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class EnrolmentsController : Controller
+    public class FeesController : Controller
     {
         private TrainersEntities db = new TrainersEntities();
 
-        // GET: Enrolments
+        // GET: Fees
         public ActionResult Index()
         {
-            var enrolments = db.Enrolments.Include(e => e.Class1).Include(e => e.TrainerUser).Include(e => e.Student1).Include(e => e.TrainerUser1);
-            return View(enrolments.ToList());
+            var fees = db.Fees.Include(f => f.TrainerUser).Include(f => f.Class1).Include(f => f.TrainerUser1);
+            return View(fees.ToList());
         }
 
-        // GET: Enrolments/Details/5
+        // GET: Fees/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Enrolment enrolment = db.Enrolments.Find(id);
-            if (enrolment == null)
+            Fee fee = db.Fees.Find(id);
+            if (fee == null)
             {
                 return HttpNotFound();
             }
-            return View(enrolment);
+            return View(fee);
         }
 
-        // GET: Enrolments/Create
+        // GET: Fees/Create
         public ActionResult Create()
         {
             List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
@@ -48,22 +48,21 @@ namespace TrainersSchoolingSystem.Controllers
                 classes.Add(pair);
             }
             ViewBag.Class = new SelectList(classes, "Key", "Value");
-            ViewBag.Student = new SelectList(db.Students, "StudentId", "FirstName");
             return View();
         }
 
-        // POST: Enrolments/Create
+        // POST: Fees/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EnrolmentId,Student,Class,LastClass,LastInstitude,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Enrolment enrolment)
+        public ActionResult Create([Bind(Include = "FeeId,Student,FeeType,Amount,Description,Year,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Fee fee)
         {
             if (ModelState.IsValid)
             {
-                enrolment.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
-                enrolment.CreatedDate = DateTime.Now;
-                db.Enrolments.Add(enrolment);
+                fee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                fee.CreatedDate = DateTime.Now;
+                db.Fees.Add(fee);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -75,19 +74,18 @@ namespace TrainersSchoolingSystem.Controllers
                 classes.Add(pair);
             }
             ViewBag.Class = new SelectList(classes, "Key", "Value");
-            ViewBag.Student = new SelectList(db.Students, "StudentId", "FirstName", enrolment.Student);
-            return View(enrolment);
+            return View(fee);
         }
 
-        // GET: Enrolments/Edit/5
+        // GET: Fees/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Enrolment enrolment = db.Enrolments.Find(id);
-            if (enrolment == null)
+            Fee fee = db.Fees.Find(id);
+            if (fee == null)
             {
                 return HttpNotFound();
             }
@@ -98,31 +96,27 @@ namespace TrainersSchoolingSystem.Controllers
                 classes.Add(pair);
             }
             ViewBag.Class = new SelectList(classes, "Key", "Value");
-            ViewBag.Student = new SelectList(db.Students, "StudentId", "FirstName", enrolment.Student);
-            return View(enrolment);
+            return View(fee);
         }
 
-        // POST: Enrolments/Edit/5
+        // POST: Fees/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Enrolment enrolment)
+        public ActionResult Edit(Fee fee)
         {
             if (ModelState.IsValid)
             {
-                var enrolmentdb = db.Enrolments.Find(enrolment.EnrolmentId);
-                enrolmentdb.RollNo = enrolment.RollNo;
-                enrolmentdb.GRNo = enrolment.GRNo;
-                enrolmentdb.Class = enrolment.Class;
-                enrolmentdb.LastClass = enrolment.LastClass;
-                enrolmentdb.LastInstitude = enrolment.LastInstitude;
-                enrolmentdb.PaymentMode = enrolment.PaymentMode;
-                enrolmentdb.Fee = enrolment.Fee;
-                enrolmentdb.Student = enrolment.Student;
-                enrolmentdb.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
-                enrolmentdb.UpdatedDate = DateTime.Now;
-                db.Enrolments.AddOrUpdate(enrolmentdb);
+                var feedb = db.Fees.Find(fee.FeeId);
+                feedb.FeeType = fee.FeeType;
+                feedb.Amount = fee.Amount;
+                feedb.Description = fee.Description;
+                feedb.Year = fee.Year;
+                feedb.Class = fee.Class;
+                feedb.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                feedb.UpdatedDate = DateTime.Now;
+                db.Fees.AddOrUpdate(fee);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -133,32 +127,31 @@ namespace TrainersSchoolingSystem.Controllers
                 classes.Add(pair);
             }
             ViewBag.Class = new SelectList(classes, "Key", "Value");
-            ViewBag.Student = new SelectList(db.Students, "StudentId", "FirstName", enrolment.Student);
-            return View(enrolment);
+            return View(fee);
         }
 
-        // GET: Enrolments/Delete/5
+        // GET: Fees/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Enrolment enrolment = db.Enrolments.Find(id);
-            if (enrolment == null)
+            Fee fee = db.Fees.Find(id);
+            if (fee == null)
             {
                 return HttpNotFound();
             }
-            return View(enrolment);
+            return View(fee);
         }
 
-        // POST: Enrolments/Delete/5
+        // POST: Fees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Enrolment enrolment = db.Enrolments.Find(id);
-            db.Enrolments.Remove(enrolment);
+            Fee fee = db.Fees.Find(id);
+            db.Fees.Remove(fee);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

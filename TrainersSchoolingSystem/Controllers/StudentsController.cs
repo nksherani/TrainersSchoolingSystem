@@ -13,6 +13,7 @@ using TrainersSchoolingSystem.Models.DTOs;
 
 namespace TrainersSchoolingSystem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class StudentsController : Controller
     {
         private TrainersEntities db = new TrainersEntities();
@@ -173,7 +174,6 @@ namespace TrainersSchoolingSystem.Controllers
                 studentdb.MotherTongue = student.MotherTongue;
                 studentdb.BloodGroup = student.BloodGroup;
                 studentdb.BFormNo = student.BFormNo;
-                studentdb.PaymentMode = student.PaymentMode;
                 studentdb.AdmissionBasis = student.AdmissionBasis;
                 studentdb.Father = student.Father;
                 studentdb.Mother = student.Mother;

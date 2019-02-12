@@ -57,7 +57,16 @@ namespace TrainersSchoolingSystem.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if(User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Unauthorized");
+            }
             ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+        [AllowAnonymous]
+        public ActionResult Unauthorized()
+        {
             return View();
         }
 

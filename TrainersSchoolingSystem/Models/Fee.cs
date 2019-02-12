@@ -15,6 +15,7 @@ namespace TrainersSchoolingSystem.Models
     public partial class Fee
     {
         public int FeeId { get; set; }
+        public Nullable<int> Class { get; set; }
         public string FeeType { get; set; }
         public Nullable<int> Amount { get; set; }
         public string Description { get; set; }
@@ -23,7 +24,6 @@ namespace TrainersSchoolingSystem.Models
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public Nullable<int> UpdatedBy { get; set; }
-        public Nullable<int> Class { get; set; }
     
         public virtual Class Class1 { get; set; }
         public virtual TrainerUser TrainerUser { get; set; }

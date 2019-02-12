@@ -31,7 +31,6 @@ namespace TrainersSchoolingSystem.Models
         public string MotherTongue { get; set; }
         public string BloodGroup { get; set; }
         public string BFormNo { get; set; }
-        public string PaymentMode { get; set; }
         public string AdmissionBasis { get; set; }
         public Nullable<int> Father { get; set; }
         public Nullable<int> Mother { get; set; }
