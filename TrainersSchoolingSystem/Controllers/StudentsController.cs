@@ -19,6 +19,7 @@ namespace TrainersSchoolingSystem.Controllers
     public class StudentsController : Controller
     {
         private TrainersEntities db = new TrainersEntities();
+
         public StudentsController()
         {
             if (!SiteMapManager.SiteMaps.ContainsKey("TMXMAP"))
@@ -99,37 +100,37 @@ namespace TrainersSchoolingSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult NewAdmission(StudentViewModel student)
         {
-            bool needGuardian = false;
-            if (student.Guardian_.Name == "")
-            {
-                student.Guardian_ = student.Father_;
-            }
-            else
-            {
-                needGuardian = true;
-            }
             if (ModelState.IsValid)
             {
                 student.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 student.CreatedDate = DateTime.Now;
-                var std = Mapper.Map<StudentViewModel, Student>(student);
+                var std = StudentViewModel.ToEntity(student);
+                if (std.DateOfBirth.HasValue)
+                    std.Age = DateTime.Now.Year - std.DateOfBirth.Value.Year;
                 db.Students.Add(std);
-                var father = Mapper.Map<ParentViewModel, Parent>(student.Father_);
-                var mother = Mapper.Map<ParentViewModel, Parent>(student.Mother_);
-                var guardian = Mapper.Map<ParentViewModel, Parent>(student.Guardian_);
+                db.SaveChanges();
+                var father = ParentViewModel.ToEntity(student.Father_);
+                var mother = ParentViewModel.ToEntity(student.Mother_);
+                father.Relation = "Father";
+                mother.Relation = "Mother";
                 db.Parents.Add(father);
+                db.SaveChanges();
                 std.Father = father.ParentId;
                 db.Parents.Add(mother);
+                db.SaveChanges();
                 std.Mother = mother.ParentId;
 
-                if (needGuardian)
+                if (student.Guardian_.Name != null)
                 {
+                    var guardian = GuardianViewModel.ToEntity(student.Guardian_);
                     db.Parents.Add(guardian);
+                    db.SaveChanges();
                     std.Guardian = guardian.ParentId;
                 }
-                var enrolment = Mapper.Map<EnrolmentViewModel, Enrolment>(student.Enrolment);
+                var enrolment = EnrolmentViewModel.ToEntity(student.Enrolment);
                 enrolment.Student = std.StudentId;
                 db.Enrolments.Add(enrolment);
+                db.Students.AddOrUpdate(std);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

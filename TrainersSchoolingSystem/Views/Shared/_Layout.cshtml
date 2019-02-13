@@ -63,7 +63,10 @@
             $("#PlaceOfBirth").autocomplete({
                 source: places
             });
-
+            var relations = ["Brother", "Sister", "Paternal Uncle", "Maternal Uncle", "Paternal Aunt", "Maternal Aunt"];
+            $("#Guardian__Relation").autocomplete({
+                source: relations
+            });
             var religions = ["Islam", "Christianity", "Hinduism"];
             $("#Religion").autocomplete({
                 source: religions

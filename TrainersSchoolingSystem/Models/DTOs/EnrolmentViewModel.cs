@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -38,5 +39,33 @@ namespace TrainersSchoolingSystem.Models.DTOs
 
         public TrainerUserViewModel CreatedBy_ { get; set; }
         public TrainerUserViewModel UpdatedBy_ { get; set; }
+
+        static IMapper toEntityMapper;
+        static IMapper toModelMapper;
+        static EnrolmentViewModel()
+        {
+            var config = new MapperConfiguration(cfg => {
+
+                cfg.CreateMap<EnrolmentViewModel, Enrolment>();
+
+            });
+            toEntityMapper = config.CreateMapper();
+
+            config = new MapperConfiguration(cfg => {
+
+                cfg.CreateMap<Enrolment, EnrolmentViewModel>();
+
+            });
+            toModelMapper = config.CreateMapper();
+        }
+        public static Enrolment ToEntity(EnrolmentViewModel enrolmentViewModel)
+        {
+            return toEntityMapper.Map<Enrolment>(enrolmentViewModel);
+        }
+        public static EnrolmentViewModel ToModel(Enrolment enrolment)
+        {
+            return toModelMapper.Map<EnrolmentViewModel>(enrolment);
+        }
+
     }
 }

@@ -7,15 +7,12 @@ using System.Web;
 
 namespace TrainersSchoolingSystem.Models.DTOs
 {
-    
-    public class ParentViewModel
+    public class GuardianViewModel
     {
         [Key]
         public int ParentId { get; set; }
-        [Required]
         public string Name { get; set; }
-        [RegularExpression("^[0-9]{5}-[0-9]{7}-[0-9]{1}$",ErrorMessage ="Enter CNIC in proper format like 12345-1234567-1")]
-        [Required]
+        [RegularExpression("^[0-9]{5}-[0-9]{7}-[0-9]{1}$", ErrorMessage = "Enter CNIC in proper format like 12345-1234567-1")]
         public string CNIC { get; set; }
         public string Profession { get; set; }
         [Display(Name = "Organization Type")]
@@ -24,7 +21,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
         [Display(Name = "Monthly Income")]
         public string MonthlyIncome { get; set; }
         [RegularExpression("^\\+[0-9]{12}$", ErrorMessage = "Enter Mobile No. in proper format like +923331234567")]
-        [MaxLength(13,ErrorMessage ="Maximum characters limit exceeded")]
+        [MaxLength(13, ErrorMessage = "Maximum characters limit exceeded")]
         public string Mobile { get; set; }
         [RegularExpression("(^\\+[0-9]{11}$)|(^\\+[0-9]{12}$)", ErrorMessage = "Enter Phone No. in proper format like +92211234567 or +922112345678")]
         [MaxLength(13, ErrorMessage = "Maximum characters limit exceeded")]
@@ -42,32 +39,32 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public Nullable<int> UpdatedBy { get; set; }
 
-
         static IMapper toEntityMapper;
         static IMapper toModelMapper;
-        static ParentViewModel()
+        static GuardianViewModel()
         {
             var config = new MapperConfiguration(cfg => {
 
-                cfg.CreateMap<ParentViewModel, Parent>();
+                cfg.CreateMap<GuardianViewModel, Parent>();
 
             });
             toEntityMapper = config.CreateMapper();
 
             config = new MapperConfiguration(cfg => {
 
-                cfg.CreateMap<Parent, ParentViewModel>();
+                cfg.CreateMap<Parent, GuardianViewModel>();
 
             });
             toModelMapper = config.CreateMapper();
         }
-        public static Parent ToEntity(ParentViewModel parentViewModel)
+        public static Parent ToEntity(GuardianViewModel parentViewModel)
         {
             return toEntityMapper.Map<Parent>(parentViewModel);
         }
-        public static ParentViewModel ToModel(Parent parent)
+        public static GuardianViewModel ToModel(Parent parent)
         {
-            return toModelMapper.Map<ParentViewModel>(parent);
+            return toModelMapper.Map<GuardianViewModel>(parent);
         }
+
     }
 }

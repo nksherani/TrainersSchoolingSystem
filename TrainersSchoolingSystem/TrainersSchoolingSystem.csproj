@@ -258,6 +258,7 @@
     <Compile Include="Models\DTOs\ClassViewModel.cs" />
     <Compile Include="Models\DTOs\EnrolmentViewModel.cs" />
     <Compile Include="Models\DTOs\FeeViewModel.cs" />
+    <Compile Include="Models\DTOs\GuardianViewModel.cs" />
     <Compile Include="Models\DTOs\ParentViewModel.cs" />
     <Compile Include="Models\DTOs\StaffViewModel.cs" />
     <Compile Include="Models\DTOs\StudentViewModel.cs" />
@@ -1162,6 +1163,7 @@
     <Content Include="Scripts\kendo\2017.2.621\kendo.virtuallist.min.js.map" />
     <Content Include="Scripts\kendo\2017.2.621\kendo.web.min.js.map" />
     <Content Include="Scripts\kendo\2017.2.621\kendo.window.min.js.map" />
+    <Content Include="Views\Shared\EditorTemplates\GuardianViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

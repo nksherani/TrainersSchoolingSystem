@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -69,13 +70,36 @@ namespace TrainersSchoolingSystem.Models.DTOs
         [Display(Name = "Mother")]
         public ParentViewModel Mother_ { get; set; }
         [Display(Name = "Guardian")]
-        public ParentViewModel Guardian_ { get; set; }
+        public GuardianViewModel Guardian_ { get; set; }
         public TrainerUserViewModel CreatedBy_ { get; set; }
         public TrainerUserViewModel UpdatedBy_ { get; set; }
 
 
-        public ParentViewModel Fee { get; set; }
+        static IMapper toEntityMapper;
+        static IMapper toModelMapper;
+        static StudentViewModel()
+        {
+            var config = new MapperConfiguration(cfg => {
 
+                cfg.CreateMap<StudentViewModel, Student>();
 
+            });
+            toEntityMapper = config.CreateMapper();
+
+            config = new MapperConfiguration(cfg => {
+
+                cfg.CreateMap<Student, StudentViewModel>();
+
+            });
+            toModelMapper = config.CreateMapper();
+        }
+        public static Student ToEntity(StudentViewModel studentViewModel)
+        {
+            return toEntityMapper.Map<Student>(studentViewModel);
+        }
+        public static StudentViewModel ToModel(Student student)
+        {
+            return toModelMapper.Map<StudentViewModel>(student);
+        }
     }
 }

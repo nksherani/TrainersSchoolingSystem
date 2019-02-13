@@ -17,49 +17,24 @@
         <th>
             @Html.DisplayNameFor(model => model.LastName)
         </th>
-        
         <th>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
+            @Html.DisplayNameFor(model => model.Father)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Age)
+            @Html.DisplayNameFor(model => model.Mother)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PlaceOfBirth)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Religion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Nationality)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MotherTongue)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BloodGroup)
+            @Html.DisplayNameFor(model => model.Guardian)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.BFormNo)
         </th>
-        
         <th>
-            @Html.DisplayNameFor(model => model.AdmissionBasis)
+            @Html.DisplayNameFor(model => model.DateOfBirth)
         </th>
+
         <th>
-            @Html.DisplayNameFor(model => model.Mobile)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LandLine)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PostalCode)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StreetAddress)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.City)
+            @Html.DisplayNameFor(model => model.Age)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.JoiningDate)
@@ -73,15 +48,7 @@
         <th>
             @Html.DisplayNameFor(model => model.UpdatedDate)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Father)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Mother)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Guardian)
-        </th>
+
         <th>
             @Html.DisplayNameFor(model => model.CreatedBy)
         </th>
@@ -99,50 +66,25 @@
         <td>
             @Html.DisplayFor(modelItem => item.LastName)
         </td>
-        
+        <td>
+            @Html.DisplayFor(modelItem => item.Parent.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Parent1.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Parent2.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BFormNo)
+        </td>
         <td>
             @Html.DisplayFor(modelItem => item.DateOfBirth)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Age)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PlaceOfBirth)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Religion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nationality)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MotherTongue)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BloodGroup)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BFormNo)
-        </td>
         
-        <td>
-            @Html.DisplayFor(modelItem => item.AdmissionBasis)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Mobile)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LandLine)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PostalCode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StreetAddress)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.City)
-        </td>
         <td>
             @Html.DisplayFor(modelItem => item.JoiningDate)
         </td>
@@ -155,15 +97,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.UpdatedDate)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Parent.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Parent1.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Parent2.Name)
-        </td>
+
         <td>
             @Html.DisplayFor(modelItem => item.TrainerUser.Username)
         </td>
@@ -171,9 +105,9 @@
             @Html.DisplayFor(modelItem => item.TrainerUser1.Username)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.StudentId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.StudentId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.StudentId })
+            @Html.ActionLink("Edit", "Edit", new { id = item.StudentId }) |
+            @Html.ActionLink("Details", "Details", new { id = item.StudentId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.StudentId })
         </td>
     </tr>
 }

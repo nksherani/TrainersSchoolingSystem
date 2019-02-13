@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -165,6 +166,28 @@ namespace TrainersSchoolingSystem.Controllers
                 if (result.Succeeded)
                 {
                     TrainersEntities tdb = new TrainersEntities();
+                    if(tdb.AspNetUsers.Count()==1)
+                    {
+                        var roles = tdb.AspNetRoles.ToList();
+                        if(roles.Where(x=>x.Name=="Admin").Count()==0)
+                        {
+                            AspNetRole role = new AspNetRole();
+                            role.Id = Guid.NewGuid().ToString();
+                            role.Name = "Admin";
+                            var dbuser = tdb.AspNetUsers.Where(x => x.UserName == model.Username).FirstOrDefault();
+                            role.AspNetUsers.Add(dbuser);
+                            tdb.AspNetRoles.Add(role);
+                            tdb.SaveChanges();
+                        }
+                        else
+                        {
+                            var role = roles.Where(x => x.Name == "Admin").FirstOrDefault();
+                            var dbuser = tdb.AspNetUsers.Where(x => x.UserName == model.Username).FirstOrDefault();
+                            role.AspNetUsers.Add(dbuser);
+                            tdb.AspNetRoles.AddOrUpdate(role);
+                            tdb.SaveChanges();
+                        }
+                    }
                     TrainerUser tuser = new TrainerUser();
                     tuser.Username = user.UserName;
                     tuser.Email = user.Email;

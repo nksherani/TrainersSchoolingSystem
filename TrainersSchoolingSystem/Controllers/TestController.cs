@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using TrainersSchoolingSystem.Models;
+using TrainersSchoolingSystem.Models.DTOs;
 
 namespace TrainersSchoolingSystem.Controllers
 {
@@ -34,6 +35,13 @@ namespace TrainersSchoolingSystem.Controllers
             db.AspNetRoles.Add(role);
             db.SaveChanges();
             return $"Roles {rolename} has been added successfully";
+        }
+        public string Mapper()
+        {
+            StudentViewModel svm = new StudentViewModel();
+            Student std = StudentViewModel.ToEntity(svm);
+            StudentViewModel svm2 = StudentViewModel.ToModel(std);
+            return "success";
         }
         // GET: Test/Details/5
         public ActionResult Details(int id)
