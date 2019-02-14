@@ -30,6 +30,7 @@ namespace TrainersSchoolingSystem.Models
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Class> Classes { get; set; }
+        public virtual DbSet<Configuration> Configurations { get; set; }
         public virtual DbSet<Enrolment> Enrolments { get; set; }
         public virtual DbSet<Fee> Fees { get; set; }
         public virtual DbSet<Lookup> Lookups { get; set; }

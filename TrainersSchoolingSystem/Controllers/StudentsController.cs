@@ -14,7 +14,7 @@ using TrainersSchoolingSystem.Models.DTOs;
 
 namespace TrainersSchoolingSystem.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Moderator")]
     [Authorize]
     public class StudentsController : Controller
     {

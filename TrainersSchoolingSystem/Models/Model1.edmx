@@ -69,6 +69,18 @@
           <Property Name="UpdatedDate" Type="datetime" />
           <Property Name="UpdatedBy" Type="int" />
         </EntityType>
+        <EntityType Name="Configuration">
+          <Key>
+            <PropertyRef Name="ConfigurationId" />
+          </Key>
+          <Property Name="ConfigurationId" Type="int" Nullable="false" />
+          <Property Name="Key" Type="varchar(max)" />
+          <Property Name="Value" Type="varchar(max)" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+        </EntityType>
         <EntityType Name="Enrolment">
           <Key>
             <PropertyRef Name="EnrolmentId" />
@@ -278,6 +290,30 @@
               <PropertyRef Name="TrainerUserId" />
             </Principal>
             <Dependent Role="Class">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Configura__Creat__567ED357">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="Configuration" Type="Self.Configuration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Configuration">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Configura__Updat__5772F790">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="Configuration" Type="Self.Configuration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Configuration">
               <PropertyRef Name="UpdatedBy" />
             </Dependent>
           </ReferentialConstraint>
@@ -705,6 +741,7 @@
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Class" EntityType="Self.Class" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Configuration" EntityType="Self.Configuration" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Enrolment" EntityType="Self.Enrolment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Fee" EntityType="Self.Fee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Lookup" EntityType="Self.Lookup" Schema="dbo" store:Type="Tables" />
@@ -726,6 +763,14 @@
           <AssociationSet Name="FK__Class__UpdatedBy__7720AD13" Association="Self.FK__Class__UpdatedBy__7720AD13">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Class" EntitySet="Class" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Configura__Creat__567ED357" Association="Self.FK__Configura__Creat__567ED357">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="Configuration" EntitySet="Configuration" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Configura__Updat__5772F790" Association="Self.FK__Configura__Updat__5772F790">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="Configuration" EntitySet="Configuration" />
           </AssociationSet>
           <AssociationSet Name="FK__Enrolment__Class__52AE4273" Association="Self.FK__Enrolment__Class__52AE4273">
             <End Role="Class" EntitySet="Class" />
@@ -874,6 +919,7 @@
           <EntitySet Name="AspNetUserLogins" EntityType="TrainersModel.AspNetUserLogin" />
           <EntitySet Name="AspNetUsers" EntityType="TrainersModel.AspNetUser" />
           <EntitySet Name="Classes" EntityType="TrainersModel.Class" />
+          <EntitySet Name="Configurations" EntityType="TrainersModel.Configuration" />
           <EntitySet Name="Enrolments" EntityType="TrainersModel.Enrolment" />
           <EntitySet Name="Fees" EntityType="TrainersModel.Fee" />
           <EntitySet Name="Lookups" EntityType="TrainersModel.Lookup" />
@@ -915,6 +961,14 @@
           <AssociationSet Name="FK__SubjectAs__Class__753864A1" Association="TrainersModel.FK__SubjectAs__Class__753864A1">
             <End Role="Class" EntitySet="Classes" />
             <End Role="SubjectAssignment" EntitySet="SubjectAssignments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Configura__Creat__567ED357" Association="TrainersModel.FK__Configura__Creat__567ED357">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="Configuration" EntitySet="Configurations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Configura__Updat__5772F790" Association="TrainersModel.FK__Configura__Updat__5772F790">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="Configuration" EntitySet="Configurations" />
           </AssociationSet>
           <AssociationSet Name="FK__Enrolment__Creat__50C5FA01" Association="TrainersModel.FK__Enrolment__Creat__50C5FA01">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
@@ -1096,6 +1150,20 @@
           <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Class__52AE4273" FromRole="Class" ToRole="Enrolment" />
           <NavigationProperty Name="Fees" Relationship="TrainersModel.FK__Fee__Class__4DE98D56" FromRole="Class" ToRole="Fee" />
           <NavigationProperty Name="SubjectAssignments" Relationship="TrainersModel.FK__SubjectAs__Class__753864A1" FromRole="Class" ToRole="SubjectAssignment" />
+        </EntityType>
+        <EntityType Name="Configuration">
+          <Key>
+            <PropertyRef Name="ConfigurationId" />
+          </Key>
+          <Property Name="ConfigurationId" Type="Int32" Nullable="false" />
+          <Property Name="Key" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Configura__Creat__567ED357" FromRole="Configuration" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Configura__Updat__5772F790" FromRole="Configuration" ToRole="TrainerUser" />
         </EntityType>
         <EntityType Name="Enrolment">
           <Key>
@@ -1311,6 +1379,8 @@
           <Property Name="UpdatedBy" Type="Int32" />
           <NavigationProperty Name="Classes" Relationship="TrainersModel.FK__Class__CreatedBy__762C88DA" FromRole="TrainerUser" ToRole="Class" />
           <NavigationProperty Name="Classes1" Relationship="TrainersModel.FK__Class__UpdatedBy__7720AD13" FromRole="TrainerUser" ToRole="Class" />
+          <NavigationProperty Name="Configurations" Relationship="TrainersModel.FK__Configura__Creat__567ED357" FromRole="TrainerUser" ToRole="Configuration" />
+          <NavigationProperty Name="Configurations1" Relationship="TrainersModel.FK__Configura__Updat__5772F790" FromRole="TrainerUser" ToRole="Configuration" />
           <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Creat__50C5FA01" FromRole="TrainerUser" ToRole="Enrolment" />
           <NavigationProperty Name="Enrolments1" Relationship="TrainersModel.FK__Enrolment__Updat__51BA1E3A" FromRole="TrainerUser" ToRole="Enrolment" />
           <NavigationProperty Name="Fees" Relationship="TrainersModel.FK__Fee__CreatedBy__4C0144E4" FromRole="TrainerUser" ToRole="Fee" />
@@ -1431,6 +1501,30 @@
             </Principal>
             <Dependent Role="SubjectAssignment">
               <PropertyRef Name="Class" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Configura__Creat__567ED357">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.Configuration" Role="Configuration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Configuration">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Configura__Updat__5772F790">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.Configuration" Role="Configuration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Configuration">
+              <PropertyRef Name="UpdatedBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1824,6 +1918,19 @@
                 <ScalarProperty Name="Section" ColumnName="Section" />
                 <ScalarProperty Name="ClassName" ColumnName="ClassName" />
                 <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Configurations">
+            <EntityTypeMapping TypeName="TrainersModel.Configuration">
+              <MappingFragment StoreEntitySet="Configuration">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+                <ScalarProperty Name="ConfigurationId" ColumnName="ConfigurationId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -19,6 +19,8 @@ namespace TrainersSchoolingSystem.Models
         {
             this.Classes = new HashSet<Class>();
             this.Classes1 = new HashSet<Class>();
+            this.Configurations = new HashSet<Configuration>();
+            this.Configurations1 = new HashSet<Configuration>();
             this.Enrolments = new HashSet<Enrolment>();
             this.Enrolments1 = new HashSet<Enrolment>();
             this.Fees = new HashSet<Fee>();
@@ -58,6 +60,10 @@ namespace TrainersSchoolingSystem.Models
         public virtual ICollection<Class> Classes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Class> Classes1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Configuration> Configurations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Configuration> Configurations1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Enrolment> Enrolments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

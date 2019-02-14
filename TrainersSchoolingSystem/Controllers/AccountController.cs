@@ -62,6 +62,11 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 return RedirectToAction("Unauthorized");
             }
+            //TrainersEntities db = new TrainersEntities();
+            //if(db.Configurations.Where(x=>x.Key=="SchoolName").Count()==0)
+            //{
+            //    return Redirect("../Setup/Index");
+            //}
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -159,13 +164,18 @@ namespace TrainersSchoolingSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            TrainersEntities tdb = new TrainersEntities();
+            if(tdb.AspNetUsers.Count()>0)
+            {
+                return Redirect("../Setup/Error?error=Unable to create user");
+            }
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    TrainersEntities tdb = new TrainersEntities();
+                    
                     if(tdb.AspNetUsers.Count()==1)
                     {
                         var roles = tdb.AspNetRoles.ToList();
@@ -175,6 +185,12 @@ namespace TrainersSchoolingSystem.Controllers
                             role.Id = Guid.NewGuid().ToString();
                             role.Name = "Admin";
                             var dbuser = tdb.AspNetUsers.Where(x => x.UserName == model.Username).FirstOrDefault();
+                            role.AspNetUsers.Add(dbuser);
+                            tdb.AspNetRoles.Add(role);
+
+                            role = new AspNetRole();
+                            role.Id = Guid.NewGuid().ToString();
+                            role.Name = "Moderator";
                             role.AspNetUsers.Add(dbuser);
                             tdb.AspNetRoles.Add(role);
                             tdb.SaveChanges();
@@ -202,7 +218,7 @@ namespace TrainersSchoolingSystem.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Create", "Setup");
                 }
                 AddErrors(result);
             }
