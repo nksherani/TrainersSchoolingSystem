@@ -790,6 +790,7 @@
     <Content Include="Content\kendo\2017.2.621\kendo.uniform.min.css.map" />
     <Content Include="Content\kendo\2017.2.621\kendo.uniform.mobile.min.css.map" />
     <Content Include="Content\TMX.sitemap" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
