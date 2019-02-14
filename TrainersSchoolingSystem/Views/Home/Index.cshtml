@@ -1,14 +1,16 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-
+@using TrainersSchoolingSystem.Utils;
 <div class="jumbotron">
-    <h1>The Trainers Schooling System</h1>
-    <p class="lead">NEDIANS Campus</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    @*<img src="~/Content/Images/Logo.png" />*@
+    <img src=@GlobalData.configuration.Picture />
+    <h1>@GlobalData.configuration.SchoolName</h1>
+    <p class="lead">@GlobalData.configuration.Campus</p>
+    @*<p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>*@
 </div>
 
-<div class="row">
+@*<div class="row">
     <div class="col-md-4">
         <h2>Getting started</h2>
         <p>
@@ -28,4 +30,4 @@
         <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
-</div>
+</div>*@

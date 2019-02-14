@@ -36,8 +36,8 @@ namespace TrainersSchoolingSystem.Models.DTOs
             Landline = "Landline Number not defined";
             Address = "School Address not defined";
             Description = "";
-            Picture = "Logo.png";
-            FirstMonth = "April";
+            Picture = "../Content/Images/Logo.png";
+            FirstMonth = "4";
         }
     }
 }

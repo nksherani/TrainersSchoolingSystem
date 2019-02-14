@@ -73,7 +73,7 @@
           <Key>
             <PropertyRef Name="ConfigurationId" />
           </Key>
-          <Property Name="ConfigurationId" Type="int" Nullable="false" />
+          <Property Name="ConfigurationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Key" Type="varchar(max)" />
           <Property Name="Value" Type="varchar(max)" />
           <Property Name="CreatedDate" Type="datetime" />
@@ -294,7 +294,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Configura__Creat__567ED357">
+        <Association Name="FK__Configura__Creat__5B438874">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="Configuration" Type="Self.Configuration" Multiplicity="*" />
           <ReferentialConstraint>
@@ -306,7 +306,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Configura__Updat__5772F790">
+        <Association Name="FK__Configura__Updat__5C37ACAD">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="Configuration" Type="Self.Configuration" Multiplicity="*" />
           <ReferentialConstraint>
@@ -734,6 +734,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="ResetDb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="TrainersModelStoreContainer">
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
@@ -764,11 +765,11 @@
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Class" EntitySet="Class" />
           </AssociationSet>
-          <AssociationSet Name="FK__Configura__Creat__567ED357" Association="Self.FK__Configura__Creat__567ED357">
+          <AssociationSet Name="FK__Configura__Creat__5B438874" Association="Self.FK__Configura__Creat__5B438874">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Configuration" EntitySet="Configuration" />
           </AssociationSet>
-          <AssociationSet Name="FK__Configura__Updat__5772F790" Association="Self.FK__Configura__Updat__5772F790">
+          <AssociationSet Name="FK__Configura__Updat__5C37ACAD" Association="Self.FK__Configura__Updat__5C37ACAD">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Configuration" EntitySet="Configuration" />
           </AssociationSet>
@@ -914,6 +915,7 @@
     <edmx:ConceptualModels>
       <Schema Namespace="TrainersModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="TrainersEntities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="ResetDb" />
           <EntitySet Name="AspNetRoles" EntityType="TrainersModel.AspNetRole" />
           <EntitySet Name="AspNetUserClaims" EntityType="TrainersModel.AspNetUserClaim" />
           <EntitySet Name="AspNetUserLogins" EntityType="TrainersModel.AspNetUserLogin" />
@@ -962,11 +964,11 @@
             <End Role="Class" EntitySet="Classes" />
             <End Role="SubjectAssignment" EntitySet="SubjectAssignments" />
           </AssociationSet>
-          <AssociationSet Name="FK__Configura__Creat__567ED357" Association="TrainersModel.FK__Configura__Creat__567ED357">
+          <AssociationSet Name="FK__Configura__Creat__5B438874" Association="TrainersModel.FK__Configura__Creat__5B438874">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Configuration" EntitySet="Configurations" />
           </AssociationSet>
-          <AssociationSet Name="FK__Configura__Updat__5772F790" Association="TrainersModel.FK__Configura__Updat__5772F790">
+          <AssociationSet Name="FK__Configura__Updat__5C37ACAD" Association="TrainersModel.FK__Configura__Updat__5C37ACAD">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Configuration" EntitySet="Configurations" />
           </AssociationSet>
@@ -1155,15 +1157,15 @@
           <Key>
             <PropertyRef Name="ConfigurationId" />
           </Key>
-          <Property Name="ConfigurationId" Type="Int32" Nullable="false" />
+          <Property Name="ConfigurationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Key" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
-          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Configura__Creat__567ED357" FromRole="Configuration" ToRole="TrainerUser" />
-          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Configura__Updat__5772F790" FromRole="Configuration" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Configura__Creat__5B438874" FromRole="Configuration" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Configura__Updat__5C37ACAD" FromRole="Configuration" ToRole="TrainerUser" />
         </EntityType>
         <EntityType Name="Enrolment">
           <Key>
@@ -1379,8 +1381,8 @@
           <Property Name="UpdatedBy" Type="Int32" />
           <NavigationProperty Name="Classes" Relationship="TrainersModel.FK__Class__CreatedBy__762C88DA" FromRole="TrainerUser" ToRole="Class" />
           <NavigationProperty Name="Classes1" Relationship="TrainersModel.FK__Class__UpdatedBy__7720AD13" FromRole="TrainerUser" ToRole="Class" />
-          <NavigationProperty Name="Configurations" Relationship="TrainersModel.FK__Configura__Creat__567ED357" FromRole="TrainerUser" ToRole="Configuration" />
-          <NavigationProperty Name="Configurations1" Relationship="TrainersModel.FK__Configura__Updat__5772F790" FromRole="TrainerUser" ToRole="Configuration" />
+          <NavigationProperty Name="Configurations" Relationship="TrainersModel.FK__Configura__Creat__5B438874" FromRole="TrainerUser" ToRole="Configuration" />
+          <NavigationProperty Name="Configurations1" Relationship="TrainersModel.FK__Configura__Updat__5C37ACAD" FromRole="TrainerUser" ToRole="Configuration" />
           <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Creat__50C5FA01" FromRole="TrainerUser" ToRole="Enrolment" />
           <NavigationProperty Name="Enrolments1" Relationship="TrainersModel.FK__Enrolment__Updat__51BA1E3A" FromRole="TrainerUser" ToRole="Enrolment" />
           <NavigationProperty Name="Fees" Relationship="TrainersModel.FK__Fee__CreatedBy__4C0144E4" FromRole="TrainerUser" ToRole="Fee" />
@@ -1504,7 +1506,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Configura__Creat__567ED357">
+        <Association Name="FK__Configura__Creat__5B438874">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.Configuration" Role="Configuration" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1516,7 +1518,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Configura__Updat__5772F790">
+        <Association Name="FK__Configura__Updat__5C37ACAD">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.Configuration" Role="Configuration" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1862,6 +1864,7 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="TrainersModelStoreContainer" CdmEntityContainer="TrainersEntities" >
+          <FunctionImportMapping FunctionImportName="ResetDb" FunctionName="TrainersModel.Store.ResetDb" />
           <EntitySetMapping Name="AspNetRoles">
             <EntityTypeMapping TypeName="TrainersModel.AspNetRole">
               <MappingFragment StoreEntitySet="AspNetRoles">
@@ -2129,7 +2132,7 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
-        </EntityContainerMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

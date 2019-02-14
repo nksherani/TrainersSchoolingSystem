@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using TrainersSchoolingSystem.Models;
+using TrainersSchoolingSystem.Models.DTOs;
 
 namespace TrainersSchoolingSystem.Controllers
 {
@@ -69,6 +70,8 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: TrainerUsers/Create
         public ActionResult Create()
         {
+            ViewBag.RoleId = new SelectList(db.AspNetRoles, "Id", "Name");
+
             return View();
         }
 
@@ -77,19 +80,23 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "TrainerUserId,Username,FirstName,LastName,Email,Mobile,Landline,Address,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] TrainerUser trainerUser)
+        public async Task<ActionResult> Create(TrainerUserViewModel trainerUser)
         {
             if (ModelState.IsValid)
             {
                 trainerUser.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 trainerUser.CreatedDate = DateTime.Now;
-                db.TrainerUsers.Add(trainerUser);
+                db.TrainerUsers.Add(TrainerUserViewModel.ToEntity(trainerUser));
                 db.SaveChanges();
                 var user = new ApplicationUser { UserName = trainerUser.Username, Email = trainerUser.Email };
                 var result = await UserManager.CreateAsync(user, trainerUser.Username);
+
+                var role = db.AspNetRoles.Where(x => x.Id == trainerUser.RoleId).FirstOrDefault();
+                role.AspNetUsers.Add(db.AspNetUsers.Where(x=>x.UserName== trainerUser.Username).FirstOrDefault());
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.RoleId = new SelectList(db.AspNetRoles, "Id", "Name");
             return View(trainerUser);
         }
 
@@ -105,7 +112,9 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 return HttpNotFound();
             }
-            return View(trainerUser);
+            var user = db.AspNetUsers.Where(x => x.UserName == trainerUser.Username).FirstOrDefault();
+            ViewBag.RoleId = new SelectList(db.AspNetRoles, "Id", "Name",user.AspNetRoles.FirstOrDefault().Id);
+            return View(TrainerUserViewModel.ToModel(trainerUser));
         }
 
         // POST: TrainerUsers/Edit/5
@@ -113,7 +122,7 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TrainerUserId,Username,FirstName,LastName,Email,Mobile,Landline,Address,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] TrainerUser trainerUser)
+        public ActionResult Edit(TrainerUserViewModel trainerUser)
         {
             if (ModelState.IsValid)
             {
@@ -127,8 +136,23 @@ namespace TrainersSchoolingSystem.Controllers
                 dbuser.Address = trainerUser.Address;
                 db.TrainerUsers.AddOrUpdate(dbuser);
                 db.SaveChanges();
+
+                var role = db.AspNetRoles.Where(x => x.Id == trainerUser.RoleId).FirstOrDefault();
+                var user = db.AspNetUsers.Where(x => x.UserName == trainerUser.Username).FirstOrDefault();
+                if(!role.AspNetUsers.Contains(user))
+                {
+                    //var oldrole = db.AspNetRoles.Where(x => x.AspNetUsers.Contains(user)).FirstOrDefault();
+                    var oldrole = db.AspNetUsers.Where(x => x.UserName == trainerUser.Username).FirstOrDefault().AspNetRoles.FirstOrDefault();
+                    oldrole.AspNetUsers.Remove(user);
+
+                    db.SaveChanges();
+                    role.AspNetUsers.Add(user);
+                    db.SaveChanges();
+                }
+
                 return RedirectToAction("Index");
             }
+            ViewBag.RoleId = new SelectList(db.AspNetRoles, "Id", "Name");
             return View(trainerUser);
         }
 

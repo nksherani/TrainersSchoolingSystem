@@ -43,20 +43,7 @@ namespace TrainersSchoolingSystem.Controllers
             StudentViewModel svm2 = StudentViewModel.ToModel(std);
             return "success";
         }
-        public string ResetDb()
-        {
-            db.Database.Delete();
-            db.Database.Initialize(true);
-            //var logins = db.AspNetUserLogins.ToList();
-            //var roles = db.AspNetRoles.ToList();
-            //var users = db.AspNetUsers.ToList();
-            //var tusers = db.TrainerUsers.ToList();
-            //var roles = db.AspNetRoles.ToList();
-            //var roles = db.AspNetRoles.ToList();
-            //var roles = db.AspNetRoles.ToList();
-            //var roles = db.AspNetRoles.ToList();
-            return "success";
-        }
+        
         
         // GET: Test/Details/5
         public ActionResult Details(int id)

@@ -12,6 +12,8 @@ namespace TrainersSchoolingSystem.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class TrainersEntities : DbContext
     {
@@ -41,5 +43,10 @@ namespace TrainersSchoolingSystem.Models
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<SubjectAssignment> SubjectAssignments { get; set; }
         public virtual DbSet<TrainerUser> TrainerUsers { get; set; }
+    
+        public virtual int ResetDb()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ResetDb");
+        }
     }
 }

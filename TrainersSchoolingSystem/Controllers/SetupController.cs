@@ -10,6 +10,7 @@ using TrainersSchoolingSystem.Utils;
 
 namespace TrainersSchoolingSystem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class SetupController : Controller
     {
         TrainersEntities db = new TrainersEntities();
@@ -40,6 +41,22 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: Setup/Create
         public ActionResult Create()
         {
+            List<KeyValuePair<int, string>> Months = new List<KeyValuePair<int, string>>();
+            Months.Add(new KeyValuePair<int, string>(1, "January"));
+            Months.Add(new KeyValuePair<int, string>(2, "February"));
+            Months.Add(new KeyValuePair<int, string>(3, "March"));
+            Months.Add(new KeyValuePair<int, string>(4, "April"));
+            Months.Add(new KeyValuePair<int, string>(5, "May"));
+            Months.Add(new KeyValuePair<int, string>(6, "June"));
+            Months.Add(new KeyValuePair<int, string>(7, "July"));
+            Months.Add(new KeyValuePair<int, string>(8, "August"));
+            Months.Add(new KeyValuePair<int, string>(9, "September"));
+            Months.Add(new KeyValuePair<int, string>(10, "October"));
+            Months.Add(new KeyValuePair<int, string>(11, "November"));
+            Months.Add(new KeyValuePair<int, string>(12, "December"));
+
+            ViewBag.FirstMonth = new SelectList(Months, "Key", "Value");
+
             return View();
         }
 
@@ -49,30 +66,77 @@ namespace TrainersSchoolingSystem.Controllers
         {
             try
             {
-                if (ModelState.IsValid && db.Configurations.Count()==0)
+                if (ModelState.IsValid && db.Configurations.Count() == 0)
                 {
+                    var file = configuration.File;
+                    if (file != null)
+                    {
+                        string pic = System.IO.Path.GetFileName(file.FileName);
+                        string path = System.IO.Path.Combine(
+                                               Server.MapPath("~/Content/Images"), pic);
+                        configuration.Picture = "../Content/Images/" + pic;
+                        // file is uploaded
+                        file.SaveAs(path);
+                    }
+
                     var properties = configuration.GetType().GetProperties();
                     int i = 1;
                     foreach (var property in properties)
                     {
+                        if (property.Name == "File")
+                            continue;
                         Configuration config = new Configuration();
-                        config.ConfigurationId = i++;
+                        //config.ConfigurationId = i++;
                         config.Key = property.Name;
                         config.Value = (string)property.GetValue(configuration);
                         config.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                         config.CreatedDate = DateTime.Now;
                         db.Configurations.Add(config);
                     }
-                    
+
                     db.SaveChanges();
                     InitLookups();
+                    GlobalData.RefreshConfiguration();
                     return RedirectToAction("Index", "Home");
                 }
                 else
+                {
+                    List<KeyValuePair<int, string>> Months = new List<KeyValuePair<int, string>>();
+                    Months.Add(new KeyValuePair<int, string>(1, "January"));
+                    Months.Add(new KeyValuePair<int, string>(2, "February"));
+                    Months.Add(new KeyValuePair<int, string>(3, "March"));
+                    Months.Add(new KeyValuePair<int, string>(4, "April"));
+                    Months.Add(new KeyValuePair<int, string>(5, "May"));
+                    Months.Add(new KeyValuePair<int, string>(6, "June"));
+                    Months.Add(new KeyValuePair<int, string>(7, "July"));
+                    Months.Add(new KeyValuePair<int, string>(8, "August"));
+                    Months.Add(new KeyValuePair<int, string>(9, "September"));
+                    Months.Add(new KeyValuePair<int, string>(10, "October"));
+                    Months.Add(new KeyValuePair<int, string>(11, "November"));
+                    Months.Add(new KeyValuePair<int, string>(12, "December"));
+
+                    ViewBag.FirstMonth = new SelectList(Months, "Key", "Value");
                     return View();
+                }
+
             }
             catch
             {
+                List<KeyValuePair<int, string>> Months = new List<KeyValuePair<int, string>>();
+                Months.Add(new KeyValuePair<int, string>(1, "January"));
+                Months.Add(new KeyValuePair<int, string>(2, "February"));
+                Months.Add(new KeyValuePair<int, string>(3, "March"));
+                Months.Add(new KeyValuePair<int, string>(4, "April"));
+                Months.Add(new KeyValuePair<int, string>(5, "May"));
+                Months.Add(new KeyValuePair<int, string>(6, "June"));
+                Months.Add(new KeyValuePair<int, string>(7, "July"));
+                Months.Add(new KeyValuePair<int, string>(8, "August"));
+                Months.Add(new KeyValuePair<int, string>(9, "September"));
+                Months.Add(new KeyValuePair<int, string>(10, "October"));
+                Months.Add(new KeyValuePair<int, string>(11, "November"));
+                Months.Add(new KeyValuePair<int, string>(12, "December"));
+
+                ViewBag.FirstMonth = new SelectList(Months, "Key", "Value");
                 return View();
             }
         }
@@ -112,24 +176,80 @@ namespace TrainersSchoolingSystem.Controllers
             db.Lookups.Add(lookup);
             return "success";
         }
+        public string ResetDb()
+        {
+            db.Database.ExecuteSqlCommand("exec ResetDb");
+            return "success";
+        }
         // GET: Setup/Edit/5
         public ActionResult Edit(int id)
         {
+            List<KeyValuePair<int, string>> Months = new List<KeyValuePair<int, string>>();
+            Months.Add(new KeyValuePair<int, string>(1, "January"));
+            Months.Add(new KeyValuePair<int, string>(2, "February"));
+            Months.Add(new KeyValuePair<int, string>(3, "March"));
+            Months.Add(new KeyValuePair<int, string>(4, "April"));
+            Months.Add(new KeyValuePair<int, string>(5, "May"));
+            Months.Add(new KeyValuePair<int, string>(6, "June"));
+            Months.Add(new KeyValuePair<int, string>(7, "July"));
+            Months.Add(new KeyValuePair<int, string>(8, "August"));
+            Months.Add(new KeyValuePair<int, string>(9, "September"));
+            Months.Add(new KeyValuePair<int, string>(10, "October"));
+            Months.Add(new KeyValuePair<int, string>(11, "November"));
+            Months.Add(new KeyValuePair<int, string>(12, "December"));
+
+            ViewBag.FirstMonth = new SelectList(Months, "Key", "Value");
             return View();
         }
 
         // POST: Setup/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(ConfigurationViewModel collection)
         {
             try
             {
                 // TODO: Add update logic here
+                if (ModelState.IsValid)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    List<KeyValuePair<int, string>> Months = new List<KeyValuePair<int, string>>();
+                    Months.Add(new KeyValuePair<int, string>(1, "January"));
+                    Months.Add(new KeyValuePair<int, string>(2, "February"));
+                    Months.Add(new KeyValuePair<int, string>(3, "March"));
+                    Months.Add(new KeyValuePair<int, string>(4, "April"));
+                    Months.Add(new KeyValuePair<int, string>(5, "May"));
+                    Months.Add(new KeyValuePair<int, string>(6, "June"));
+                    Months.Add(new KeyValuePair<int, string>(7, "July"));
+                    Months.Add(new KeyValuePair<int, string>(8, "August"));
+                    Months.Add(new KeyValuePair<int, string>(9, "September"));
+                    Months.Add(new KeyValuePair<int, string>(10, "October"));
+                    Months.Add(new KeyValuePair<int, string>(11, "November"));
+                    Months.Add(new KeyValuePair<int, string>(12, "December"));
 
-                return RedirectToAction("Index");
+                    ViewBag.FirstMonth = new SelectList(Months, "Key", "Value");
+                    return View();
+                }
             }
             catch
             {
+                List<KeyValuePair<int, string>> Months = new List<KeyValuePair<int, string>>();
+                Months.Add(new KeyValuePair<int, string>(1, "January"));
+                Months.Add(new KeyValuePair<int, string>(2, "February"));
+                Months.Add(new KeyValuePair<int, string>(3, "March"));
+                Months.Add(new KeyValuePair<int, string>(4, "April"));
+                Months.Add(new KeyValuePair<int, string>(5, "May"));
+                Months.Add(new KeyValuePair<int, string>(6, "June"));
+                Months.Add(new KeyValuePair<int, string>(7, "July"));
+                Months.Add(new KeyValuePair<int, string>(8, "August"));
+                Months.Add(new KeyValuePair<int, string>(9, "September"));
+                Months.Add(new KeyValuePair<int, string>(10, "October"));
+                Months.Add(new KeyValuePair<int, string>(11, "November"));
+                Months.Add(new KeyValuePair<int, string>(12, "December"));
+
+                ViewBag.FirstMonth = new SelectList(Months, "Key", "Value");
                 return View();
             }
         }
