@@ -1,6 +1,8 @@
 ﻿using Kendo.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
+//using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -176,14 +178,27 @@ namespace TrainersSchoolingSystem.Controllers
             db.Lookups.Add(lookup);
             return "success";
         }
+        [AllowAnonymous]
         public string ResetDb()
         {
             db.Database.ExecuteSqlCommand("exec ResetDb");
+            if (User.Identity.IsAuthenticated)
+                new AccountController().LogOff();
             return "success";
         }
         // GET: Setup/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit()
         {
+            ConfigurationViewModel configuration = new ConfigurationViewModel();
+            var configurationdb = db.Configurations.ToList();
+            var properties = configuration.GetType().GetProperties();
+            int i = 1;
+            foreach (var property in properties)
+            {
+                if (property.Name == "File")
+                    continue;
+                property.SetValue(configuration, configurationdb.Where(x => x.Key == property.Name).FirstOrDefault().Value);
+            }
             List<KeyValuePair<int, string>> Months = new List<KeyValuePair<int, string>>();
             Months.Add(new KeyValuePair<int, string>(1, "January"));
             Months.Add(new KeyValuePair<int, string>(2, "February"));
@@ -198,20 +213,72 @@ namespace TrainersSchoolingSystem.Controllers
             Months.Add(new KeyValuePair<int, string>(11, "November"));
             Months.Add(new KeyValuePair<int, string>(12, "December"));
 
-            ViewBag.FirstMonth = new SelectList(Months, "Key", "Value");
-            return View();
+            ViewBag.FirstMonth = new SelectList(Months, "Key", "Value", Months[Convert.ToInt32(configuration.FirstMonth)]);
+            return View(configuration);
         }
+        [HttpPost]
+        public string Temp(HttpPostedFileBase file)
+        {
+            string path = "";
+            string pic = "";
+            var files = System.IO.Directory.EnumerateFiles(Server.MapPath("~/Content/Temp"));
+            foreach (var item in files)
+            {
+                if (System.IO.File.Exists(item))
+                {
+                    System.IO.File.Delete(item);
+                }
+            }
 
+            if (file != null)
+            {
+                pic = System.IO.Path.GetFileName(file.FileName);
+                path = System.IO.Path.Combine(
+                                       Server.MapPath("~/Content/Temp"), pic);
+                // file is uploaded
+                file.SaveAs(path);
+            }
+            return $"../Content/Temp/{pic}";
+        }
         // POST: Setup/Edit/5
         [HttpPost]
-        public ActionResult Edit(ConfigurationViewModel collection)
+        public ActionResult Edit(ConfigurationViewModel configuration)
         {
             try
             {
+                var configdb = db.Configurations.ToList();
                 // TODO: Add update logic here
                 if (ModelState.IsValid)
                 {
-                    return RedirectToAction("Index");
+                    var file = configuration.File;
+                    if (file != null)
+                    {
+                        string pic = System.IO.Path.GetFileName(file.FileName);
+                        string path = System.IO.Path.Combine(
+                                               Server.MapPath("~/Content/Images"), pic);
+                        configuration.Picture = "../Content/Images/" + pic;
+                        // file is uploaded
+                        file.SaveAs(path);
+                    }
+
+                    var properties = configuration.GetType().GetProperties();
+                    int i = 1;
+                    foreach (var property in properties)
+                    {
+                        if (property.Name == "File")
+                            continue;
+                        Configuration config = configdb.Where(x => x.Key == property.Name).FirstOrDefault();
+                        //config.ConfigurationId = i++;
+                        config.Key = property.Name;
+                        config.Value = (string)property.GetValue(configuration);
+                        config.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                        config.UpdatedDate = DateTime.Now;
+                        db.Configurations.AddOrUpdate(config);
+                    }
+
+                    db.SaveChanges();
+                    GlobalData.RefreshConfiguration();
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -229,7 +296,7 @@ namespace TrainersSchoolingSystem.Controllers
                     Months.Add(new KeyValuePair<int, string>(11, "November"));
                     Months.Add(new KeyValuePair<int, string>(12, "December"));
 
-                    ViewBag.FirstMonth = new SelectList(Months, "Key", "Value");
+                    ViewBag.FirstMonth = new SelectList(Months, "Key", "Value", Convert.ToInt32(configuration.FirstMonth));
                     return View();
                 }
             }

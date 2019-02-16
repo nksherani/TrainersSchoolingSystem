@@ -329,6 +329,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\Logo.png" />
+    <Content Include="Content\Images\trainers.jpg" />
     <Content Include="Content\kendo\2017.2.621\Black\editor.png" />
     <Content Include="Content\kendo\2017.2.621\Black\imagebrowser.png" />
     <Content Include="Content\kendo\2017.2.621\Black\indeterminate.gif" />
@@ -955,6 +956,7 @@
     <Content Include="Scripts\kendo\2017.2.621\kendo.window.min.js" />
     <Content Include="Scripts\kendo\2017.2.621\pako_deflate.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\Site.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1174,9 +1176,11 @@
     <Content Include="Views\Setup\Index.cshtml" />
     <Content Include="Views\Setup\Error.cshtml" />
     <Content Include="Views\Setup\Create.cshtml" />
+    <Content Include="Views\Setup\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Temp\" />
     <Folder Include="Views\Test\" />
   </ItemGroup>
   <ItemGroup>

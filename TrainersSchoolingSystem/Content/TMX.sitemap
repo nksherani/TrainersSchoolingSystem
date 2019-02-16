@@ -17,5 +17,8 @@
     <siteMapNode title="Registration">
       <siteMapNode title="New Admission" controller="Students" action="NewAdmission"/>
     </siteMapNode>
+    <siteMapNode title="Configuration">
+      <siteMapNode title="Portal Settings" controller="Setup" action="Edit"/>
+    </siteMapNode>
   </siteMapNode>
 </siteMap>
