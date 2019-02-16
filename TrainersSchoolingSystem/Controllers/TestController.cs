@@ -25,6 +25,11 @@ namespace TrainersSchoolingSystem.Controllers
         {
             return View();
         }
+        public ActionResult FeeSlip()
+        {
+
+            return View();
+        }
         public string AddRoles(string rolename)
         {
             AspNetRole role = new AspNetRole();
