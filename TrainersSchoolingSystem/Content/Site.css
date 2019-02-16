@@ -33,3 +33,12 @@ textarea {
     width:110px;
     height:110px;
 }
+th, tr, td {
+    border: 2px solid black;
+    padding: 5px;
+}
+
+table {
+    width: 450px;
+    border: 2px solid black;
+}

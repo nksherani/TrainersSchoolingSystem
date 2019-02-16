@@ -27,7 +27,9 @@ namespace TrainersSchoolingSystem.Controllers
         }
         public ActionResult FeeSlip()
         {
-
+            IronPdf.HtmlToPdf Renderer = new IronPdf.HtmlToPdf();
+            var data = "";
+            Renderer.RenderHtmlAsPdf("<h1>Hello World</h1>").SaveAs("html-string.pdf");
             return View();
         }
         public string AddRoles(string rolename)
