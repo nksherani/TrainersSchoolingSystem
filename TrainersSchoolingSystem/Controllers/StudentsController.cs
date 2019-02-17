@@ -1,7 +1,4 @@
-﻿using Kendo.Mvc;
-using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -22,13 +19,7 @@ namespace TrainersSchoolingSystem.Controllers
     {
         private TrainersEntities db = new TrainersEntities();
 
-        public StudentsController()
-        {
-            if (!SiteMapManager.SiteMaps.ContainsKey("TMXMAP"))
-            {
-                SiteMapManager.SiteMaps.Register<XmlSiteMap>("TMXMAP", sitmap => sitmap.LoadFrom("~/Content/TMX.sitemap"));
-            }
-        }
+        
         // GET: Students
         public ActionResult Index()
         {

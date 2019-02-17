@@ -1,5 +1,4 @@
-﻿using Kendo.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -16,13 +15,7 @@ namespace TrainersSchoolingSystem.Controllers
     public class LookupTypesController : Controller
     {
         private TrainersEntities db = new TrainersEntities();
-        public LookupTypesController()
-        {
-            if (!SiteMapManager.SiteMaps.ContainsKey("TMXMAP"))
-            {
-                SiteMapManager.SiteMaps.Register<XmlSiteMap>("TMXMAP", sitmap => sitmap.LoadFrom("~/Content/TMX.sitemap"));
-            }
-        }
+        
         // GET: LookupTypes
         public ActionResult Index()
         {

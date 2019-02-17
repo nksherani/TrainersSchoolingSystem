@@ -1,5 +1,4 @@
-﻿using Kendo.Mvc;
-using Microsoft.AspNet.Identity.Owin;
+﻿using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -21,20 +20,11 @@ namespace TrainersSchoolingSystem.Controllers
     {
         private TrainersEntities db = new TrainersEntities();
         private ApplicationUserManager _userManager;
-        public TrainerUsersController()
-        {
-            if (!SiteMapManager.SiteMaps.ContainsKey("TMXMAP"))
-            {
-                SiteMapManager.SiteMaps.Register<XmlSiteMap>("TMXMAP", sitmap => sitmap.LoadFrom("~/Content/TMX.sitemap"));
-            }
-        }
+       
         public TrainerUsersController(ApplicationUserManager userManager)
         {
             UserManager = userManager;
-            if (!SiteMapManager.SiteMaps.ContainsKey("TMXMAP"))
-            {
-                SiteMapManager.SiteMaps.Register<XmlSiteMap>("TMXMAP", sitmap => sitmap.LoadFrom("~/Content/TMX.sitemap"));
-            }
+            
         }
         public ApplicationUserManager UserManager
         {

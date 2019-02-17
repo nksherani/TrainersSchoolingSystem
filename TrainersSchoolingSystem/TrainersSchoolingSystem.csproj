@@ -48,9 +48,6 @@
     <Reference Include="IronPdf, Version=5.0.5.17148, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\IronPdf.5.0.5.2\lib\net40\IronPdf.dll</HintPath>
     </Reference>
-    <Reference Include="Kendo.Mvc">
-      <HintPath>..\packages\Kendo.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
@@ -793,7 +790,6 @@
     <Content Include="Content\kendo\2017.2.621\kendo.silver.mobile.min.css.map" />
     <Content Include="Content\kendo\2017.2.621\kendo.uniform.min.css.map" />
     <Content Include="Content\kendo\2017.2.621\kendo.uniform.mobile.min.css.map" />
-    <Content Include="Content\TMX.sitemap" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />

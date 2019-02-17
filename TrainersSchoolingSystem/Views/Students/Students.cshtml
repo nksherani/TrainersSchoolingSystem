@@ -62,6 +62,22 @@
 <script>
     $(document).ready(function () {
         $("#grid").kendoGrid({
+            toolbar: ["excel","pdf"],
+            excel: {
+                fileName: "Students.xlsx",
+                proxyURL: "../Students/Excel_Export_Save",
+                filterable: true
+            },
+            pdf: {
+                allPages: true,
+                avoidLinks: true,
+                paperSize: "A4",
+                margin: { top: "2cm", left: "1cm", right: "1cm", bottom: "1cm" },
+                landscape: true,
+                repeatHeaders: true,
+                template: $("#page-template").html(),
+                scale: 0.8
+            },
             dataSource: {
                 type: "jsonp",
                 transport: {
@@ -81,6 +97,7 @@
             height: 550,
             groupable: true,
             sortable: true,
+            selectable: true,
             pageable: {
                 refresh: true,
                 pageSizes: true,
@@ -91,7 +108,7 @@
                 title: "ID",
                 width: 30
             }, {
-                //template: "#: FirstName # #: LastName #",
+                template: "#: FirstName # #: LastName #",
                 field: "FirstName",
                 title: "Name",
                 width: 80
