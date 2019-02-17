@@ -1,4 +1,6 @@
 ﻿using Kendo.Mvc;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -37,7 +39,7 @@ namespace TrainersSchoolingSystem.Controllers
         {
             return View();
         }
-        public ActionResult GetStudents()
+        public ActionResult GetStudents([DataSourceRequest] DataSourceRequest request)
         {
             var students = db.Students.Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
             var enrolments = db.Enrolments.ToList();
@@ -52,12 +54,28 @@ namespace TrainersSchoolingSystem.Controllers
                 {
                     model.Guardian_ = Mapper<GuardianViewModel>.GetObject(student.Parent1);
                 }
-                model.Enrolment = Mapper<EnrolmentViewModel>.GetObject( enrolments.Where(x => x.Student == student.StudentId).OrderByDescending(x=>x.CreatedDate).FirstOrDefault());
+                var enrolmentdb = enrolments.Where(x => x.Student == student.StudentId).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
+                model.Enrolment = Mapper<EnrolmentViewModel>.GetObject(enrolmentdb);
+                model.Enrolment.Class_ = Mapper<ClassViewModel>.GetObject(enrolmentdb.Class1);
                 modellist.Add(model);
             }
-            return Json(modellist, JsonRequestBehavior.AllowGet);
+            //request.Filters.Add(new FilterDescriptor() { Member = "Enrolment.Class_.ClassName", MemberType = typeof(string), Operator = FilterOperator.IsEqualTo/*, Value = "Chai"*/ });
+            return Json(modellist.ToDataSourceResult(request));
         }
+        [HttpPost]
+        public ActionResult Excel_Export_Save(string contentType, string base64, string fileName)
+        {
+            var fileContents = Convert.FromBase64String(base64);
 
+            return File(fileContents, contentType, fileName);
+        }
+        [HttpPost]
+        public ActionResult Pdf_Export_Save(string contentType, string base64, string fileName)
+        {
+            var fileContents = Convert.FromBase64String(base64);
+
+            return File(fileContents, contentType, fileName);
+        }
         // GET: Students/Details/5
         public ActionResult Details(int? id)
         {

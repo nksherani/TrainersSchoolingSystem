@@ -6,29 +6,54 @@
 <h2>Students</h2>
 
 @(Html.Kendo().Grid<TrainersSchoolingSystem.Models.DTOs.StudentViewModel>()
-                .Name("grid")
-                .Columns(columns =>
-                {
-                    columns.Bound(c => c.StudentId);
-        //    .ClientTemplate(
-        //        @"<div class='customer-photo'
-        //style='background-image: url(" + @Url.Content("~/content/web/Customers/#:data.CustomerID#.jpg") + ");'></div><div class='customer-name'>#: ContactName #</div>")
-        //      .Width(240);
-        columns.Bound(c => c.FirstName);
-                    columns.Bound(c => c.LastName);
-                    columns.Bound(c => c.BFormNo).Width(150);
-                })
-                .HtmlAttributes(new { style = "height: 550px;" })
-                .Scrollable()
-                .Groupable()
-                .Sortable()
-                .Pageable(pageable => pageable
-                    .Refresh(true)
-                    .PageSizes(true)
-                    .ButtonCount(5))
-                .DataSource(dataSource => dataSource
-                    .Ajax()
-                    .Read(read => read.Action("GetStudents", "Students"))
-                    .PageSize(20)
-                )
+    .Name("grid")
+    .ToolBar(tools => tools.Pdf())
+    .ToolBar(tools => tools.Excel())
+
+    .Pdf(pdf => pdf
+    //.AllPages()
+    .PaperSize("A4")
+    .Margin("2cm", "1cm", "1cm", "1cm")
+    .Landscape()
+    .FileName("Students.pdf")
+    .ProxyURL(Url.Action("Pdf_Export_Save", "Students"))
+    )
+    .Excel(excel => excel
+        .FileName("Students.xlsx")
+        .Filterable(true)
+        //.AllPages()
+        .ProxyURL(Url.Action("Excel_Export_Save", "Students"))
+    )
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.StudentId).Width(20).Title("Id");
+        columns.Bound(c => c.FirstName).Width(20).Title("Name")
+            .ClientTemplate(@"#: FirstName # #: LastName #").Width(50);
+        columns.Bound(c => c.Father_.Name).Width(50);
+        columns.Bound(c => c.Enrolment.Class_.ClassName).Width(50);
+        columns.Bound(c => c.Enrolment.Class_.Section).Width(50);
+        columns.Bound(c => c.Enrolment.Fee).Width(50);
+        columns.Bound(c => c.Father_.Mobile).Width(50);
+    })
+    .HtmlAttributes(new { style = "height: 550px;" })
+    .Scrollable()
+    .Groupable()
+    .Sortable()
+    .Selectable()
+    .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
+    .Pageable(pageable => pageable
+    .Refresh(true)
+    .PageSizes(true)
+    .ButtonCount(5))
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .Read(read => read.Action("GetStudents", "Students"))
+    .Update(read => read.Action("UpdateStudent", "Students"))
+    .PageSize(20)
+    .Model(model =>
+    {
+        model.Id(p => p.StudentId);
+        model.Field("Enrolment.Fee", 1.GetType());
+    })
+    )
 )
