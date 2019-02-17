@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewBag.Title = "Students";
+}
+
+<h2>Students</h2>
+
+@(Html.Kendo().Grid<TrainersSchoolingSystem.Models.DTOs.StudentViewModel>()
+                .Name("grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(c => c.StudentId);
+        //    .ClientTemplate(
+        //        @"<div class='customer-photo'
+        //style='background-image: url(" + @Url.Content("~/content/web/Customers/#:data.CustomerID#.jpg") + ");'></div><div class='customer-name'>#: ContactName #</div>")
+        //      .Width(240);
+        columns.Bound(c => c.FirstName);
+                    columns.Bound(c => c.LastName);
+                    columns.Bound(c => c.BFormNo).Width(150);
+                })
+                .HtmlAttributes(new { style = "height: 550px;" })
+                .Scrollable()
+                .Groupable()
+                .Sortable()
+                .Pageable(pageable => pageable
+                    .Refresh(true)
+                    .PageSizes(true)
+                    .ButtonCount(5))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("GetStudents", "Students"))
+                    .PageSize(20)
+                )
+)

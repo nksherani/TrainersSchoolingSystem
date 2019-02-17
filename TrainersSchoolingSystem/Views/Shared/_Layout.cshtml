@@ -16,9 +16,9 @@
 </head>
 <body>
     @(Html.Kendo().Menu()
-                        .Name("menu")
-                        .BindTo("TMXMAP")
-                        .SecurityTrimming(s => s.HideParent(true))
+                                .Name("menu")
+                                .BindTo("TMXMAP")
+                                .SecurityTrimming(s => s.HideParent(true))
     )
 
     <nav class="navbar navbar-inverse">
@@ -51,7 +51,8 @@
     @RenderSection("scripts", required: false)
     <script src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
     <script src="~/Scripts/kendo/2017.2.621/kendo.all.min.js"></script>
-    
+
+    <script src="~/Scripts/kendo/2017.2.621/kendo.aspnetmvc.min.js"></script>
     <script src="~/Scripts/Site.js"></script>
 </body>
 </html>

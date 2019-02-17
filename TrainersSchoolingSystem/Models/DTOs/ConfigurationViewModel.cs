@@ -24,6 +24,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public string Picture { get; set; }
         public string FirstMonth { get; set; }
 
+        [Display(Name ="Logo")]
         public HttpPostedFileBase File { get; set; }
 
         public ConfigurationViewModel()

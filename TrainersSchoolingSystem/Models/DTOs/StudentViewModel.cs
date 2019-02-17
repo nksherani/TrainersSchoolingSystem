@@ -81,14 +81,14 @@ namespace TrainersSchoolingSystem.Models.DTOs
         {
             var config = new MapperConfiguration(cfg => {
 
-                cfg.CreateMap<StudentViewModel, Student>();
+                cfg.CreateMap<StudentViewModel, Student>().IgnoreAllPropertiesWithAnInaccessibleSetter();
 
             });
             toEntityMapper = config.CreateMapper();
 
             config = new MapperConfiguration(cfg => {
 
-                cfg.CreateMap<Student, StudentViewModel>();
+                cfg.CreateMap<Student, StudentViewModel>().IgnoreAllPropertiesWithAnInaccessibleSetter();
 
             });
             toModelMapper = config.CreateMapper();

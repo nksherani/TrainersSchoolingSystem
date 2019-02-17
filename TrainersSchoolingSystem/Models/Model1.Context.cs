@@ -48,5 +48,7 @@ namespace TrainersSchoolingSystem.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ResetDb");
         }
+
+        public System.Data.Entity.DbSet<TrainersSchoolingSystem.Models.DTOs.StudentViewModel> StudentViewModels { get; set; }
     }
 }

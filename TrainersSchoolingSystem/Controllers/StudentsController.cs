@@ -33,6 +33,30 @@ namespace TrainersSchoolingSystem.Controllers
             var students = db.Students.Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
             return View(students.ToList());
         }
+        public ActionResult Students()
+        {
+            return View();
+        }
+        public ActionResult GetStudents()
+        {
+            var students = db.Students.Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
+            var enrolments = db.Enrolments.ToList();
+            List<StudentViewModel> modellist = new List<StudentViewModel>();
+            foreach (var student in students)
+            {
+                StudentViewModel model = new StudentViewModel();
+                model = StudentViewModel.ToModel(student);
+                model.Father_ = ParentViewModel.ToModel(student.Parent);
+                model.Mother_ = ParentViewModel.ToModel(student.Parent1);
+                if(student.Parent2.Name!="")
+                {
+                    model.Guardian_ = GuardianViewModel.ToModel(student.Parent2);
+                }
+                model.Enrolment = EnrolmentViewModel.ToModel( enrolments.Where(x => x.Student == student.StudentId).OrderByDescending(x=>x.CreatedDate).FirstOrDefault());
+                modellist.Add(model);
+            }
+            return Json(modellist, JsonRequestBehavior.AllowGet);
+        }
 
         // GET: Students/Details/5
         public ActionResult Details(int? id)

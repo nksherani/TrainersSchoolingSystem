@@ -29,7 +29,7 @@ namespace TrainersSchoolingSystem.Controllers
         {
             IronPdf.HtmlToPdf Renderer = new IronPdf.HtmlToPdf();
             var data = "";
-            Renderer.RenderHtmlAsPdf("<h1>Hello World</h1>").SaveAs("html-string.pdf");
+            //Renderer.RenderHtmlAsPdf("<h1>Hello World</h1>").SaveAs("html-string.pdf");
             return View();
         }
         public string AddRoles(string rolename)

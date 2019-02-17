@@ -176,6 +176,15 @@ namespace TrainersSchoolingSystem.Controllers
             lookup.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
             lookup.CreatedDate = DateTime.Now;
             db.Lookups.Add(lookup);
+
+            lookup = new Lookup();
+            lookup.LookupTypeId = lookupType1.LookupTypeId;
+            lookup.LookupText = "Teacher";
+            lookup.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            lookup.CreatedDate = DateTime.Now;
+            db.Lookups.Add(lookup);
+
+            db.SaveChanges();
             return "success";
         }
         [AllowAnonymous]
