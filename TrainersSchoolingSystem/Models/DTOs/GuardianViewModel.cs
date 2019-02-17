@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -39,32 +38,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public Nullable<int> UpdatedBy { get; set; }
 
-        static IMapper toEntityMapper;
-        static IMapper toModelMapper;
-        static GuardianViewModel()
-        {
-            var config = new MapperConfiguration(cfg => {
-
-                cfg.CreateMap<GuardianViewModel, Parent>();
-
-            });
-            toEntityMapper = config.CreateMapper();
-
-            config = new MapperConfiguration(cfg => {
-
-                cfg.CreateMap<Parent, GuardianViewModel>();
-
-            });
-            toModelMapper = config.CreateMapper();
-        }
-        public static Parent ToEntity(GuardianViewModel parentViewModel)
-        {
-            return toEntityMapper.Map<Parent>(parentViewModel);
-        }
-        public static GuardianViewModel ToModel(Parent parent)
-        {
-            return toModelMapper.Map<GuardianViewModel>(parent);
-        }
+        
 
     }
 }

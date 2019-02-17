@@ -12,6 +12,7 @@ using System.Web;
 using System.Web.Mvc;
 using TrainersSchoolingSystem.Models;
 using TrainersSchoolingSystem.Models.DTOs;
+using TrainersSchoolingSystem.Utils;
 
 namespace TrainersSchoolingSystem.Controllers
 {
@@ -86,7 +87,7 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 trainerUser.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 trainerUser.CreatedDate = DateTime.Now;
-                db.TrainerUsers.Add(TrainerUserViewModel.ToEntity(trainerUser));
+                db.TrainerUsers.Add(Mapper<TrainerUser>.GetObject(trainerUser));
                 db.SaveChanges();
                 var user = new ApplicationUser { UserName = trainerUser.Username, Email = trainerUser.Email };
                 var result = await UserManager.CreateAsync(user, trainerUser.Username);
@@ -114,7 +115,7 @@ namespace TrainersSchoolingSystem.Controllers
             }
             var user = db.AspNetUsers.Where(x => x.UserName == trainerUser.Username).FirstOrDefault();
             ViewBag.RoleId = new SelectList(db.AspNetRoles, "Id", "Name",user.AspNetRoles.FirstOrDefault().Id);
-            return View(TrainerUserViewModel.ToModel(trainerUser));
+            return View(Mapper<TrainerUserViewModel>.GetObject(trainerUser));
         }
 
         // POST: TrainerUsers/Edit/5

@@ -43,13 +43,7 @@ namespace TrainersSchoolingSystem.Controllers
             db.SaveChanges();
             return $"Roles {rolename} has been added successfully";
         }
-        public string Mapper()
-        {
-            StudentViewModel svm = new StudentViewModel();
-            Student std = StudentViewModel.ToEntity(svm);
-            StudentViewModel svm2 = StudentViewModel.ToModel(std);
-            return "success";
-        }
+        
         
         
         // GET: Test/Details/5

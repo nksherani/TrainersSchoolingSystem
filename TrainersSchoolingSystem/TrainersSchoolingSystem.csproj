@@ -45,9 +45,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.8.0.0\lib\net461\AutoMapper.dll</HintPath>
-    </Reference>
     <Reference Include="IronPdf, Version=5.0.5.17148, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\IronPdf.5.0.5.2\lib\net40\IronPdf.dll</HintPath>
     </Reference>
@@ -325,6 +322,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\GlobalData.cs" />
+    <Compile Include="Utils\Mapper.cs" />
     <Compile Include="Utils\RegularExpressions.cs" />
   </ItemGroup>
   <ItemGroup>

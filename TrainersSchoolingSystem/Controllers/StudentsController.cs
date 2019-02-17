@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Kendo.Mvc;
+﻿using Kendo.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using TrainersSchoolingSystem.Models;
 using TrainersSchoolingSystem.Models.DTOs;
+using TrainersSchoolingSystem.Utils;
 
 namespace TrainersSchoolingSystem.Controllers
 {
@@ -45,14 +45,14 @@ namespace TrainersSchoolingSystem.Controllers
             foreach (var student in students)
             {
                 StudentViewModel model = new StudentViewModel();
-                model = StudentViewModel.ToModel(student);
-                model.Father_ = ParentViewModel.ToModel(student.Parent);
-                model.Mother_ = ParentViewModel.ToModel(student.Parent1);
-                if(student.Parent2.Name!="")
+                model = Mapper<StudentViewModel>.GetObject(student);
+                model.Father_ = Mapper<ParentViewModel>.GetObject(student.Parent);
+                model.Mother_ = Mapper<ParentViewModel>.GetObject(student.Parent2);
+                if(student.Parent1!=null)
                 {
-                    model.Guardian_ = GuardianViewModel.ToModel(student.Parent2);
+                    model.Guardian_ = Mapper<GuardianViewModel>.GetObject(student.Parent1);
                 }
-                model.Enrolment = EnrolmentViewModel.ToModel( enrolments.Where(x => x.Student == student.StudentId).OrderByDescending(x=>x.CreatedDate).FirstOrDefault());
+                model.Enrolment = Mapper<EnrolmentViewModel>.GetObject( enrolments.Where(x => x.Student == student.StudentId).OrderByDescending(x=>x.CreatedDate).FirstOrDefault());
                 modellist.Add(model);
             }
             return Json(modellist, JsonRequestBehavior.AllowGet);
@@ -128,13 +128,13 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 student.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 student.CreatedDate = DateTime.Now;
-                var std = StudentViewModel.ToEntity(student);
+                var std = Mapper<Student>.GetObject(student);
                 if (std.DateOfBirth.HasValue)
                     std.Age = DateTime.Now.Year - std.DateOfBirth.Value.Year;
                 db.Students.Add(std);
                 db.SaveChanges();
-                var father = ParentViewModel.ToEntity(student.Father_);
-                var mother = ParentViewModel.ToEntity(student.Mother_);
+                var father = Mapper<Parent>.GetObject(student.Father_);
+                var mother = Mapper<Parent>.GetObject(student.Mother_);
                 father.Relation = "Father";
                 mother.Relation = "Mother";
                 db.Parents.Add(father);
@@ -146,12 +146,12 @@ namespace TrainersSchoolingSystem.Controllers
 
                 if (student.Guardian_.Name != null)
                 {
-                    var guardian = GuardianViewModel.ToEntity(student.Guardian_);
+                    var guardian = Mapper<Parent>.GetObject(student.Guardian_);
                     db.Parents.Add(guardian);
                     db.SaveChanges();
                     std.Guardian = guardian.ParentId;
                 }
-                var enrolment = EnrolmentViewModel.ToEntity(student.Enrolment);
+                var enrolment = Mapper<Enrolment>.GetObject(student.Enrolment);
                 enrolment.Student = std.StudentId;
                 db.Enrolments.Add(enrolment);
                 db.Students.AddOrUpdate(std);

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -43,31 +42,6 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public Nullable<int> UpdatedBy { get; set; }
 
 
-        static IMapper toEntityMapper;
-        static IMapper toModelMapper;
-        static ParentViewModel()
-        {
-            var config = new MapperConfiguration(cfg => {
-
-                cfg.CreateMap<ParentViewModel, Parent>();
-
-            });
-            toEntityMapper = config.CreateMapper();
-
-            config = new MapperConfiguration(cfg => {
-
-                cfg.CreateMap<Parent, ParentViewModel>();
-
-            });
-            toModelMapper = config.CreateMapper();
-        }
-        public static Parent ToEntity(ParentViewModel parentViewModel)
-        {
-            return toEntityMapper.Map<Parent>(parentViewModel);
-        }
-        public static ParentViewModel ToModel(Parent parent)
-        {
-            return toModelMapper.Map<ParentViewModel>(parent);
-        }
+        
     }
 }

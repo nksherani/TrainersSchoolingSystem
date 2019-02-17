@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -74,32 +73,5 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public TrainerUserViewModel CreatedBy_ { get; set; }
         public TrainerUserViewModel UpdatedBy_ { get; set; }
 
-
-        static IMapper toEntityMapper;
-        static IMapper toModelMapper;
-        static StudentViewModel()
-        {
-            var config = new MapperConfiguration(cfg => {
-
-                cfg.CreateMap<StudentViewModel, Student>().IgnoreAllPropertiesWithAnInaccessibleSetter();
-
-            });
-            toEntityMapper = config.CreateMapper();
-
-            config = new MapperConfiguration(cfg => {
-
-                cfg.CreateMap<Student, StudentViewModel>().IgnoreAllPropertiesWithAnInaccessibleSetter();
-
-            });
-            toModelMapper = config.CreateMapper();
-        }
-        public static Student ToEntity(StudentViewModel studentViewModel)
-        {
-            return toEntityMapper.Map<Student>(studentViewModel);
-        }
-        public static StudentViewModel ToModel(Student student)
-        {
-            return toModelMapper.Map<StudentViewModel>(student);
-        }
     }
 }
