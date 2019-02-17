@@ -18,12 +18,14 @@ namespace TrainersSchoolingSystem.Controllers
         {
             return View();
         }
-        public ActionResult FeeSlip()
+        public string FeeSlip()
         {
             IronPdf.HtmlToPdf Renderer = new IronPdf.HtmlToPdf();
-            var data = "";
-            //Renderer.RenderHtmlAsPdf("<h1>Hello World</h1>").SaveAs("html-string.pdf");
-            return View();
+            //var data = "";
+            var path = Server.MapPath("~/Content/FeeSlips/");
+            var filename = DateTime.Now + "_by_" + User.Identity.Name + ".pdf";
+            Renderer.RenderHtmlAsPdf("<h1>Hello World</h1>").SaveAs(path+filename);
+            return "../Content/FeeSlips/"+filename;
         }
         public string AddRoles(string rolename)
         {

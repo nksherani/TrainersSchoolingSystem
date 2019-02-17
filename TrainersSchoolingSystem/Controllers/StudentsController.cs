@@ -1,8 +1,10 @@
-﻿using System;
+﻿using IronPdf;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -33,7 +35,7 @@ namespace TrainersSchoolingSystem.Controllers
         public ActionResult GetStudents()
         {
             var students = db.Students.Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
-            var enrolments = db.Enrolments.ToList();
+            var enrolments = db.Enrolments.Where(x=>x.IsActive.Value).ToList();
             List<StudentViewModel> modellist = new List<StudentViewModel>();
             foreach (var student in students)
             {
@@ -50,9 +52,70 @@ namespace TrainersSchoolingSystem.Controllers
                 model.Enrolment.Class_ = Mapper<ClassViewModel>.GetObject(enrolmentdb.Class1);
                 modellist.Add(model);
             }
-            //request.Filters.Add(new FilterDescriptor() { Member = "Enrolment.Class_.ClassName", MemberType = typeof(string), Operator = FilterOperator.IsEqualTo/*, Value = "Chai"*/ });
             return Json(modellist,JsonRequestBehavior.AllowGet);
         }
+        public string GenerateFeeSlips()
+        {
+            var enrolments = db.Enrolments.Where(x => x.IsActive.Value).ToList();
+            var studentIds = enrolments.Select(x => x.Student).ToList();
+            var students = db.Students.Where(x=>studentIds.Contains(x.StudentId)).Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
+            List<StudentViewModel> modellist = new List<StudentViewModel>();
+            foreach (var student in students)
+            {
+                StudentViewModel model = new StudentViewModel();
+                model = Mapper<StudentViewModel>.GetObject(student);
+                model.Father_ = Mapper<ParentViewModel>.GetObject(student.Parent);
+                model.Mother_ = Mapper<ParentViewModel>.GetObject(student.Parent2);
+                if (student.Parent1 != null)
+                {
+                    model.Guardian_ = Mapper<GuardianViewModel>.GetObject(student.Parent1);
+                }
+                var enrolmentdb = enrolments.Where(x => x.Student == student.StudentId).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
+                model.Enrolment = Mapper<EnrolmentViewModel>.GetObject(enrolmentdb);
+                model.Enrolment.Class_ = Mapper<ClassViewModel>.GetObject(enrolmentdb.Class1);
+                modellist.Add(model);
+            }
+            string feeslips = "";
+            foreach (var studentView in modellist)
+            {
+                feeslips += GetFeeSlip(studentView);
+            }
+            IronPdf.HtmlToPdf Renderer = new IronPdf.HtmlToPdf();
+            Renderer.PrintOptions.CssMediaType = PdfPrintOptions.PdfCssMediaType.Print;
+            //var data = "";
+            var path = Server.MapPath("~/Content/FeeSlips/");
+            var filename = DateTime.Now.ToString("ddMMyyyyhhmmss") + "_by_" + User.Identity.Name + ".pdf";
+            Renderer.RenderHtmlAsPdf(feeslips).SaveAs(path + filename);
+            //var PDF = Renderer.RenderUrlAsPdf("https://en.wikipedia.org/wiki/Portable_Document_Format").SaveAs(path + filename); ;
+
+            return "../Content/FeeSlips/" + filename;
+            //return Json(modellist, JsonRequestBehavior.AllowGet);
+        }
+
+        private string GetFeeSlip(StudentViewModel studentView)
+        {
+            string data = "";
+            Server.MapPath("~/Content/FeeSlips/");
+            string[] lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/"+"FeeSlip.html"));
+
+            foreach (var item in lines)
+            {
+                data += item;
+            }
+            data = data.Replace("__Picture__", GlobalData.configuration.Picture);
+            data = data.Replace("__SchoolName__", GlobalData.configuration.SchoolName);
+            data = data.Replace("__Campus__", GlobalData.configuration.Campus);
+            data = data.Replace("__Month__", DateTime.Now.ToString("mmm-yyyy"));
+            data = data.Replace("__IssueDate__", DateTime.Now.ToString("dd-MM-yyyy"));
+            data = data.Replace("__DueDate__", DateTime.Now.ToString("10-MM-yyyy"));
+            data = data.Replace("__Challan__", DateTime.Now.ToString()+studentView.StudentId);
+            data = data.Replace("__GRNo__", studentView.Enrolment.GRNo);
+            data = data.Replace("__StudentName__", studentView.FirstName+" "+studentView.LastName);
+            data = data.Replace("__FatherName__", studentView.Father_.Name);
+
+            return data;
+        }
+
         [HttpPost]
         public ActionResult Excel_Export_Save(string contentType, string base64, string fileName)
         {

@@ -15,6 +15,7 @@ namespace TrainersSchoolingSystem.Models
     public partial class Enrolment
     {
         public int EnrolmentId { get; set; }
+        public Nullable<bool> IsActive { get; set; }
         public Nullable<int> Student { get; set; }
         public string GRNo { get; set; }
         public Nullable<int> RollNo { get; set; }

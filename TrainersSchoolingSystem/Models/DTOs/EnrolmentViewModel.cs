@@ -10,6 +10,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
     {
         [Key]
         public int EnrolmentId { get; set; }
+        public Nullable<bool> IsActive { get; set; }
         [Required]
         [Display(Name = "G.R No.")]
         public string GRNo { get; set; }

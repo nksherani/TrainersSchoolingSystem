@@ -1178,9 +1178,11 @@
     <Content Include="Views\Setup\Edit.cshtml" />
     <Content Include="Views\Test\FeeSlip.cshtml" />
     <Content Include="Views\Students\Students.cshtml" />
+    <Content Include="Content\FeeSlip.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\FeeSlips\" />
     <Folder Include="Content\Temp\" />
   </ItemGroup>
   <ItemGroup>
