@@ -39,7 +39,7 @@ namespace TrainersSchoolingSystem.Controllers
         {
             return View();
         }
-        public ActionResult GetStudents([DataSourceRequest] DataSourceRequest request)
+        public ActionResult GetStudents()
         {
             var students = db.Students.Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
             var enrolments = db.Enrolments.ToList();
@@ -60,7 +60,7 @@ namespace TrainersSchoolingSystem.Controllers
                 modellist.Add(model);
             }
             //request.Filters.Add(new FilterDescriptor() { Member = "Enrolment.Class_.ClassName", MemberType = typeof(string), Operator = FilterOperator.IsEqualTo/*, Value = "Chai"*/ });
-            return Json(modellist.ToDataSourceResult(request));
+            return Json(modellist,JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult Excel_Export_Save(string contentType, string base64, string fileName)
