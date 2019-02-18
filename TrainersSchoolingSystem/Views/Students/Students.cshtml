@@ -20,17 +20,17 @@
 <div id="error4" class="alert alert-danger">
     <strong>Fee field is empty!</strong> Please enter the amount to be increased e.g 100.
 </div>
-<div id="error" class="alert alert-danger">
+<div id="error1" class="alert alert-danger">
     <strong>No selection is made!</strong> Please select students for bulk operation.
 </div>
 
 <div id="grid"></div>
 
 <script>
-    var grid,action,class_,section,fee,error1,error2,error3,error4;
+    var grid, action, class_, section, fee, error1, error2, error3, error4;
     $(document).ready(function () {
         /////////////
-        
+
         ////////////
         $("#btnPerformAction").kendoButton();
         //////////
@@ -140,6 +140,7 @@
             //height: 400,
             index: 0,
             optionLabel: "Select a section...",
+            change: onChangeSection,
             dataSource: {
                 type: "jsonp",
                 transport: {
@@ -151,6 +152,7 @@
         $("#class").kendoDropDownList({
             dataTextField: "Text",
             dataValueField: "Value",
+            change: onChangeClass,
             //height: 400,
             index: 0,
             optionLabel: "Select a class...",
@@ -172,7 +174,7 @@
         error3 = $("#error3");
         error4 = $("#error4");
 
-        HideControls
+        HideControls();
         HideErrors();
         ////////
         $("#btnPerformAction").click(function () {
@@ -190,38 +192,48 @@
                 iserror = true;
                 $("#error3").show();
             }
-            if (action.value() == 4 && fee.value() == "") {
+            if (action.value() == 4 && fee.text() == "") {
                 iserror = true;
                 $("#error4").show();
             }
             if (iserror)
                 return;
+            var formData = {
+                "Action": action.value(),
+                "Ids": studentIds,
+                "Class": class_.value(),
+                "Section": section.value(),
+                "Fee": fee.text()
+            };
+            console.log(formData);
             $.ajax({
-                url: "/setup/temp",
+                url: "../Students/Bulk",
                 type: "POST",
-                data: formData,
-                contentType: false,  // tell jQuery not to set contentType
+                dataType: "json",
+                data: JSON.stringify(formData),
+                contentType: "application/json;charset=utf-8",
                 success: function (data) {
                     var grid = $('#grid').data('kendoGrid');
                     grid.dataSource.read();
                     grid.refresh();
                 }
             });
-
+            
 
             //console.log("clicked");
 
         });
     });
     function onChange(arg) {
-        
+        if (grid.selectedKeyNames().length > 0)
+            error1.hide();
         //console.log(arg);
         //console.log("The selected product ids are: [" + grid.selectedKeyNames().join(", ") + "]");
 
     }
     function onChangeAction(arg) {
-        
-        HideControls
+
+        HideControls();
         HideErrors();
 
         if (action.value() == 1) {
@@ -247,5 +259,13 @@
         class_.wrapper.hide();
         section.wrapper.hide();
         fee.hide();
+    }
+    function onChangeClass(arg) {
+        if (class_.value() != 0)
+            error2.hide();
+    }
+    function onChangeSection(arg) {
+        if (section.value() != 0)
+            error3.hide();
     }
 </script>

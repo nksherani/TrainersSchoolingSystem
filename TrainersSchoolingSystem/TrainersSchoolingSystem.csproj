@@ -257,6 +257,7 @@
     <Compile Include="Models\Configuration.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\BulkStudents.cs" />
     <Compile Include="Models\DTOs\ClassViewModel.cs" />
     <Compile Include="Models\DTOs\ConfigurationViewModel.cs" />
     <Compile Include="Models\DTOs\EnrolmentViewModel.cs" />

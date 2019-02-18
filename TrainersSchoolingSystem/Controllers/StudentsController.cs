@@ -115,7 +115,12 @@ namespace TrainersSchoolingSystem.Controllers
 
             return data;
         }
+        [HttpPost]
+        public bool Bulk( BulkStudents bulk)
+        {
 
+            return true;
+        }
         [HttpPost]
         public ActionResult Excel_Export_Save(string contentType, string base64, string fileName)
         {
