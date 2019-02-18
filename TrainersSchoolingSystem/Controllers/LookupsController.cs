@@ -22,6 +22,11 @@ namespace TrainersSchoolingSystem.Controllers
             var lookups = db.Lookups.Include(l => l.TrainerUser).Include(l => l.LookupType).Include(l => l.TrainerUser1);
             return View(lookups.ToList());
         }
+        public ActionResult GetLookups(string Type)
+        {
+            var lookups = db.Lookups.Where(x => x.LookupType.LookupTypeName == Type).Select(x=>new { x.LookupId ,x.LookupText}).ToList();
+            return Json(lookups, JsonRequestBehavior.AllowGet);
+        }
 
         // GET: Lookups/Details/5
         public ActionResult Details(int? id)

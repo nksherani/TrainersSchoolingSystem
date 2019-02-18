@@ -4,30 +4,53 @@
 }
 
 <h2>Students</h2>
-<label>Enter The amount to be added to current fee of selected students</label>
-<input type="text" id="fee" name="fee" placeholder="100"/>
-<input type="button" id="btnFee" value="Increase Fee" />
+<label>Select a bulk Action to Perform on Selected Students </label>
+<input id="action" @*value="1"*@ />
+<input id="class" />
+<input id="section" />
+<input type="text" id="fee" name="fee" placeholder="100" />
+<input type="button" id="btnPerformAction" value="Perform Action" />
+
+<div id="error2" class="alert alert-danger">
+    <strong>No class is selected!</strong> Please select a class.
+</div>
+<div id="error3" class="alert alert-danger">
+    <strong>No section is selected!</strong> Please select a section.
+</div>
+<div id="error4" class="alert alert-danger">
+    <strong>Fee field is empty!</strong> Please enter the amount to be increased e.g 100.
+</div>
+<div id="error" class="alert alert-danger">
+    <strong>No selection is made!</strong> Please select students for bulk operation.
+</div>
+
 <div id="grid"></div>
 
 <script>
+    var grid,action,class_,section,fee,error1,error2,error3,error4;
     $(document).ready(function () {
+        /////////////
+        
+        ////////////
+        $("#btnPerformAction").kendoButton();
+        //////////
         $("#grid").kendoGrid({
-            toolbar: ["excel", "pdf"],
-            excel: {
-                fileName: "Students.xlsx",
-                proxyURL: "../Students/Excel_Export_Save",
-                filterable: true
-            },
-            pdf: {
-                allPages: true,
-                avoidLinks: true,
-                paperSize: "A4",
-                margin: { top: "2cm", left: "1cm", right: "1cm", bottom: "1cm" },
-                landscape: true,
-                repeatHeaders: true,
-                template: $("#page-template").html(),
-                scale: 0.8
-            },
+            //toolbar: ["excel", "pdf"],
+            //excel: {
+            //    fileName: "Students.xlsx",
+            //    proxyURL: "../Students/Excel_Export_Save",
+            //    filterable: true
+            //},
+            //pdf: {
+            //    allPages: true,
+            //    avoidLinks: true,
+            //    paperSize: "A4",
+            //    margin: { top: "2cm", left: "1cm", right: "1cm", bottom: "1cm" },
+            //    landscape: true,
+            //    repeatHeaders: true,
+            //    template: $("#page-template").html(),
+            //    scale: 0.8
+            //},
             dataSource: {
                 type: "jsonp",
                 transport: {
@@ -92,15 +115,91 @@
                     width: 80
                 }]
         });
+        //////////
+        var data = [
+            { text: "Promote to Upper Class", value: "1" },
+            { text: "Change Class", value: "2" },
+            { text: "Change Section", value: "3" },
+            { text: "Increase Fee", value: "4" }
+        ];
 
+        // create DropDownList from input HTML element
+        $("#action").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: data,
+            autoBind: true,
+            index: 0,
+            optionLabel: "Select an action...",
+            change: onChangeAction
+        });
+        ///////
+        $("#section").kendoDropDownList({
+            dataTextField: "LookupText",
+            dataValueField: "LookupId",
+            //height: 400,
+            index: 0,
+            optionLabel: "Select a section...",
+            dataSource: {
+                type: "jsonp",
+                transport: {
+                    read: "../Lookups/GetLookups?Type=Section"
+                }
+            }
+        });
+        /////////
+        $("#class").kendoDropDownList({
+            dataTextField: "Text",
+            dataValueField: "Value",
+            //height: 400,
+            index: 0,
+            optionLabel: "Select a class...",
+            dataSource: {
+                type: "jsonp",
+                transport: {
+                    read: "../Classes/GetClasses"
+                }
+            }
+        });
+        ///////
+        grid = $('#grid').data('kendoGrid');
+        action = $('#action').data('kendoDropDownList');
+        class_ = $('#class').data('kendoDropDownList');
+        section = $('#section').data('kendoDropDownList');
+        fee = $("#fee");
+        error1 = $("#error1");
+        error2 = $("#error2");
+        error3 = $("#error3");
+        error4 = $("#error4");
+
+        HideControls
+        HideErrors();
         ////////
-        $("#btnFee").click(function () {
-
+        $("#btnPerformAction").click(function () {
+            var studentIds = grid.selectedKeyNames()/*.join(", ")*/;
+            var iserror = false;
+            if (studentIds.length == 0) {
+                $("#error1").show();
+                iserror = true;
+            }
+            if (action.value() == 2 && class_.value() == 0) {
+                iserror = true;
+                $("#error2").show();
+            }
+            if (action.value() == 3 && section.value() == 0) {
+                iserror = true;
+                $("#error3").show();
+            }
+            if (action.value() == 4 && fee.value() == "") {
+                iserror = true;
+                $("#error4").show();
+            }
+            if (iserror)
+                return;
             $.ajax({
                 url: "/setup/temp",
                 type: "POST",
                 data: formData,
-                processData: false,  // tell jQuery not to process the data
                 contentType: false,  // tell jQuery not to set contentType
                 success: function (data) {
                     var grid = $('#grid').data('kendoGrid');
@@ -111,13 +210,42 @@
 
 
             //console.log("clicked");
-            
+
         });
     });
     function onChange(arg) {
-        var grid = $('#grid').data('kendoGrid');
+        
         //console.log(arg);
         //console.log("The selected product ids are: [" + grid.selectedKeyNames().join(", ") + "]");
+
+    }
+    function onChangeAction(arg) {
         
+        HideControls
+        HideErrors();
+
+        if (action.value() == 1) {
+
+        }
+        else if (action.value() == 2) {
+            class_.wrapper.show();
+        }
+        else if (action.value() == 3) {
+            section.wrapper.show();
+        }
+        else if (action.value() == 4) {
+            fee.show();
+        }
+    }
+    function HideErrors() {
+        error1.hide();
+        error2.hide();
+        error3.hide();
+        error4.hide();
+    }
+    function HideControls() {
+        class_.wrapper.hide();
+        section.wrapper.hide();
+        fee.hide();
     }
 </script>

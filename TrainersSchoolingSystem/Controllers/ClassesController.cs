@@ -21,7 +21,19 @@ namespace TrainersSchoolingSystem.Controllers
         {
             return View(db.Classes.ToList());
         }
-
+        public ActionResult GetClasses()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            var classes = db.Classes.ToList();
+            foreach (var class_ in classes)
+            {
+                SelectListItem item = new SelectListItem();
+                item.Value = class_.ClassId.ToString();
+                item.Text = class_.ClassName+class_.Section;
+                list.Add(item);
+            }
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
         // GET: Classes/Details/5
         public ActionResult Details(int? id)
         {
