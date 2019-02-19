@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
+using System.IO;
 //using System.IO;
 using System.Linq;
 using System.Web;
@@ -155,6 +156,18 @@ namespace TrainersSchoolingSystem.Controllers
             lookupType3.CreatedDate = DateTime.Now;
             db.LookupTypes.Add(lookupType3);
 
+            LookupType lookupType4 = new LookupType();
+            lookupType4.LookupTypeName = "Category";
+            lookupType4.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            lookupType4.CreatedDate = DateTime.Now;
+            db.LookupTypes.Add(lookupType4);
+
+            LookupType lookupType5 = new LookupType();
+            lookupType5.LookupTypeName = "Level";
+            lookupType5.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            lookupType5.CreatedDate = DateTime.Now;
+            db.LookupTypes.Add(lookupType5);
+
             db.SaveChanges();
 
             Lookup lookup = new Lookup();
@@ -176,6 +189,30 @@ namespace TrainersSchoolingSystem.Controllers
             lookup.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
             lookup.CreatedDate = DateTime.Now;
             db.Lookups.Add(lookup);
+
+            lookup = new Lookup();
+            lookup.LookupTypeId = lookupType4.LookupTypeId;
+            lookup.LookupText = "Teaching";
+            lookup.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            lookup.CreatedDate = DateTime.Now;
+            db.Lookups.Add(lookup);
+
+            lookup = new Lookup();
+            lookup.LookupTypeId = lookupType4.LookupTypeId;
+            lookup.LookupText = "Non-Teaching";
+            lookup.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            lookup.CreatedDate = DateTime.Now;
+            db.Lookups.Add(lookup);
+
+            for (int i = 0; i < 13; i++)
+            {
+                lookup = new Lookup();
+                lookup.LookupTypeId = lookupType5.LookupTypeId;
+                lookup.LookupText = (i+1).ToString();
+                lookup.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                lookup.CreatedDate = DateTime.Now;
+                db.Lookups.Add(lookup);
+            }
 
             db.SaveChanges();
             return "success";
@@ -223,14 +260,19 @@ namespace TrainersSchoolingSystem.Controllers
         {
             string path = "";
             string pic = "";
-            var files = System.IO.Directory.EnumerateFiles(Server.MapPath("~/Content/Temp"));
-            foreach (var item in files)
+            var path_ = Server.MapPath("~/Content/Temp");
+            if(Directory.Exists(path_))
             {
-                if (System.IO.File.Exists(item))
+                var files = System.IO.Directory.EnumerateFiles(path_);
+                foreach (var item in files)
                 {
-                    System.IO.File.Delete(item);
+                    if (System.IO.File.Exists(item))
+                    {
+                        System.IO.File.Delete(item);
+                    }
                 }
             }
+            
 
             if (file != null)
             {

@@ -21,7 +21,7 @@ namespace TrainersSchoolingSystem.Controllers
     {
         private TrainersEntities db = new TrainersEntities();
 
-        
+
         // GET: Students
         public ActionResult Index()
         {
@@ -35,7 +35,7 @@ namespace TrainersSchoolingSystem.Controllers
         public ActionResult GetStudents()
         {
             var students = db.Students.Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
-            var enrolments = db.Enrolments.Where(x=>x.IsActive.Value).ToList();
+            var enrolments = db.Enrolments.Where(x => x.IsActive.Value).ToList();
             List<StudentViewModel> modellist = new List<StudentViewModel>();
             foreach (var student in students)
             {
@@ -43,7 +43,7 @@ namespace TrainersSchoolingSystem.Controllers
                 model = Mapper<StudentViewModel>.GetObject(student);
                 model.Father_ = Mapper<ParentViewModel>.GetObject(student.Parent);
                 model.Mother_ = Mapper<ParentViewModel>.GetObject(student.Parent2);
-                if(student.Parent1!=null)
+                if (student.Parent1 != null)
                 {
                     model.Guardian_ = Mapper<GuardianViewModel>.GetObject(student.Parent1);
                 }
@@ -52,13 +52,13 @@ namespace TrainersSchoolingSystem.Controllers
                 model.Enrolment.Class_ = Mapper<ClassViewModel>.GetObject(enrolmentdb.Class1);
                 modellist.Add(model);
             }
-            return Json(modellist,JsonRequestBehavior.AllowGet);
+            return Json(modellist, JsonRequestBehavior.AllowGet);
         }
         public string GenerateFeeSlips()
         {
             var enrolments = db.Enrolments.Where(x => x.IsActive.Value).ToList();
             var studentIds = enrolments.Select(x => x.Student).ToList();
-            var students = db.Students.Where(x=>studentIds.Contains(x.StudentId)).Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
+            var students = db.Students.Where(x => studentIds.Contains(x.StudentId)).Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
             List<StudentViewModel> modellist = new List<StudentViewModel>();
             foreach (var student in students)
             {
@@ -96,7 +96,7 @@ namespace TrainersSchoolingSystem.Controllers
         {
             string data = "";
             Server.MapPath("~/Content/FeeSlips/");
-            string[] lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/"+"FeeSlip.html"));
+            string[] lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlip.html"));
 
             foreach (var item in lines)
             {
@@ -108,17 +108,185 @@ namespace TrainersSchoolingSystem.Controllers
             data = data.Replace("__Month__", DateTime.Now.ToString("mmm-yyyy"));
             data = data.Replace("__IssueDate__", DateTime.Now.ToString("dd-MM-yyyy"));
             data = data.Replace("__DueDate__", DateTime.Now.ToString("10-MM-yyyy"));
-            data = data.Replace("__Challan__", DateTime.Now.ToString()+studentView.StudentId);
+            data = data.Replace("__Challan__", DateTime.Now.ToString() + studentView.StudentId);
             data = data.Replace("__GRNo__", studentView.Enrolment.GRNo);
-            data = data.Replace("__StudentName__", studentView.FirstName+" "+studentView.LastName);
+            data = data.Replace("__StudentName__", studentView.FirstName + " " + studentView.LastName);
             data = data.Replace("__FatherName__", studentView.Father_.Name);
 
             return data;
         }
         [HttpPost]
-        public bool Bulk( BulkStudents bulk)
+        public ActionResult Bulk(BulkStudents bulk)
         {
+            bool flag = false;
+            if (bulk.Action == "1")
+                flag = PromoteToUpperClass(bulk);
+            else if (bulk.Action == "2")
+                flag = ChangeClass(bulk);
+            else if (bulk.Action == "3")
+                flag = ChangeSection(bulk);
+            else if (bulk.Action == "4")
+                flag = IncreaseFee(bulk);
+            return Json(flag, JsonRequestBehavior.AllowGet);
+        }
+        bool PromoteToUpperClass(BulkStudents bulk)
+        {
+            var IDs = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+            var enrolments = db.Enrolments.Where(x => x.IsActive.Value).Where(x => IDs.Contains(x.Student.Value));
+            var classes = db.Classes.ToList();
+            List<Enrolment> newList = new List<Enrolment>();
+            foreach (var enrolment in enrolments)
+            {
+                var oldClass = enrolment.Class1;
+                var newClass = classes.Where(x => x.Level == oldClass.Level + 1)
+                    .Where(x => x.Section == oldClass.Section).FirstOrDefault();
+                if ((DateTime.Now - enrolment.CreatedDate).Value.TotalDays > 180)
+                {
+                    enrolment.IsActive = false;
+                    Enrolment newEnr = new Enrolment();
+                    newEnr.Fee = enrolment.Fee;
+                    newEnr.IsActive = true;
+                    newEnr.Student = enrolment.Student;
+                    newEnr.GRNo = enrolment.GRNo;
+                    newEnr.RollNo = enrolment.RollNo;
+                    newEnr.Class = newClass.ClassId;
+                    newEnr.PaymentMode = enrolment.PaymentMode;
+                    newEnr.LastClass = enrolment.LastClass;
+                    newEnr.LastInstitude = enrolment.LastInstitude;
+                    newEnr.CreatedDate = DateTime.Now;
+                    newEnr.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    newList.Add(newEnr);
+                }
+                else
+                {
+                    enrolment.Class = newClass.ClassId;
+                    enrolment.UpdatedDate = DateTime.Now;
+                    enrolment.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                }
+                db.Enrolments.AddOrUpdate(enrolment);
+            }
 
+            db.Enrolments.AddRange(newList);
+            db.SaveChanges();
+            return true;
+        }
+        bool ChangeClass(BulkStudents bulk)
+        {
+            var IDs = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+            var enrolments = db.Enrolments.Where(x => x.IsActive.Value).Where(x => IDs.Contains(x.Student.Value));
+            var classes = db.Classes.ToList();
+            List<Enrolment> newList = new List<Enrolment>();
+            foreach (var enrolment in enrolments)
+            {
+                var newClass = classes.Where(x => x.ClassId == Convert.ToInt32(bulk.Class)).FirstOrDefault();
+                if ((DateTime.Now - enrolment.CreatedDate).Value.TotalDays > 180)
+                {
+                    enrolment.IsActive = false;
+                    Enrolment newEnr = new Enrolment();
+                    newEnr.Fee = enrolment.Fee;
+                    newEnr.IsActive = true;
+                    newEnr.Student = enrolment.Student;
+                    newEnr.GRNo = enrolment.GRNo;
+                    newEnr.RollNo = enrolment.RollNo;
+                    newEnr.Class = newClass.ClassId;
+                    newEnr.PaymentMode = enrolment.PaymentMode;
+                    newEnr.LastClass = enrolment.LastClass;
+                    newEnr.LastInstitude = enrolment.LastInstitude;
+                    newEnr.CreatedDate = DateTime.Now;
+                    newEnr.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    newList.Add(newEnr);
+                }
+                else
+                {
+                    enrolment.Class = newClass.ClassId;
+                    enrolment.UpdatedDate = DateTime.Now;
+                    enrolment.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                }
+                db.Enrolments.AddOrUpdate(enrolment);
+            }
+
+            db.Enrolments.AddRange(newList);
+            db.SaveChanges();
+            return true;
+        }
+        bool ChangeSection(BulkStudents bulk)
+        {
+            var IDs = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+            var enrolments = db.Enrolments.Where(x => x.IsActive.Value).Where(x => IDs.Contains(x.Student.Value));
+            var classes = db.Classes.ToList();
+            var sectionId = Convert.ToInt32(bulk.Section);
+            var newsection = db.Lookups.Where(x => x.LookupId == sectionId).FirstOrDefault().LookupText;
+            List<Enrolment> newList = new List<Enrolment>();
+            foreach (var enrolment in enrolments)
+            {
+                var oldClass = enrolment.Class1;
+                var newClass = classes.Where(x => x.ClassName == oldClass.ClassName && x.Section == newsection).FirstOrDefault();
+                if ((DateTime.Now - enrolment.CreatedDate).Value.TotalDays > 180)
+                {
+                    enrolment.IsActive = false;
+                    Enrolment newEnr = new Enrolment();
+                    newEnr.Fee = enrolment.Fee;
+                    newEnr.IsActive = true;
+                    newEnr.Student = enrolment.Student;
+                    newEnr.GRNo = enrolment.GRNo;
+                    newEnr.RollNo = enrolment.RollNo;
+                    newEnr.Class = newClass.ClassId;
+                    newEnr.PaymentMode = enrolment.PaymentMode;
+                    newEnr.LastClass = enrolment.LastClass;
+                    newEnr.LastInstitude = enrolment.LastInstitude;
+                    newEnr.CreatedDate = DateTime.Now;
+                    newEnr.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    newList.Add(newEnr);
+                }
+                else
+                {
+                    enrolment.Class = newClass.ClassId;
+                    enrolment.UpdatedDate = DateTime.Now;
+                    enrolment.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                }
+                db.Enrolments.AddOrUpdate(enrolment);
+            }
+
+            db.Enrolments.AddRange(newList);
+            db.SaveChanges();
+            return true;
+        }
+        bool IncreaseFee(BulkStudents bulk)
+        {
+            var IDs = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+            var enrolments = db.Enrolments.Where(x=>x.IsActive.Value)
+                .Where(x => IDs.Contains(x.Student.Value)).ToList();
+            List<Enrolment> newList = new List<Enrolment>();
+            foreach (var enrolment in enrolments)
+            {
+                if ((DateTime.Now - enrolment.CreatedDate).Value.TotalDays > 180)
+                {
+                    enrolment.IsActive = false;
+                    Enrolment newEnr = new Enrolment();
+                    newEnr.Fee = (Convert.ToSingle(enrolment.Fee) + Convert.ToSingle(bulk.Fee)).ToString();
+                    newEnr.IsActive = true;
+                    newEnr.Student = enrolment.Student;
+                    newEnr.GRNo = enrolment.GRNo;
+                    newEnr.RollNo = enrolment.RollNo;
+                    newEnr.Class = enrolment.Class;
+                    newEnr.PaymentMode = enrolment.PaymentMode;
+                    newEnr.LastClass = enrolment.LastClass;
+                    newEnr.LastInstitude = enrolment.LastInstitude;
+                    newEnr.CreatedDate = DateTime.Now;
+                    newEnr.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    newList.Add(newEnr);
+                }
+                else
+                {
+                    enrolment.Fee = (Convert.ToSingle(enrolment.Fee) + Convert.ToSingle(bulk.Fee)).ToString();
+                    enrolment.UpdatedDate = DateTime.Now;
+                    enrolment.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                }
+                db.Enrolments.AddOrUpdate(enrolment);
+            }
+
+            db.Enrolments.AddRange(newList);
+            db.SaveChanges();
             return true;
         }
         [HttpPost]
@@ -205,6 +373,12 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 student.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 student.CreatedDate = DateTime.Now;
+                student.Father_.CreatedBy = student.CreatedBy;
+                student.Father_.CreatedDate = student.CreatedDate;
+                student.Mother_.CreatedBy = student.CreatedBy;
+                student.Mother_.CreatedDate = student.CreatedDate;
+                student.Enrolment.CreatedBy = student.CreatedBy;
+                student.Enrolment.CreatedDate = student.CreatedDate;
                 var std = Mapper<Student>.GetObject(student);
                 if (std.DateOfBirth.HasValue)
                     std.Age = DateTime.Now.Year - std.DateOfBirth.Value.Year;
@@ -223,6 +397,8 @@ namespace TrainersSchoolingSystem.Controllers
 
                 if (student.Guardian_.Name != null)
                 {
+                    student.Guardian_.CreatedBy = student.CreatedBy;
+                    student.Guardian_.CreatedDate = student.CreatedDate;
                     var guardian = Mapper<Parent>.GetObject(student.Guardian_);
                     db.Parents.Add(guardian);
                     db.SaveChanges();
@@ -230,10 +406,11 @@ namespace TrainersSchoolingSystem.Controllers
                 }
                 var enrolment = Mapper<Enrolment>.GetObject(student.Enrolment);
                 enrolment.Student = std.StudentId;
+                enrolment.IsActive = true;
                 db.Enrolments.Add(enrolment);
                 db.Students.AddOrUpdate(std);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Students");
             }
             List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
             foreach (var item in db.Classes)

@@ -19,6 +19,9 @@ namespace TrainersSchoolingSystem.Models.DTOs
         [Required]
         public string Designation { get; set; }
         [Required]
+        public string Category { get; set; }
+
+        [Required]
         public string Gender { get; set; }
         [Required]
         public Nullable<DateTime> DateOfBirth { get; set; }

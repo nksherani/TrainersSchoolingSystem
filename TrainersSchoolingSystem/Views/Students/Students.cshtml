@@ -192,7 +192,7 @@
                 iserror = true;
                 $("#error3").show();
             }
-            if (action.value() == 4 && fee.text() == "") {
+            if (action.value() == 4 && fee.val() == "") {
                 iserror = true;
                 $("#error4").show();
             }
@@ -203,7 +203,7 @@
                 "Ids": studentIds,
                 "Class": class_.value(),
                 "Section": section.value(),
-                "Fee": fee.text()
+                "Fee": fee.val()
             };
             console.log(formData);
             $.ajax({
@@ -213,9 +213,15 @@
                 data: JSON.stringify(formData),
                 contentType: "application/json;charset=utf-8",
                 success: function (data) {
+                    console.log("success");
                     var grid = $('#grid').data('kendoGrid');
                     grid.dataSource.read();
                     grid.refresh();
+                    action.value(0);
+                    HideControls();
+                },
+                error: function (data) {
+                    console.log("error");
                 }
             });
             

@@ -18,6 +18,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
         [Required]
         [Display(Name = "Class Advisor")]
         public Nullable<int> ClassAdvisor { get; set; }
+        public Nullable<int> Level { get; set; }
         public Nullable<DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<DateTime> UpdatedDate { get; set; }

@@ -21,6 +21,9 @@
             @Html.DisplayNameFor(model => model.ClassAdvisor)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Level)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.CreatedDate)
         </th>
         <th>
@@ -45,6 +48,9 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Staff.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Level)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CreatedDate)

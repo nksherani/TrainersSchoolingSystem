@@ -21,9 +21,12 @@
             @Html.DisplayNameFor(model => model.Designation)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Category)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Gender)
         </th>
-        
+
         <th>
             @Html.DisplayNameFor(model => model.Mobile)
         </th>
@@ -72,9 +75,12 @@
             @Html.DisplayFor(modelItem => item.Designation)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.Category)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.Gender)
         </td>
-        
+
         <td>
             @Html.DisplayFor(modelItem => item.Mobile)
         </td>
@@ -109,9 +115,9 @@
             @Html.DisplayFor(modelItem => item.TrainerUser1.Username)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.StaffId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.StaffId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.StaffId })
+            @Html.ActionLink("Edit", "Edit", new { id = item.StaffId }) |
+            @Html.ActionLink("Details", "Details", new { id = item.StaffId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.StaffId })
         </td>
     </tr>
 }

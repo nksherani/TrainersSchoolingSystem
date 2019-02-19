@@ -26,6 +26,7 @@ namespace TrainersSchoolingSystem.Models
         public string ClassName { get; set; }
         public string Section { get; set; }
         public Nullable<int> ClassAdvisor { get; set; }
+        public Nullable<int> Level { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> UpdatedDate { get; set; }

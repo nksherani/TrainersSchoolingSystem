@@ -39,8 +39,8 @@ namespace TrainersSchoolingSystem.Controllers
             return $"Roles {rolename} has been added successfully";
         }
         
-        
-        
+
+
         // GET: Test/Details/5
         public ActionResult Details(int id)
         {
