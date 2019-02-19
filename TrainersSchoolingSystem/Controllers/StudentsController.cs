@@ -54,11 +54,11 @@ namespace TrainersSchoolingSystem.Controllers
             }
             return Json(modellist, JsonRequestBehavior.AllowGet);
         }
-        public string GenerateFeeSlips()
+        public string GenerateFeeSlips(BulkStudents bulk)
         {
-            var enrolments = db.Enrolments.Where(x => x.IsActive.Value).ToList();
-            var studentIds = enrolments.Select(x => x.Student).ToList();
-            var students = db.Students.Where(x => studentIds.Contains(x.StudentId)).Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
+            var stdIds = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+            var enrolments = db.Enrolments.Where(x => x.IsActive.Value && stdIds.Contains(x.Student.Value)).ToList();
+            var students = db.Students.Where(x => stdIds.Contains(x.StudentId)).Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
             List<StudentViewModel> modellist = new List<StudentViewModel>();
             foreach (var student in students)
             {
@@ -118,6 +118,7 @@ namespace TrainersSchoolingSystem.Controllers
         [HttpPost]
         public ActionResult Bulk(BulkStudents bulk)
         {
+            string path = "";
             bool flag = false;
             if (bulk.Action == "1")
                 flag = PromoteToUpperClass(bulk);
@@ -127,6 +128,11 @@ namespace TrainersSchoolingSystem.Controllers
                 flag = ChangeSection(bulk);
             else if (bulk.Action == "4")
                 flag = IncreaseFee(bulk);
+            else if (bulk.Action == "5")
+                path = GenerateFeeSlips(bulk);
+            if (path != "")
+                return Json(path, JsonRequestBehavior.AllowGet);
+
             return Json(flag, JsonRequestBehavior.AllowGet);
         }
         bool PromoteToUpperClass(BulkStudents bulk)
@@ -254,7 +260,7 @@ namespace TrainersSchoolingSystem.Controllers
         bool IncreaseFee(BulkStudents bulk)
         {
             var IDs = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
-            var enrolments = db.Enrolments.Where(x=>x.IsActive.Value)
+            var enrolments = db.Enrolments.Where(x => x.IsActive.Value)
                 .Where(x => IDs.Contains(x.Student.Value)).ToList();
             List<Enrolment> newList = new List<Enrolment>();
             foreach (var enrolment in enrolments)

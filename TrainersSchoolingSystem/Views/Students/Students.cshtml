@@ -10,7 +10,7 @@
 <input id="section" />
 <input type="text" id="fee" name="fee" placeholder="100" />
 <input type="button" id="btnPerformAction" value="Perform Action" />
-
+<a href="#" id="DownloadFeeSlips">Download Fee Slips</a>
 <div id="error2" class="alert alert-danger">
     <strong>No class is selected!</strong> Please select a class.
 </div>
@@ -120,7 +120,9 @@
             { text: "Promote to Upper Class", value: "1" },
             { text: "Change Class", value: "2" },
             { text: "Change Section", value: "3" },
-            { text: "Increase Fee", value: "4" }
+            { text: "Increase Fee", value: "4" },
+            { text: "Generate Fee Challan", value: "5" }
+
         ];
 
         // create DropDownList from input HTML element
@@ -173,7 +175,7 @@
         error2 = $("#error2");
         error3 = $("#error3");
         error4 = $("#error4");
-
+        link = $("#DownloadFeeSlips");
         HideControls();
         HideErrors();
         ////////
@@ -212,19 +214,24 @@
                 dataType: "json",
                 data: JSON.stringify(formData),
                 contentType: "application/json;charset=utf-8",
-                success: function (data) {
-                    console.log("success");
+                success: function (data_) {
+                    console.log(data_);
                     var grid = $('#grid').data('kendoGrid');
                     grid.dataSource.read();
                     grid.refresh();
                     action.value(0);
                     HideControls();
+                    if (formData["Action"] == "5") {
+                        link.prop("href", data_);
+                        link.show();
+                    }
+                        
                 },
                 error: function (data) {
                     console.log("error");
                 }
             });
-            
+
 
             //console.log("clicked");
 
@@ -265,6 +272,7 @@
         class_.wrapper.hide();
         section.wrapper.hide();
         fee.hide();
+        link.hide();
     }
     function onChangeClass(arg) {
         if (class_.value() != 0)
