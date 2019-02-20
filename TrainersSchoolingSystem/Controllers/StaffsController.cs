@@ -41,7 +41,7 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: Staffs/Create
         public ActionResult Create()
         {
-            ViewBag.Designation = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Designation"), "LookupText", "LookupText");
+            ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName");
             ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText");
             ViewBag.Category = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Category"), "LookupText", "LookupText");
 
@@ -65,7 +65,7 @@ namespace TrainersSchoolingSystem.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Designation = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Designation"), "LookupText", "LookupText");
+            ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName");
             ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText");
             ViewBag.Category = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Category"), "LookupText", "LookupText");
             //ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", staff.CreatedBy);
@@ -85,7 +85,7 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Designation = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Designation"), "LookupText", "LookupText", staff.Designation);
+            ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName",staff.Designation);
             ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText", staff.Gender);
             ViewBag.Category = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Category"), "LookupText", "LookupText", staff.Category);
 
@@ -126,8 +126,8 @@ namespace TrainersSchoolingSystem.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Designation = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Designation"), "LookupText", "LookupText");
-            ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText");
+            ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName",staff.Designation);
+            ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText",staff.Gender);
             ViewBag.Category = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Category"), "LookupText", "LookupText", staff.Category);
 
             //ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", staff.CreatedBy);

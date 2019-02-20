@@ -21,6 +21,8 @@ namespace TrainersSchoolingSystem.Models
             this.Classes1 = new HashSet<Class>();
             this.Configurations = new HashSet<Configuration>();
             this.Configurations1 = new HashSet<Configuration>();
+            this.Designations = new HashSet<Designation>();
+            this.Designations1 = new HashSet<Designation>();
             this.Enrolments = new HashSet<Enrolment>();
             this.Enrolments1 = new HashSet<Enrolment>();
             this.Fees = new HashSet<Fee>();
@@ -31,6 +33,8 @@ namespace TrainersSchoolingSystem.Models
             this.LookupTypes1 = new HashSet<LookupType>();
             this.Parents = new HashSet<Parent>();
             this.Parents1 = new HashSet<Parent>();
+            this.Salaries = new HashSet<Salary>();
+            this.Salaries1 = new HashSet<Salary>();
             this.Staffs = new HashSet<Staff>();
             this.Staffs1 = new HashSet<Staff>();
             this.Students = new HashSet<Student>();
@@ -65,6 +69,10 @@ namespace TrainersSchoolingSystem.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Configuration> Configurations1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Designation> Designations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Designation> Designations1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Enrolment> Enrolments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Enrolment> Enrolments1 { get; set; }
@@ -84,6 +92,10 @@ namespace TrainersSchoolingSystem.Models
         public virtual ICollection<Parent> Parents { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Parent> Parents1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Salary> Salaries { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Salary> Salaries1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Staff> Staffs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

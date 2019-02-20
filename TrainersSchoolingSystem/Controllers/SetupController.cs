@@ -138,11 +138,11 @@ namespace TrainersSchoolingSystem.Controllers
         }
         public string InitLookups()
         {
-            LookupType lookupType1 = new LookupType();
-            lookupType1.LookupTypeName = "Designation";
-            lookupType1.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-            lookupType1.CreatedDate = DateTime.Now;
-            db.LookupTypes.Add(lookupType1);
+            //LookupType lookupType1 = new LookupType();
+            //lookupType1.LookupTypeName = "Designation";
+            //lookupType1.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            //lookupType1.CreatedDate = DateTime.Now;
+            //db.LookupTypes.Add(lookupType1);
 
             LookupType lookupType2 = new LookupType();
             lookupType2.LookupTypeName = "Gender";
@@ -183,12 +183,12 @@ namespace TrainersSchoolingSystem.Controllers
             lookup.CreatedDate = DateTime.Now;
             db.Lookups.Add(lookup);
 
-            lookup = new Lookup();
-            lookup.LookupTypeId = lookupType1.LookupTypeId;
-            lookup.LookupText = "Teacher";
-            lookup.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-            lookup.CreatedDate = DateTime.Now;
-            db.Lookups.Add(lookup);
+            //lookup = new Lookup();
+            //lookup.LookupTypeId = lookupType1.LookupTypeId;
+            //lookup.LookupText = "Teacher";
+            //lookup.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            //lookup.CreatedDate = DateTime.Now;
+            //db.Lookups.Add(lookup);
 
             lookup = new Lookup();
             lookup.LookupTypeId = lookupType4.LookupTypeId;

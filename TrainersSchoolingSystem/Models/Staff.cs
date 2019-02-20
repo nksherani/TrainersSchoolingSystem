@@ -18,13 +18,15 @@ namespace TrainersSchoolingSystem.Models
         public Staff()
         {
             this.Classes = new HashSet<Class>();
+            this.Salaries = new HashSet<Salary>();
+            this.StaffAttendances = new HashSet<StaffAttendance>();
             this.SubjectAssignments = new HashSet<SubjectAssignment>();
         }
     
         public int StaffId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Designation { get; set; }
+        public Nullable<int> Designation { get; set; }
         public string Category { get; set; }
         public string Gender { get; set; }
         public Nullable<System.DateTime> DateOfBirth { get; set; }
@@ -45,8 +47,13 @@ namespace TrainersSchoolingSystem.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Class> Classes { get; set; }
+        public virtual Designation Designation1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Salary> Salaries { get; set; }
         public virtual TrainerUser TrainerUser { get; set; }
         public virtual TrainerUser TrainerUser1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StaffAttendance> StaffAttendances { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubjectAssignment> SubjectAssignments { get; set; }
     }
