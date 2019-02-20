@@ -9,8 +9,11 @@
 <input id="class" />
 <input id="section" />
 <input type="text" id="fee" name="fee" placeholder="100" />
-<input type="button" id="btnPerformAction" value="Perform Action" />
+<input type="button" disabled id="btnPerformAction" value="Perform Action" />
+
+<img id="loading" hidden src="~/Content/loading.gif" style="width:60px;height:50px;" />
 <a href="#" class="k-button" id="DownloadFeeSlips">Download Fee Slips</a>
+
 <div id="error2" class="alert alert-danger">
     <strong>No class is selected!</strong> Please select a class.
 </div>
@@ -200,6 +203,8 @@
             }
             if (iserror)
                 return;
+            $("#loading").show();
+
             var formData = {
                 "Action": action.value(),
                 "Ids": studentIds,
@@ -215,6 +220,9 @@
                 data: JSON.stringify(formData),
                 contentType: "application/json;charset=utf-8",
                 success: function (data_) {
+                    $("#loading").hide();
+
+                    //alert(data_);
                     console.log(data_);
                     var grid = $('#grid').data('kendoGrid');
                     grid.dataSource.read();
@@ -225,9 +233,12 @@
                         link.prop("href", data_);
                         link.show();
                     }
-                        
+
                 },
-                error: function (data) {
+                error: function (data_) {
+                    $("#loading").hide();
+
+                    alert(data_.responseText)
                     console.log("error");
                 }
             });
@@ -248,11 +259,16 @@
 
         HideControls();
         HideErrors();
-
-        if (action.value() == 1) {
-
+        console.log(action.value());
+        console.log($("#btnPerformAction"));
+        if (action.value() != 0) {
+            $("#btnPerformAction").prop('disabled', false);
+            $("#btnPerformAction").removeClass('k-state-disabled');
         }
-        else if (action.value() == 2) {
+        else {
+            $("#btnPerformAction").prop('disabled', true);
+        }
+        if (action.value() == 2) {
             class_.wrapper.show();
         }
         else if (action.value() == 3) {

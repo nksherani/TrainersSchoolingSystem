@@ -1,4 +1,4 @@
-﻿using IronPdf;
+﻿using HiQPdf;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -76,22 +76,47 @@ namespace TrainersSchoolingSystem.Controllers
                 modellist.Add(model);
             }
             string feeslips = "";
+            Server.MapPath("~/Content/FeeSlips/");
+            var csslines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlip.css")).ToList();
+            foreach (var item in csslines)
+            {
+                feeslips += item;
+            }
+            int add = 0, i = 0;
+            modellist.AddRange(modellist);
+            modellist.AddRange(modellist);
+            modellist.AddRange(modellist);
+            modellist.AddRange(modellist);
+            modellist.AddRange(modellist);
+            modellist.AddRange(modellist);
             foreach (var studentView in modellist)
             {
-                feeslips += GetFeeSlip(studentView);
+                var html = GetFeeSlip(studentView);
+                if (i % 5 == 0)
+                    html += "<div style=\"width: 240px; height: 1px; background - color:white\"></div>";
+                
+                feeslips += html;
+                i++;
             }
-            IronPdf.HtmlToPdf Renderer = new IronPdf.HtmlToPdf();
-            Renderer.PrintOptions.CssMediaType = PdfPrintOptions.PdfCssMediaType.Print;
-            //var data = "";
             var path = Server.MapPath("~/Content/FeeSlips/");
             var filename = DateTime.Now.ToString("ddMMyyyyhhmmss") + "_by_" + User.Identity.Name + ".pdf";
-            Renderer.RenderHtmlAsPdf(feeslips).SaveAs(path + filename);
-            //var PDF = Renderer.RenderUrlAsPdf("https://en.wikipedia.org/wiki/Portable_Document_Format").SaveAs(path + filename); ;
-
-            return "../Content/FeeSlips/" + filename;
-            //return Json(modellist, JsonRequestBehavior.AllowGet);
+            if (SavePdf(filename, path, feeslips))
+                return "../Content/FeeSlips/" + filename;
+            return "error";
         }
+        bool SavePdf(string filename, string path, string html)
+        {
+            HtmlToPdf htmlToPdfConverter = new HtmlToPdf();
 
+
+            //htmlToPdfConverter.Document.PageSize = new PdfPageSize(400, 400);
+            //htmlToPdfConverter.Document.PageOrientation = PdfPageOrientation.Portrait;
+            htmlToPdfConverter.Document.Margins = new PdfMargins(0);
+            byte[] pdfBuffer = null;
+            pdfBuffer = htmlToPdfConverter.ConvertHtmlToMemory(html, "http://localhost:50496");
+            System.IO.File.WriteAllBytes(path + filename, pdfBuffer);
+            return true;
+        }
         private string GetFeeSlip(StudentViewModel studentView)
         {
             string data = "";
