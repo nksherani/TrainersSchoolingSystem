@@ -17,7 +17,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
         [Required]
-        public string Designation { get; set; }
+        public Nullable<int> Designation { get; set; }
         [Required]
         public string Category { get; set; }
 
@@ -53,6 +53,9 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public Nullable<DateTime> UpdatedDate { get; set; }
         public Nullable<int> UpdatedBy { get; set; }
 
+        public StaffAttendanceViewModel Attendance_ { get; set; }
+        public SalaryViewModel Salary_ { get; set; }
+        public DesignationViewModel Designation_ { get; set; }
         public TrainerUserViewModel CreatedBy_ { get; set; }
         public TrainerUserViewModel UpdatedBy_ { get; set; }
     }
