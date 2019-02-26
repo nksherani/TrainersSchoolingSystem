@@ -213,41 +213,79 @@
                 "Fee": fee.val()
             };
             console.log(formData);
-            $.ajax({
-                url: "../Students/Bulk",
-                type: "POST",
-                dataType: "json",
-                data: JSON.stringify(formData),
-                contentType: "application/json;charset=utf-8",
-                success: function (data_) {
-                    $("#loading").hide();
-
-                    //alert(data_);
-                    console.log(data_);
-                    var grid = $('#grid').data('kendoGrid');
-                    grid.dataSource.read();
-                    grid.refresh();
-                    action.value(0);
-                    HideControls();
-                    if (formData["Action"] == "5") {
-                        link.prop("href", data_);
-                        link.show();
-                    }
-
-                },
-                error: function (data_) {
-                    $("#loading").hide();
-
-                    alert(data_.responseText)
-                    console.log("error");
-                }
-            });
-
-
-            //console.log("clicked");
-
+            if (action.value() == 5)
+                FeeSlipsAjax(formData);
+            else
+                BulkAjax(formData);
         });
     });
+    function BulkAjax(formData) {
+        $.ajax({
+            url: "../Students/Bulk",
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify(formData),
+            contentType: "application/json;charset=utf-8",
+            success: function (data_) {
+                $("#loading").hide();
+
+                //alert(data_);
+                console.log(data_);
+                var grid = $('#grid').data('kendoGrid');
+                grid.dataSource.read();
+                grid.refresh();
+                action.value(0);
+                HideControls();
+                if (formData["Action"] == "5") {
+                    link.prop("href", data_);
+                    link.show();
+                }
+
+            },
+            error: function (data_) {
+                $("#loading").hide();
+
+                alert(data_.responseText)
+                console.log("error");
+            }
+        });
+    }
+    function FeeSlipsAjax(formData) {
+        $.ajax({
+            url: "../Students/GenerateFeeSlips2",
+            type: "POST",
+            //dataType: "application/msword",
+            data: JSON.stringify(formData),
+            contentType: "application/json;charset=utf-8",
+            success: function (data_) {
+                $("#loading").hide();
+
+                //alert(data_);
+                console.log(data_);
+                action.value(0);
+                HideControls();
+                //if (formData["Action"] == "5") {
+                //    link.prop("href", data_);
+                //    link.show();
+                //}
+                var win = window.open('../Content/Temp/FeeSlips.html', '_blank');
+                if (win) {
+                    //Browser has allowed it to be opened
+                    win.focus();
+                    win.print();
+                } else {
+                    //Browser has blocked it
+                    alert('Please allow popups for this website');
+                }
+            },
+            error: function (data_) {
+                $("#loading").hide();
+                console.log(data_);
+                alert(data_.responseText);
+                console.log("error");
+            }
+        });
+    }
     function onChange(arg) {
         if (grid.selectedKeyNames().length > 0)
             error1.hide();

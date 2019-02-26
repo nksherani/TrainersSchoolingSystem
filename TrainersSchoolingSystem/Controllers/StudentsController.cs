@@ -1,4 +1,5 @@
 ﻿using HiQPdf;
+using Microsoft.Office.Interop.Word;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,6 +8,7 @@ using System.Data.Entity.Migrations;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using TrainersSchoolingSystem.Models;
@@ -54,6 +56,62 @@ namespace TrainersSchoolingSystem.Controllers
             }
             return Json(modellist, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult GenerateFeeSlips2(BulkStudents bulk)
+        {
+            var stdIds = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+            var enrolments = db.Enrolments.Where(x => x.IsActive.Value && stdIds.Contains(x.Student.Value)).ToList();
+            var students = db.Students.Where(x => stdIds.Contains(x.StudentId)).Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
+            List<StudentViewModel> modellist = new List<StudentViewModel>();
+            foreach (var student in students)
+            {
+                StudentViewModel model = new StudentViewModel();
+                model = Mapper<StudentViewModel>.GetObject(student);
+                model.Father_ = Mapper<ParentViewModel>.GetObject(student.Parent);
+                model.Mother_ = Mapper<ParentViewModel>.GetObject(student.Parent2);
+                if (student.Parent1 != null)
+                {
+                    model.Guardian_ = Mapper<GuardianViewModel>.GetObject(student.Parent1);
+                }
+                var enrolmentdb = enrolments.Where(x => x.Student == student.StudentId).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
+                model.Enrolment = Mapper<EnrolmentViewModel>.GetObject(enrolmentdb);
+                model.Enrolment.Class_ = Mapper<ClassViewModel>.GetObject(enrolmentdb.Class1);
+                modellist.Add(model);
+            }
+            modellist.AddRange(modellist);
+            modellist.AddRange(modellist);
+            //string feeslips = "";
+            string css = "";
+            Server.MapPath("~/Content/FeeSlips/");
+            var csslines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlipHeader.html")).ToList();
+            foreach (var item in csslines)
+            {
+                css += item;
+            }
+            int i = 0;
+            string feeslipsBody = "";
+            foreach (var studentView in modellist)
+            {
+                var html = GetFeeSlip(studentView);
+                if (i % 5 == 0)
+                    html += "<div style=\"width: 240px; height: 1px; background - color:white\"></div>";
+
+                feeslipsBody += html;
+                i++;
+            }
+            StringBuilder strBody = new StringBuilder();
+            strBody.Append("<html>" +
+            "<head><title>Fee Slips</title>");
+
+            strBody.Append(css+ "</head>");
+            strBody.Append("<body lang=EN-US style='tab-interval:.5in'>" +
+                                    feeslipsBody  + 
+                                    "</body></html>");
+
+            var filePath = Server.MapPath("~/Content/Temp/FeeSlips.html");
+            System.IO.File.WriteAllText(filePath, strBody.ToString());
+            return Json("../Content/Temp/FeeSlips.html",JsonRequestBehavior.AllowGet);
+        }
+
         public string GenerateFeeSlips(BulkStudents bulk)
         {
             var stdIds = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
@@ -75,34 +133,33 @@ namespace TrainersSchoolingSystem.Controllers
                 model.Enrolment.Class_ = Mapper<ClassViewModel>.GetObject(enrolmentdb.Class1);
                 modellist.Add(model);
             }
+            modellist.AddRange(modellist);
+            modellist.AddRange(modellist);
             string feeslips = "";
             Server.MapPath("~/Content/FeeSlips/");
-            var csslines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlip.css")).ToList();
+            var csslines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlipHeader.html")).ToList();
             foreach (var item in csslines)
             {
                 feeslips += item;
             }
-            int add = 0, i = 0;
-            modellist.AddRange(modellist);
-            modellist.AddRange(modellist);
-            modellist.AddRange(modellist);
-            modellist.AddRange(modellist);
-            modellist.AddRange(modellist);
-            modellist.AddRange(modellist);
+            int i = 0;
+            string feeslipsBody = "";
             foreach (var studentView in modellist)
             {
                 var html = GetFeeSlip(studentView);
                 if (i % 5 == 0)
                     html += "<div style=\"width: 240px; height: 1px; background - color:white\"></div>";
-                
-                feeslips += html;
+
+                feeslipsBody += html;
                 i++;
             }
+            feeslips += feeslipsBody;
             var path = Server.MapPath("~/Content/FeeSlips/");
             var filename = DateTime.Now.ToString("ddMMyyyyhhmmss") + "_by_" + User.Identity.Name + ".pdf";
-            if (SavePdf(filename, path, feeslips))
+            if (SavePdf2(filename, path, feeslips))
                 return "../Content/FeeSlips/" + filename;
             return "error";
+
         }
         bool SavePdf(string filename, string path, string html)
         {
@@ -117,6 +174,21 @@ namespace TrainersSchoolingSystem.Controllers
             System.IO.File.WriteAllBytes(path + filename, pdfBuffer);
             return true;
         }
+        bool SavePdf2(string filename, string path, string html)
+        {
+            var word = new Microsoft.Office.Interop.Word.Application();
+            word.Visible = false;
+            
+            //html = html.Replace("Content")
+            var filePath = Server.MapPath("~/Content/Temp/Html2PdfTest.html");
+            System.IO.File.WriteAllText(filePath, html);
+            var savePathPdf = path+filename;
+            var wordDoc = word.Documents.Open(FileName: filePath, ReadOnly: false);
+            wordDoc.PageSetup.PaperSize = WdPaperSize.wdPaperA4;
+            wordDoc.SaveAs2(FileName: savePathPdf, FileFormat: WdSaveFormat.wdFormatPDF);
+            wordDoc.Close();
+            return true;
+        }
         private string GetFeeSlip(StudentViewModel studentView)
         {
             string data = "";
@@ -127,7 +199,7 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 data += item;
             }
-            data = data.Replace("__Picture__", GlobalData.configuration.Picture);
+            data = data.Replace("__Picture__", "../"+GlobalData.configuration.Picture);
             data = data.Replace("__SchoolName__", GlobalData.configuration.SchoolName);
             data = data.Replace("__Campus__", GlobalData.configuration.Campus);
             data = data.Replace("__Month__", DateTime.Now.ToString("mmm-yyyy"));

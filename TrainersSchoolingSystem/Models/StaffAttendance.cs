@@ -14,7 +14,7 @@ namespace TrainersSchoolingSystem.Models
     
     public partial class StaffAttendance
     {
-        public int AttendanceId { get; set; }
+        public int StaffAttendanceId { get; set; }
         public Nullable<int> WorkingDays { get; set; }
         public Nullable<int> Absents { get; set; }
         public Nullable<int> ShortLeaves { get; set; }

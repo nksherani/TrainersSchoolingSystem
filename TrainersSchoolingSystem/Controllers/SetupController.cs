@@ -183,6 +183,19 @@ namespace TrainersSchoolingSystem.Controllers
             lookup.CreatedDate = DateTime.Now;
             db.Lookups.Add(lookup);
 
+            lookup = new Lookup();
+            lookup.LookupTypeId = lookupType3.LookupTypeId;
+            lookup.LookupText = "A";
+            lookup.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            lookup.CreatedDate = DateTime.Now;
+            db.Lookups.Add(lookup);
+            lookup = new Lookup();
+            lookup.LookupTypeId = lookupType3.LookupTypeId;
+            lookup.LookupText = "B";
+            lookup.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            lookup.CreatedDate = DateTime.Now;
+            db.Lookups.Add(lookup);
+
             //lookup = new Lookup();
             //lookup.LookupTypeId = lookupType1.LookupTypeId;
             //lookup.LookupText = "Teacher";
@@ -213,7 +226,31 @@ namespace TrainersSchoolingSystem.Controllers
                 lookup.CreatedDate = DateTime.Now;
                 db.Lookups.Add(lookup);
             }
+            Designation designation = new Designation();
+            designation.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            designation.CreatedDate = DateTime.Now;
+            designation.DesignationName = "Teacher";
+            designation.LateComingScale = 3;
+            designation.PaidLeaves = 13;
+            designation.ShortLeavesScale = 2;
+            db.Designations.Add(designation);
 
+            db.SaveChanges();
+
+            Staff staff = new Staff();
+            staff.Age = 20;
+            staff.Category = "Teaching";
+            staff.City = "Karachi";
+            staff.DateOfBirth = DateTime.Now.AddYears(-20);
+            staff.Designation = designation.DesignationId;
+            staff.FatherName = "ffdgdg";
+            staff.FirstName = "fname";
+            staff.LastName = "lname";
+            staff.Mobile = "+923314567896";
+            staff.PostalCode = "745";
+            staff.StreetAddress = "ffdgdg";
+
+            db.Staffs.Add(staff);
             db.SaveChanges();
             return "success";
         }
