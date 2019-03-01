@@ -17,8 +17,10 @@ namespace TrainersSchoolingSystem.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Staff()
         {
+            this.Arrears = new HashSet<Arrear>();
             this.Classes = new HashSet<Class>();
             this.Salaries = new HashSet<Salary>();
+            this.SalaryPayments = new HashSet<SalaryPayment>();
             this.StaffAttendances = new HashSet<StaffAttendance>();
             this.SubjectAssignments = new HashSet<SubjectAssignment>();
         }
@@ -46,10 +48,14 @@ namespace TrainersSchoolingSystem.Models
         public Nullable<int> UpdatedBy { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Arrear> Arrears { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Class> Classes { get; set; }
         public virtual Designation Designation1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Salary> Salaries { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SalaryPayment> SalaryPayments { get; set; }
         public virtual TrainerUser TrainerUser { get; set; }
         public virtual TrainerUser TrainerUser1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

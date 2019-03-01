@@ -1,0 +1,82 @@
+﻿@model TrainersSchoolingSystem.Models.Designation
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Designation</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DesignationName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DesignationName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PaidLeaves)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PaidLeaves)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ShortLeavesScale)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ShortLeavesScale)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LateComingScale)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LateComingScale)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpdatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrainerUser.Username)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrainerUser1.Username)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.DesignationId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

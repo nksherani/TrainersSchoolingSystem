@@ -1,0 +1,75 @@
+﻿@model IEnumerable<TrainersSchoolingSystem.Models.Designation>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DesignationName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PaidLeaves)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ShortLeavesScale)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LateComingScale)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UpdatedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UpdatedBy)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DesignationName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PaidLeaves)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ShortLeavesScale)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LateComingScale)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UpdatedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TrainerUser.Username)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TrainerUser1.Username)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.DesignationId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.DesignationId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.DesignationId })
+        </td>
+    </tr>
+}
+
+</table>

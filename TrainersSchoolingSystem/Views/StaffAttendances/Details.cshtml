@@ -1,0 +1,104 @@
+﻿@model TrainersSchoolingSystem.Models.StaffAttendance
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>StaffAttendance</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkingDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WorkingDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Absents)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Absents)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ShortLeaves)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ShortLeaves)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LateComings)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LateComings)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Month)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Month)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Year)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Year)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrainerUser.Username)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpdatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrainerUser1.Username)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Staff.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Staff.FirstName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.StaffAttendanceId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

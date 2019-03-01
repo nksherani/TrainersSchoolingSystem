@@ -27,6 +27,7 @@ namespace TrainersSchoolingSystem.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Arrear> Arrears { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
@@ -38,8 +39,10 @@ namespace TrainersSchoolingSystem.Models
         public virtual DbSet<Fee> Fees { get; set; }
         public virtual DbSet<Lookup> Lookups { get; set; }
         public virtual DbSet<LookupType> LookupTypes { get; set; }
+        public virtual DbSet<PaidFee> PaidFees { get; set; }
         public virtual DbSet<Parent> Parents { get; set; }
         public virtual DbSet<Salary> Salaries { get; set; }
+        public virtual DbSet<SalaryPayment> SalaryPayments { get; set; }
         public virtual DbSet<Staff> Staffs { get; set; }
         public virtual DbSet<StaffAttendance> StaffAttendances { get; set; }
         public virtual DbSet<Student> Students { get; set; }

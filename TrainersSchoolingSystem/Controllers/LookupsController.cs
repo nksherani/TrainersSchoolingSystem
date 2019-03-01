@@ -46,9 +46,7 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: Lookups/Create
         public ActionResult Create()
         {
-            //ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username");
             ViewBag.LookupTypeId = new SelectList(db.LookupTypes, "LookupTypeId", "LookupTypeName");
-            //ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username");
             return View();
         }
 

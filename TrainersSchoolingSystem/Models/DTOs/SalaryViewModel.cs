@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -7,6 +8,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
 {
     public class SalaryViewModel
     {
+        [Key]
         public int SalaryId { get; set; }
         public Nullable<decimal> BasicPay { get; set; }
         public Nullable<decimal> Bonus { get; set; }

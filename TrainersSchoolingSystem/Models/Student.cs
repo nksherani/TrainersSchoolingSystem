@@ -17,7 +17,9 @@ namespace TrainersSchoolingSystem.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Student()
         {
+            this.Arrears = new HashSet<Arrear>();
             this.Enrolments = new HashSet<Enrolment>();
+            this.PaidFees = new HashSet<PaidFee>();
         }
     
         public int StudentId { get; set; }
@@ -48,7 +50,11 @@ namespace TrainersSchoolingSystem.Models
         public Nullable<int> UpdatedBy { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Arrear> Arrears { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Enrolment> Enrolments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PaidFee> PaidFees { get; set; }
         public virtual Parent Parent { get; set; }
         public virtual Parent Parent1 { get; set; }
         public virtual Parent Parent2 { get; set; }

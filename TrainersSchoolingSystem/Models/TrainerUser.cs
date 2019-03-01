@@ -17,6 +17,8 @@ namespace TrainersSchoolingSystem.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TrainerUser()
         {
+            this.Arrears = new HashSet<Arrear>();
+            this.Arrears1 = new HashSet<Arrear>();
             this.Classes = new HashSet<Class>();
             this.Classes1 = new HashSet<Class>();
             this.Configurations = new HashSet<Configuration>();
@@ -31,12 +33,18 @@ namespace TrainersSchoolingSystem.Models
             this.Lookups1 = new HashSet<Lookup>();
             this.LookupTypes = new HashSet<LookupType>();
             this.LookupTypes1 = new HashSet<LookupType>();
+            this.PaidFees = new HashSet<PaidFee>();
+            this.PaidFees1 = new HashSet<PaidFee>();
             this.Parents = new HashSet<Parent>();
             this.Parents1 = new HashSet<Parent>();
             this.Salaries = new HashSet<Salary>();
             this.Salaries1 = new HashSet<Salary>();
+            this.SalaryPayments = new HashSet<SalaryPayment>();
+            this.SalaryPayments1 = new HashSet<SalaryPayment>();
             this.Staffs = new HashSet<Staff>();
             this.Staffs1 = new HashSet<Staff>();
+            this.StaffAttendances = new HashSet<StaffAttendance>();
+            this.StaffAttendances1 = new HashSet<StaffAttendance>();
             this.Students = new HashSet<Student>();
             this.Students1 = new HashSet<Student>();
             this.Subjects = new HashSet<Subject>();
@@ -60,6 +68,10 @@ namespace TrainersSchoolingSystem.Models
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public Nullable<int> UpdatedBy { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Arrear> Arrears { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Arrear> Arrears1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Class> Classes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -89,6 +101,10 @@ namespace TrainersSchoolingSystem.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LookupType> LookupTypes1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PaidFee> PaidFees { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PaidFee> PaidFees1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Parent> Parents { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Parent> Parents1 { get; set; }
@@ -97,9 +113,17 @@ namespace TrainersSchoolingSystem.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Salary> Salaries1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SalaryPayment> SalaryPayments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SalaryPayment> SalaryPayments1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Staff> Staffs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Staff> Staffs1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StaffAttendance> StaffAttendances { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StaffAttendance> StaffAttendances1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Student> Students { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

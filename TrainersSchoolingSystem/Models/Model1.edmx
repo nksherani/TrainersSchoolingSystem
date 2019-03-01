@@ -5,6 +5,20 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="TrainersModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Arrear">
+          <Key>
+            <PropertyRef Name="ArrearId" />
+          </Key>
+          <Property Name="ArrearId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StudentId" Type="int" />
+          <Property Name="StaffId" Type="int" />
+          <Property Name="Amount" Type="int" />
+          <Property Name="ArrearType" Type="varbinary(max)" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+        </EntityType>
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -153,6 +167,19 @@
           <Property Name="UpdatedDate" Type="datetime" />
           <Property Name="UpdatedBy" Type="int" />
         </EntityType>
+        <EntityType Name="PaidFee">
+          <Key>
+            <PropertyRef Name="PaidFeeId" />
+          </Key>
+          <Property Name="PaidFeeId" Type="int" Nullable="false" />
+          <Property Name="StudentId" Type="int" />
+          <Property Name="Amount" Type="int" />
+          <Property Name="PaymentDate" Type="datetime" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+        </EntityType>
         <EntityType Name="Parent">
           <Key>
             <PropertyRef Name="ParentId" />
@@ -189,6 +216,19 @@
           <Property Name="GrossPay" Type="numeric" Precision="18" Scale="0" />
           <Property Name="NetPay" Type="numeric" Precision="18" Scale="0" />
           <Property Name="StaffId" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+        </EntityType>
+        <EntityType Name="SalaryPayment">
+          <Key>
+            <PropertyRef Name="SalaryPaymentId" />
+          </Key>
+          <Property Name="SalaryPaymentId" Type="int" Nullable="false" />
+          <Property Name="StaffId" Type="int" />
+          <Property Name="Amount" Type="int" />
+          <Property Name="PaymentDate" Type="datetime" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="UpdatedDate" Type="datetime" />
@@ -231,6 +271,7 @@
           <Property Name="LateComings" Type="int" />
           <Property Name="StaffId" Type="int" />
           <Property Name="Month" Type="int" />
+          <Property Name="Year" Type="varchar(max)" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="UpdatedDate" Type="datetime" />
@@ -309,6 +350,54 @@
           <Property Name="UpdatedDate" Type="datetime" />
           <Property Name="UpdatedBy" Type="int" />
         </EntityType>
+        <Association Name="FK__Arrear__CreatedB__70099B30">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="Arrear" Type="Self.Arrear" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Arrear">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Arrear__StaffId__6A50C1DA">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="0..1" />
+          <End Role="Arrear" Type="Self.Arrear" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffId" />
+            </Principal>
+            <Dependent Role="Arrear">
+              <PropertyRef Name="StaffId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Arrear__StudentI__695C9DA1">
+          <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+          <End Role="Arrear" Type="Self.Arrear" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="Arrear">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Arrear__UpdatedB__70FDBF69">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="Arrear" Type="Self.Arrear" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Arrear">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Class__ClassAdvi__33008CF0">
           <End Role="Staff" Type="Self.Staff" Multiplicity="0..1" />
           <End Role="Class" Type="Self.Class" Multiplicity="*" />
@@ -537,6 +626,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__PaidFee__Created__74CE504D">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="PaidFee" Type="Self.PaidFee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="PaidFee">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaidFee__Student__73DA2C14">
+          <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+          <End Role="PaidFee" Type="Self.PaidFee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="PaidFee">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaidFee__Updated__75C27486">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="PaidFee" Type="Self.PaidFee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="PaidFee">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Parent__CreatedB__29AC2CE0">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="Parent" Type="Self.Parent" Multiplicity="*" />
@@ -561,7 +686,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Salary__CreatedB__546180BB">
+        <Association Name="FK__Salary__CreatedB__6497E884">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="Salary" Type="Self.Salary" Multiplicity="*" />
           <ReferentialConstraint>
@@ -573,7 +698,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Salary__StaffId__5649C92D">
+        <Association Name="FK__Salary__StaffId__668030F6">
           <End Role="Staff" Type="Self.Staff" Multiplicity="0..1" />
           <End Role="Salary" Type="Self.Salary" Multiplicity="*" />
           <ReferentialConstraint>
@@ -585,7 +710,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Salary__UpdatedB__5555A4F4">
+        <Association Name="FK__Salary__UpdatedB__658C0CBD">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="Salary" Type="Self.Salary" Multiplicity="*" />
           <ReferentialConstraint>
@@ -593,6 +718,42 @@
               <PropertyRef Name="TrainerUserId" />
             </Principal>
             <Dependent Role="Salary">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SalaryPay__Creat__6E2152BE">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="SalaryPayment" Type="Self.SalaryPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="SalaryPayment">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SalaryPay__Staff__6D2D2E85">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="0..1" />
+          <End Role="SalaryPayment" Type="Self.SalaryPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffId" />
+            </Principal>
+            <Dependent Role="SalaryPayment">
+              <PropertyRef Name="StaffId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SalaryPay__Updat__6F1576F7">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="SalaryPayment" Type="Self.SalaryPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="SalaryPayment">
               <PropertyRef Name="UpdatedBy" />
             </Dependent>
           </ReferentialConstraint>
@@ -633,7 +794,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__StaffAtte__Staff__592635D8">
+        <Association Name="FK__StaffAtte__Creat__60C757A0">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="StaffAttendance" Type="Self.StaffAttendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="StaffAttendance">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StaffAtte__Staff__5FD33367">
           <End Role="Staff" Type="Self.Staff" Multiplicity="0..1" />
           <End Role="StaffAttendance" Type="Self.StaffAttendance" Multiplicity="*" />
           <ReferentialConstraint>
@@ -642,6 +815,18 @@
             </Principal>
             <Dependent Role="StaffAttendance">
               <PropertyRef Name="StaffId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StaffAtte__Updat__61BB7BD9">
+          <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
+          <End Role="StaffAttendance" Type="Self.StaffAttendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="StaffAttendance">
+              <PropertyRef Name="UpdatedBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -871,6 +1056,7 @@
         </Association>
         <Function Name="ResetDb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="TrainersModelStoreContainer">
+          <EntitySet Name="Arrear" EntityType="Self.Arrear" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
@@ -883,14 +1069,32 @@
           <EntitySet Name="Fee" EntityType="Self.Fee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Lookup" EntityType="Self.Lookup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LookupType" EntityType="Self.LookupType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaidFee" EntityType="Self.PaidFee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Parent" EntityType="Self.Parent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Salary" EntityType="Self.Salary" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalaryPayment" EntityType="Self.SalaryPayment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Staff" EntityType="Self.Staff" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StaffAttendance" EntityType="Self.StaffAttendance" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subject" EntityType="Self.Subject" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubjectAssignment" EntityType="Self.SubjectAssignment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TrainerUser" EntityType="Self.TrainerUser" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Arrear__CreatedB__70099B30" Association="Self.FK__Arrear__CreatedB__70099B30">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="Arrear" EntitySet="Arrear" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Arrear__StaffId__6A50C1DA" Association="Self.FK__Arrear__StaffId__6A50C1DA">
+            <End Role="Staff" EntitySet="Staff" />
+            <End Role="Arrear" EntitySet="Arrear" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Arrear__StudentI__695C9DA1" Association="Self.FK__Arrear__StudentI__695C9DA1">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="Arrear" EntitySet="Arrear" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Arrear__UpdatedB__70FDBF69" Association="Self.FK__Arrear__UpdatedB__70FDBF69">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="Arrear" EntitySet="Arrear" />
+          </AssociationSet>
           <AssociationSet Name="FK__Class__ClassAdvi__33008CF0" Association="Self.FK__Class__ClassAdvi__33008CF0">
             <End Role="Staff" EntitySet="Staff" />
             <End Role="Class" EntitySet="Class" />
@@ -967,6 +1171,18 @@
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="LookupType" EntitySet="LookupType" />
           </AssociationSet>
+          <AssociationSet Name="FK__PaidFee__Created__74CE504D" Association="Self.FK__PaidFee__Created__74CE504D">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="PaidFee" EntitySet="PaidFee" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaidFee__Student__73DA2C14" Association="Self.FK__PaidFee__Student__73DA2C14">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="PaidFee" EntitySet="PaidFee" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaidFee__Updated__75C27486" Association="Self.FK__PaidFee__Updated__75C27486">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="PaidFee" EntitySet="PaidFee" />
+          </AssociationSet>
           <AssociationSet Name="FK__Parent__CreatedB__29AC2CE0" Association="Self.FK__Parent__CreatedB__29AC2CE0">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Parent" EntitySet="Parent" />
@@ -975,17 +1191,29 @@
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Parent" EntitySet="Parent" />
           </AssociationSet>
-          <AssociationSet Name="FK__Salary__CreatedB__546180BB" Association="Self.FK__Salary__CreatedB__546180BB">
+          <AssociationSet Name="FK__Salary__CreatedB__6497E884" Association="Self.FK__Salary__CreatedB__6497E884">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Salary" EntitySet="Salary" />
           </AssociationSet>
-          <AssociationSet Name="FK__Salary__StaffId__5649C92D" Association="Self.FK__Salary__StaffId__5649C92D">
+          <AssociationSet Name="FK__Salary__StaffId__668030F6" Association="Self.FK__Salary__StaffId__668030F6">
             <End Role="Staff" EntitySet="Staff" />
             <End Role="Salary" EntitySet="Salary" />
           </AssociationSet>
-          <AssociationSet Name="FK__Salary__UpdatedB__5555A4F4" Association="Self.FK__Salary__UpdatedB__5555A4F4">
+          <AssociationSet Name="FK__Salary__UpdatedB__658C0CBD" Association="Self.FK__Salary__UpdatedB__658C0CBD">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Salary" EntitySet="Salary" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SalaryPay__Creat__6E2152BE" Association="Self.FK__SalaryPay__Creat__6E2152BE">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="SalaryPayment" EntitySet="SalaryPayment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SalaryPay__Staff__6D2D2E85" Association="Self.FK__SalaryPay__Staff__6D2D2E85">
+            <End Role="Staff" EntitySet="Staff" />
+            <End Role="SalaryPayment" EntitySet="SalaryPayment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SalaryPay__Updat__6F1576F7" Association="Self.FK__SalaryPay__Updat__6F1576F7">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="SalaryPayment" EntitySet="SalaryPayment" />
           </AssociationSet>
           <AssociationSet Name="FK__Staff__CreatedBy__33F4B129" Association="Self.FK__Staff__CreatedBy__33F4B129">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
@@ -999,8 +1227,16 @@
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Staff" EntitySet="Staff" />
           </AssociationSet>
-          <AssociationSet Name="FK__StaffAtte__Staff__592635D8" Association="Self.FK__StaffAtte__Staff__592635D8">
+          <AssociationSet Name="FK__StaffAtte__Creat__60C757A0" Association="Self.FK__StaffAtte__Creat__60C757A0">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
+            <End Role="StaffAttendance" EntitySet="StaffAttendance" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StaffAtte__Staff__5FD33367" Association="Self.FK__StaffAtte__Staff__5FD33367">
             <End Role="Staff" EntitySet="Staff" />
+            <End Role="StaffAttendance" EntitySet="StaffAttendance" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StaffAtte__Updat__61BB7BD9" Association="Self.FK__StaffAtte__Updat__61BB7BD9">
+            <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="StaffAttendance" EntitySet="StaffAttendance" />
           </AssociationSet>
           <AssociationSet Name="FK__Student__Created__13BCEBC1" Association="Self.FK__Student__Created__13BCEBC1">
@@ -1082,6 +1318,7 @@
       <Schema Namespace="TrainersModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="TrainersEntities" annotation:LazyLoadingEnabled="true" >
           <FunctionImport Name="ResetDb" />
+          <EntitySet Name="Arrears" EntityType="TrainersModel.Arrear" />
           <EntitySet Name="AspNetRoles" EntityType="TrainersModel.AspNetRole" />
           <EntitySet Name="AspNetUserClaims" EntityType="TrainersModel.AspNetUserClaim" />
           <EntitySet Name="AspNetUserLogins" EntityType="TrainersModel.AspNetUserLogin" />
@@ -1093,14 +1330,32 @@
           <EntitySet Name="Fees" EntityType="TrainersModel.Fee" />
           <EntitySet Name="Lookups" EntityType="TrainersModel.Lookup" />
           <EntitySet Name="LookupTypes" EntityType="TrainersModel.LookupType" />
+          <EntitySet Name="PaidFees" EntityType="TrainersModel.PaidFee" />
           <EntitySet Name="Parents" EntityType="TrainersModel.Parent" />
           <EntitySet Name="Salaries" EntityType="TrainersModel.Salary" />
+          <EntitySet Name="SalaryPayments" EntityType="TrainersModel.SalaryPayment" />
           <EntitySet Name="Staffs" EntityType="TrainersModel.Staff" />
           <EntitySet Name="StaffAttendances" EntityType="TrainersModel.StaffAttendance" />
           <EntitySet Name="Students" EntityType="TrainersModel.Student" />
           <EntitySet Name="Subjects" EntityType="TrainersModel.Subject" />
           <EntitySet Name="SubjectAssignments" EntityType="TrainersModel.SubjectAssignment" />
           <EntitySet Name="TrainerUsers" EntityType="TrainersModel.TrainerUser" />
+          <AssociationSet Name="FK__Arrear__CreatedB__70099B30" Association="TrainersModel.FK__Arrear__CreatedB__70099B30">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="Arrear" EntitySet="Arrears" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Arrear__StaffId__6A50C1DA" Association="TrainersModel.FK__Arrear__StaffId__6A50C1DA">
+            <End Role="Staff" EntitySet="Staffs" />
+            <End Role="Arrear" EntitySet="Arrears" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Arrear__StudentI__695C9DA1" Association="TrainersModel.FK__Arrear__StudentI__695C9DA1">
+            <End Role="Student" EntitySet="Students" />
+            <End Role="Arrear" EntitySet="Arrears" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Arrear__UpdatedB__70FDBF69" Association="TrainersModel.FK__Arrear__UpdatedB__70FDBF69">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="Arrear" EntitySet="Arrears" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="TrainersModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
@@ -1193,6 +1448,18 @@
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="LookupType" EntitySet="LookupTypes" />
           </AssociationSet>
+          <AssociationSet Name="FK__PaidFee__Created__74CE504D" Association="TrainersModel.FK__PaidFee__Created__74CE504D">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="PaidFee" EntitySet="PaidFees" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaidFee__Student__73DA2C14" Association="TrainersModel.FK__PaidFee__Student__73DA2C14">
+            <End Role="Student" EntitySet="Students" />
+            <End Role="PaidFee" EntitySet="PaidFees" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaidFee__Updated__75C27486" Association="TrainersModel.FK__PaidFee__Updated__75C27486">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="PaidFee" EntitySet="PaidFees" />
+          </AssociationSet>
           <AssociationSet Name="FK__Parent__CreatedB__29AC2CE0" Association="TrainersModel.FK__Parent__CreatedB__29AC2CE0">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Parent" EntitySet="Parents" />
@@ -1213,17 +1480,29 @@
             <End Role="Parent" EntitySet="Parents" />
             <End Role="Student" EntitySet="Students" />
           </AssociationSet>
-          <AssociationSet Name="FK__Salary__CreatedB__546180BB" Association="TrainersModel.FK__Salary__CreatedB__546180BB">
+          <AssociationSet Name="FK__Salary__CreatedB__6497E884" Association="TrainersModel.FK__Salary__CreatedB__6497E884">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Salary" EntitySet="Salaries" />
           </AssociationSet>
-          <AssociationSet Name="FK__Salary__StaffId__5649C92D" Association="TrainersModel.FK__Salary__StaffId__5649C92D">
+          <AssociationSet Name="FK__Salary__StaffId__668030F6" Association="TrainersModel.FK__Salary__StaffId__668030F6">
             <End Role="Staff" EntitySet="Staffs" />
             <End Role="Salary" EntitySet="Salaries" />
           </AssociationSet>
-          <AssociationSet Name="FK__Salary__UpdatedB__5555A4F4" Association="TrainersModel.FK__Salary__UpdatedB__5555A4F4">
+          <AssociationSet Name="FK__Salary__UpdatedB__658C0CBD" Association="TrainersModel.FK__Salary__UpdatedB__658C0CBD">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Salary" EntitySet="Salaries" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SalaryPay__Creat__6E2152BE" Association="TrainersModel.FK__SalaryPay__Creat__6E2152BE">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="SalaryPayment" EntitySet="SalaryPayments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SalaryPay__Staff__6D2D2E85" Association="TrainersModel.FK__SalaryPay__Staff__6D2D2E85">
+            <End Role="Staff" EntitySet="Staffs" />
+            <End Role="SalaryPayment" EntitySet="SalaryPayments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SalaryPay__Updat__6F1576F7" Association="TrainersModel.FK__SalaryPay__Updat__6F1576F7">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="SalaryPayment" EntitySet="SalaryPayments" />
           </AssociationSet>
           <AssociationSet Name="FK__Staff__CreatedBy__33F4B129" Association="TrainersModel.FK__Staff__CreatedBy__33F4B129">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
@@ -1233,13 +1512,21 @@
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Staff" EntitySet="Staffs" />
           </AssociationSet>
-          <AssociationSet Name="FK__StaffAtte__Staff__592635D8" Association="TrainersModel.FK__StaffAtte__Staff__592635D8">
+          <AssociationSet Name="FK__StaffAtte__Staff__5FD33367" Association="TrainersModel.FK__StaffAtte__Staff__5FD33367">
             <End Role="Staff" EntitySet="Staffs" />
             <End Role="StaffAttendance" EntitySet="StaffAttendances" />
           </AssociationSet>
           <AssociationSet Name="FK__SubjectAs__Teach__320C68B7" Association="TrainersModel.FK__SubjectAs__Teach__320C68B7">
             <End Role="Staff" EntitySet="Staffs" />
             <End Role="SubjectAssignment" EntitySet="SubjectAssignments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StaffAtte__Creat__60C757A0" Association="TrainersModel.FK__StaffAtte__Creat__60C757A0">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="StaffAttendance" EntitySet="StaffAttendances" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StaffAtte__Updat__61BB7BD9" Association="TrainersModel.FK__StaffAtte__Updat__61BB7BD9">
+            <End Role="TrainerUser" EntitySet="TrainerUsers" />
+            <End Role="StaffAttendance" EntitySet="StaffAttendances" />
           </AssociationSet>
           <AssociationSet Name="FK__Student__Created__13BCEBC1" Association="TrainersModel.FK__Student__Created__13BCEBC1">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
@@ -1282,6 +1569,24 @@
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Arrear">
+          <Key>
+            <PropertyRef Name="ArrearId" />
+          </Key>
+          <Property Name="ArrearId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StudentId" Type="Int32" />
+          <Property Name="StaffId" Type="Int32" />
+          <Property Name="Amount" Type="Int32" />
+          <Property Name="ArrearType" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Arrear__CreatedB__70099B30" FromRole="Arrear" ToRole="TrainerUser" />
+          <NavigationProperty Name="Staff" Relationship="TrainersModel.FK__Arrear__StaffId__6A50C1DA" FromRole="Arrear" ToRole="Staff" />
+          <NavigationProperty Name="Student" Relationship="TrainersModel.FK__Arrear__StudentI__695C9DA1" FromRole="Arrear" ToRole="Student" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Arrear__UpdatedB__70FDBF69" FromRole="Arrear" ToRole="TrainerUser" />
+        </EntityType>
         <EntityType Name="AspNetRole">
           <Key>
             <PropertyRef Name="Id" />
@@ -1452,6 +1757,22 @@
           <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__LookupTyp__Creat__5F492382" FromRole="LookupType" ToRole="TrainerUser" />
           <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__LookupTyp__Updat__603D47BB" FromRole="LookupType" ToRole="TrainerUser" />
         </EntityType>
+        <EntityType Name="PaidFee">
+          <Key>
+            <PropertyRef Name="PaidFeeId" />
+          </Key>
+          <Property Name="PaidFeeId" Type="Int32" Nullable="false" />
+          <Property Name="StudentId" Type="Int32" />
+          <Property Name="Amount" Type="Int32" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__PaidFee__Created__74CE504D" FromRole="PaidFee" ToRole="TrainerUser" />
+          <NavigationProperty Name="Student" Relationship="TrainersModel.FK__PaidFee__Student__73DA2C14" FromRole="PaidFee" ToRole="Student" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__PaidFee__Updated__75C27486" FromRole="PaidFee" ToRole="TrainerUser" />
+        </EntityType>
         <EntityType Name="Parent">
           <Key>
             <PropertyRef Name="ParentId" />
@@ -1497,9 +1818,25 @@
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
-          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Salary__CreatedB__546180BB" FromRole="Salary" ToRole="TrainerUser" />
-          <NavigationProperty Name="Staff" Relationship="TrainersModel.FK__Salary__StaffId__5649C92D" FromRole="Salary" ToRole="Staff" />
-          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Salary__UpdatedB__5555A4F4" FromRole="Salary" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Salary__CreatedB__6497E884" FromRole="Salary" ToRole="TrainerUser" />
+          <NavigationProperty Name="Staff" Relationship="TrainersModel.FK__Salary__StaffId__668030F6" FromRole="Salary" ToRole="Staff" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Salary__UpdatedB__658C0CBD" FromRole="Salary" ToRole="TrainerUser" />
+        </EntityType>
+        <EntityType Name="SalaryPayment">
+          <Key>
+            <PropertyRef Name="SalaryPaymentId" />
+          </Key>
+          <Property Name="SalaryPaymentId" Type="Int32" Nullable="false" />
+          <Property Name="StaffId" Type="Int32" />
+          <Property Name="Amount" Type="Int32" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__SalaryPay__Creat__6E2152BE" FromRole="SalaryPayment" ToRole="TrainerUser" />
+          <NavigationProperty Name="Staff" Relationship="TrainersModel.FK__SalaryPay__Staff__6D2D2E85" FromRole="SalaryPayment" ToRole="Staff" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__SalaryPay__Updat__6F1576F7" FromRole="SalaryPayment" ToRole="TrainerUser" />
         </EntityType>
         <EntityType Name="Staff">
           <Key>
@@ -1526,12 +1863,14 @@
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
+          <NavigationProperty Name="Arrears" Relationship="TrainersModel.FK__Arrear__StaffId__6A50C1DA" FromRole="Staff" ToRole="Arrear" />
           <NavigationProperty Name="Classes" Relationship="TrainersModel.FK__Class__ClassAdvi__33008CF0" FromRole="Staff" ToRole="Class" />
           <NavigationProperty Name="Designation1" Relationship="TrainersModel.FK__Staff__Designati__536D5C82" FromRole="Staff" ToRole="Designation" />
-          <NavigationProperty Name="Salaries" Relationship="TrainersModel.FK__Salary__StaffId__5649C92D" FromRole="Staff" ToRole="Salary" />
+          <NavigationProperty Name="Salaries" Relationship="TrainersModel.FK__Salary__StaffId__668030F6" FromRole="Staff" ToRole="Salary" />
+          <NavigationProperty Name="SalaryPayments" Relationship="TrainersModel.FK__SalaryPay__Staff__6D2D2E85" FromRole="Staff" ToRole="SalaryPayment" />
           <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__Staff__CreatedBy__33F4B129" FromRole="Staff" ToRole="TrainerUser" />
           <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__Staff__UpdatedBy__34E8D562" FromRole="Staff" ToRole="TrainerUser" />
-          <NavigationProperty Name="StaffAttendances" Relationship="TrainersModel.FK__StaffAtte__Staff__592635D8" FromRole="Staff" ToRole="StaffAttendance" />
+          <NavigationProperty Name="StaffAttendances" Relationship="TrainersModel.FK__StaffAtte__Staff__5FD33367" FromRole="Staff" ToRole="StaffAttendance" />
           <NavigationProperty Name="SubjectAssignments" Relationship="TrainersModel.FK__SubjectAs__Teach__320C68B7" FromRole="Staff" ToRole="SubjectAssignment" />
         </EntityType>
         <EntityType Name="StaffAttendance">
@@ -1545,11 +1884,14 @@
           <Property Name="LateComings" Type="Int32" />
           <Property Name="StaffId" Type="Int32" />
           <Property Name="Month" Type="Int32" />
+          <Property Name="Year" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
-          <NavigationProperty Name="Staff" Relationship="TrainersModel.FK__StaffAtte__Staff__592635D8" FromRole="StaffAttendance" ToRole="Staff" />
+          <NavigationProperty Name="Staff" Relationship="TrainersModel.FK__StaffAtte__Staff__5FD33367" FromRole="StaffAttendance" ToRole="Staff" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__StaffAtte__Creat__60C757A0" FromRole="StaffAttendance" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__StaffAtte__Updat__61BB7BD9" FromRole="StaffAttendance" ToRole="TrainerUser" />
         </EntityType>
         <EntityType Name="Student">
           <Key>
@@ -1581,7 +1923,9 @@
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
+          <NavigationProperty Name="Arrears" Relationship="TrainersModel.FK__Arrear__StudentI__695C9DA1" FromRole="Student" ToRole="Arrear" />
           <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Stude__703EA55A" FromRole="Student" ToRole="Enrolment" />
+          <NavigationProperty Name="PaidFees" Relationship="TrainersModel.FK__PaidFee__Student__73DA2C14" FromRole="Student" ToRole="PaidFee" />
           <NavigationProperty Name="Parent" Relationship="TrainersModel.FK__Student__Father__25DB9BFC" FromRole="Student" ToRole="Parent" />
           <NavigationProperty Name="Parent1" Relationship="TrainersModel.FK__Student__Guardia__27C3E46E" FromRole="Student" ToRole="Parent" />
           <NavigationProperty Name="Parent2" Relationship="TrainersModel.FK__Student__Mother__26CFC035" FromRole="Student" ToRole="Parent" />
@@ -1637,6 +1981,8 @@
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
+          <NavigationProperty Name="Arrears" Relationship="TrainersModel.FK__Arrear__CreatedB__70099B30" FromRole="TrainerUser" ToRole="Arrear" />
+          <NavigationProperty Name="Arrears1" Relationship="TrainersModel.FK__Arrear__UpdatedB__70FDBF69" FromRole="TrainerUser" ToRole="Arrear" />
           <NavigationProperty Name="Classes" Relationship="TrainersModel.FK__Class__CreatedBy__035179CE" FromRole="TrainerUser" ToRole="Class" />
           <NavigationProperty Name="Classes1" Relationship="TrainersModel.FK__Class__UpdatedBy__04459E07" FromRole="TrainerUser" ToRole="Class" />
           <NavigationProperty Name="Configurations" Relationship="TrainersModel.FK__Configura__Creat__5B438874" FromRole="TrainerUser" ToRole="Configuration" />
@@ -1651,12 +1997,18 @@
           <NavigationProperty Name="Lookups1" Relationship="TrainersModel.FK__Lookup__UpdatedB__5C6CB6D7" FromRole="TrainerUser" ToRole="Lookup" />
           <NavigationProperty Name="LookupTypes" Relationship="TrainersModel.FK__LookupTyp__Creat__5F492382" FromRole="TrainerUser" ToRole="LookupType" />
           <NavigationProperty Name="LookupTypes1" Relationship="TrainersModel.FK__LookupTyp__Updat__603D47BB" FromRole="TrainerUser" ToRole="LookupType" />
+          <NavigationProperty Name="PaidFees" Relationship="TrainersModel.FK__PaidFee__Created__74CE504D" FromRole="TrainerUser" ToRole="PaidFee" />
+          <NavigationProperty Name="PaidFees1" Relationship="TrainersModel.FK__PaidFee__Updated__75C27486" FromRole="TrainerUser" ToRole="PaidFee" />
           <NavigationProperty Name="Parents" Relationship="TrainersModel.FK__Parent__CreatedB__29AC2CE0" FromRole="TrainerUser" ToRole="Parent" />
           <NavigationProperty Name="Parents1" Relationship="TrainersModel.FK__Parent__UpdatedB__28B808A7" FromRole="TrainerUser" ToRole="Parent" />
-          <NavigationProperty Name="Salaries" Relationship="TrainersModel.FK__Salary__CreatedB__546180BB" FromRole="TrainerUser" ToRole="Salary" />
-          <NavigationProperty Name="Salaries1" Relationship="TrainersModel.FK__Salary__UpdatedB__5555A4F4" FromRole="TrainerUser" ToRole="Salary" />
+          <NavigationProperty Name="Salaries" Relationship="TrainersModel.FK__Salary__CreatedB__6497E884" FromRole="TrainerUser" ToRole="Salary" />
+          <NavigationProperty Name="Salaries1" Relationship="TrainersModel.FK__Salary__UpdatedB__658C0CBD" FromRole="TrainerUser" ToRole="Salary" />
+          <NavigationProperty Name="SalaryPayments" Relationship="TrainersModel.FK__SalaryPay__Creat__6E2152BE" FromRole="TrainerUser" ToRole="SalaryPayment" />
+          <NavigationProperty Name="SalaryPayments1" Relationship="TrainersModel.FK__SalaryPay__Updat__6F1576F7" FromRole="TrainerUser" ToRole="SalaryPayment" />
           <NavigationProperty Name="Staffs" Relationship="TrainersModel.FK__Staff__CreatedBy__33F4B129" FromRole="TrainerUser" ToRole="Staff" />
           <NavigationProperty Name="Staffs1" Relationship="TrainersModel.FK__Staff__UpdatedBy__34E8D562" FromRole="TrainerUser" ToRole="Staff" />
+          <NavigationProperty Name="StaffAttendances" Relationship="TrainersModel.FK__StaffAtte__Creat__60C757A0" FromRole="TrainerUser" ToRole="StaffAttendance" />
+          <NavigationProperty Name="StaffAttendances1" Relationship="TrainersModel.FK__StaffAtte__Updat__61BB7BD9" FromRole="TrainerUser" ToRole="StaffAttendance" />
           <NavigationProperty Name="Students" Relationship="TrainersModel.FK__Student__Created__13BCEBC1" FromRole="TrainerUser" ToRole="Student" />
           <NavigationProperty Name="Students1" Relationship="TrainersModel.FK__Student__Updated__12C8C788" FromRole="TrainerUser" ToRole="Student" />
           <NavigationProperty Name="Subjects" Relationship="TrainersModel.FK__Subject__Created__640DD89F" FromRole="TrainerUser" ToRole="Subject" />
@@ -1668,6 +2020,54 @@
           <NavigationProperty Name="TrainerUser11" Relationship="TrainersModel.FK__TrainerUs__Updat__336AA144" FromRole="TrainerUser" ToRole="TrainerUser1" />
           <NavigationProperty Name="TrainerUser3" Relationship="TrainersModel.FK__TrainerUs__Updat__336AA144" FromRole="TrainerUser1" ToRole="TrainerUser" />
         </EntityType>
+        <Association Name="FK__Arrear__CreatedB__70099B30">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.Arrear" Role="Arrear" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Arrear">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Arrear__StaffId__6A50C1DA">
+          <End Type="TrainersModel.Staff" Role="Staff" Multiplicity="0..1" />
+          <End Type="TrainersModel.Arrear" Role="Arrear" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffId" />
+            </Principal>
+            <Dependent Role="Arrear">
+              <PropertyRef Name="StaffId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Arrear__StudentI__695C9DA1">
+          <End Type="TrainersModel.Student" Role="Student" Multiplicity="0..1" />
+          <End Type="TrainersModel.Arrear" Role="Arrear" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="Arrear">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Arrear__UpdatedB__70FDBF69">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.Arrear" Role="Arrear" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="Arrear">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Type="TrainersModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1948,6 +2348,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__PaidFee__Created__74CE504D">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.PaidFee" Role="PaidFee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="PaidFee">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaidFee__Student__73DA2C14">
+          <End Type="TrainersModel.Student" Role="Student" Multiplicity="0..1" />
+          <End Type="TrainersModel.PaidFee" Role="PaidFee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="PaidFee">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaidFee__Updated__75C27486">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.PaidFee" Role="PaidFee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="PaidFee">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Parent__CreatedB__29AC2CE0">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.Parent" Role="Parent" Multiplicity="*" />
@@ -2008,7 +2444,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Salary__CreatedB__546180BB">
+        <Association Name="FK__Salary__CreatedB__6497E884">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.Salary" Role="Salary" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2020,7 +2456,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Salary__StaffId__5649C92D">
+        <Association Name="FK__Salary__StaffId__668030F6">
           <End Type="TrainersModel.Staff" Role="Staff" Multiplicity="0..1" />
           <End Type="TrainersModel.Salary" Role="Salary" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2032,7 +2468,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Salary__UpdatedB__5555A4F4">
+        <Association Name="FK__Salary__UpdatedB__658C0CBD">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.Salary" Role="Salary" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2040,6 +2476,42 @@
               <PropertyRef Name="TrainerUserId" />
             </Principal>
             <Dependent Role="Salary">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SalaryPay__Creat__6E2152BE">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.SalaryPayment" Role="SalaryPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="SalaryPayment">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SalaryPay__Staff__6D2D2E85">
+          <End Type="TrainersModel.Staff" Role="Staff" Multiplicity="0..1" />
+          <End Type="TrainersModel.SalaryPayment" Role="SalaryPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffId" />
+            </Principal>
+            <Dependent Role="SalaryPayment">
+              <PropertyRef Name="StaffId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SalaryPay__Updat__6F1576F7">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.SalaryPayment" Role="SalaryPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="SalaryPayment">
               <PropertyRef Name="UpdatedBy" />
             </Dependent>
           </ReferentialConstraint>
@@ -2068,7 +2540,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__StaffAtte__Staff__592635D8">
+        <Association Name="FK__StaffAtte__Staff__5FD33367">
           <End Type="TrainersModel.Staff" Role="Staff" Multiplicity="0..1" />
           <End Type="TrainersModel.StaffAttendance" Role="StaffAttendance" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2089,6 +2561,30 @@
             </Principal>
             <Dependent Role="SubjectAssignment">
               <PropertyRef Name="Teacher" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StaffAtte__Creat__60C757A0">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.StaffAttendance" Role="StaffAttendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="StaffAttendance">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StaffAtte__Updat__61BB7BD9">
+          <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
+          <End Type="TrainersModel.StaffAttendance" Role="StaffAttendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerUser">
+              <PropertyRef Name="TrainerUserId" />
+            </Principal>
+            <Dependent Role="StaffAttendance">
+              <PropertyRef Name="UpdatedBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2211,6 +2707,21 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="TrainersModelStoreContainer" CdmEntityContainer="TrainersEntities" >
           <FunctionImportMapping FunctionImportName="ResetDb" FunctionName="TrainersModel.Store.ResetDb" />
+          <EntitySetMapping Name="Arrears">
+            <EntityTypeMapping TypeName="TrainersModel.Arrear">
+              <MappingFragment StoreEntitySet="Arrear">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ArrearType" ColumnName="ArrearType" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="StaffId" ColumnName="StaffId" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="ArrearId" ColumnName="ArrearId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="AspNetRoles">
             <EntityTypeMapping TypeName="TrainersModel.AspNetRole">
               <MappingFragment StoreEntitySet="AspNetRoles">
@@ -2360,6 +2871,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PaidFees">
+            <EntityTypeMapping TypeName="TrainersModel.PaidFee">
+              <MappingFragment StoreEntitySet="PaidFee">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="PaidFeeId" ColumnName="PaidFeeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Parents">
             <EntityTypeMapping TypeName="TrainersModel.Parent">
               <MappingFragment StoreEntitySet="Parent">
@@ -2403,6 +2928,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="SalaryPayments">
+            <EntityTypeMapping TypeName="TrainersModel.SalaryPayment">
+              <MappingFragment StoreEntitySet="SalaryPayment">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="StaffId" ColumnName="StaffId" />
+                <ScalarProperty Name="SalaryPaymentId" ColumnName="SalaryPaymentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Staffs">
             <EntityTypeMapping TypeName="TrainersModel.Staff">
               <MappingFragment StoreEntitySet="Staff">
@@ -2437,6 +2976,7 @@
                 <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
                 <ScalarProperty Name="Month" ColumnName="Month" />
                 <ScalarProperty Name="StaffId" ColumnName="StaffId" />
                 <ScalarProperty Name="LateComings" ColumnName="LateComings" />

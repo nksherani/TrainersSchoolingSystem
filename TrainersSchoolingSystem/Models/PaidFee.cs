@@ -12,23 +12,19 @@ namespace TrainersSchoolingSystem.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class StaffAttendance
+    public partial class PaidFee
     {
-        public int StaffAttendanceId { get; set; }
-        public Nullable<int> WorkingDays { get; set; }
-        public Nullable<int> Absents { get; set; }
-        public Nullable<int> ShortLeaves { get; set; }
-        public Nullable<int> LateComings { get; set; }
-        public Nullable<int> StaffId { get; set; }
-        public Nullable<int> Month { get; set; }
-        public string Year { get; set; }
+        public int PaidFeeId { get; set; }
+        public Nullable<int> StudentId { get; set; }
+        public Nullable<int> Amount { get; set; }
+        public Nullable<System.DateTime> PaymentDate { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public Nullable<int> UpdatedBy { get; set; }
     
-        public virtual Staff Staff { get; set; }
         public virtual TrainerUser TrainerUser { get; set; }
+        public virtual Student Student { get; set; }
         public virtual TrainerUser TrainerUser1 { get; set; }
     }
 }
