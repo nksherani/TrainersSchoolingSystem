@@ -232,7 +232,9 @@
     <Compile Include="Controllers\LookupsController.cs" />
     <Compile Include="Controllers\LookupTypesController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PaidFeesController.cs" />
     <Compile Include="Controllers\ParentsController.cs" />
+    <Compile Include="Controllers\SalariesController.cs" />
     <Compile Include="Controllers\SetupController.cs" />
     <Compile Include="Controllers\StaffAttendancesController.cs" />
     <Compile Include="Controllers\StaffsController.cs" />
@@ -1220,6 +1222,16 @@
     <Content Include="Views\StaffAttendances\Details.cshtml" />
     <Content Include="Views\StaffAttendances\Edit.cshtml" />
     <Content Include="Views\StaffAttendances\Index.cshtml" />
+    <Content Include="Views\Salaries\Create.cshtml" />
+    <Content Include="Views\Salaries\Delete.cshtml" />
+    <Content Include="Views\Salaries\Details.cshtml" />
+    <Content Include="Views\Salaries\Edit.cshtml" />
+    <Content Include="Views\Salaries\Index.cshtml" />
+    <Content Include="Views\PaidFees\Create.cshtml" />
+    <Content Include="Views\PaidFees\Delete.cshtml" />
+    <Content Include="Views\PaidFees\Details.cshtml" />
+    <Content Include="Views\PaidFees\Edit.cshtml" />
+    <Content Include="Views\PaidFees\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
