@@ -37,21 +37,7 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: Setup/Create
         public ActionResult Create()
         {
-            List<KeyValuePair<int, string>> Months = new List<KeyValuePair<int, string>>();
-            Months.Add(new KeyValuePair<int, string>(1, "January"));
-            Months.Add(new KeyValuePair<int, string>(2, "February"));
-            Months.Add(new KeyValuePair<int, string>(3, "March"));
-            Months.Add(new KeyValuePair<int, string>(4, "April"));
-            Months.Add(new KeyValuePair<int, string>(5, "May"));
-            Months.Add(new KeyValuePair<int, string>(6, "June"));
-            Months.Add(new KeyValuePair<int, string>(7, "July"));
-            Months.Add(new KeyValuePair<int, string>(8, "August"));
-            Months.Add(new KeyValuePair<int, string>(9, "September"));
-            Months.Add(new KeyValuePair<int, string>(10, "October"));
-            Months.Add(new KeyValuePair<int, string>(11, "November"));
-            Months.Add(new KeyValuePair<int, string>(12, "December"));
-
-            ViewBag.FirstMonth = new SelectList(Months, "Key", "Value");
+            ViewBag.FirstMonth = new SelectList(Constants.months, "Key", "Value");
 
             return View();
         }
@@ -97,42 +83,14 @@ namespace TrainersSchoolingSystem.Controllers
                 }
                 else
                 {
-                    List<KeyValuePair<int, string>> Months = new List<KeyValuePair<int, string>>();
-                    Months.Add(new KeyValuePair<int, string>(1, "January"));
-                    Months.Add(new KeyValuePair<int, string>(2, "February"));
-                    Months.Add(new KeyValuePair<int, string>(3, "March"));
-                    Months.Add(new KeyValuePair<int, string>(4, "April"));
-                    Months.Add(new KeyValuePair<int, string>(5, "May"));
-                    Months.Add(new KeyValuePair<int, string>(6, "June"));
-                    Months.Add(new KeyValuePair<int, string>(7, "July"));
-                    Months.Add(new KeyValuePair<int, string>(8, "August"));
-                    Months.Add(new KeyValuePair<int, string>(9, "September"));
-                    Months.Add(new KeyValuePair<int, string>(10, "October"));
-                    Months.Add(new KeyValuePair<int, string>(11, "November"));
-                    Months.Add(new KeyValuePair<int, string>(12, "December"));
-
-                    ViewBag.FirstMonth = new SelectList(Months, "Key", "Value");
+                    ViewBag.FirstMonth = new SelectList(Constants.months, "Key", "Value");
                     return View();
                 }
 
             }
             catch
             {
-                List<KeyValuePair<int, string>> Months = new List<KeyValuePair<int, string>>();
-                Months.Add(new KeyValuePair<int, string>(1, "January"));
-                Months.Add(new KeyValuePair<int, string>(2, "February"));
-                Months.Add(new KeyValuePair<int, string>(3, "March"));
-                Months.Add(new KeyValuePair<int, string>(4, "April"));
-                Months.Add(new KeyValuePair<int, string>(5, "May"));
-                Months.Add(new KeyValuePair<int, string>(6, "June"));
-                Months.Add(new KeyValuePair<int, string>(7, "July"));
-                Months.Add(new KeyValuePair<int, string>(8, "August"));
-                Months.Add(new KeyValuePair<int, string>(9, "September"));
-                Months.Add(new KeyValuePair<int, string>(10, "October"));
-                Months.Add(new KeyValuePair<int, string>(11, "November"));
-                Months.Add(new KeyValuePair<int, string>(12, "December"));
-
-                ViewBag.FirstMonth = new SelectList(Months, "Key", "Value");
+                ViewBag.FirstMonth = new SelectList(Constants.months, "Key", "Value");
                 return View();
             }
         }

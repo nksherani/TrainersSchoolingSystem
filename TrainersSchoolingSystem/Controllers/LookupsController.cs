@@ -55,7 +55,7 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LookupId,LookupTypeId,LookupText,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Lookup lookup)
+        public ActionResult Create( Lookup lookup)
         {
             if (ModelState.IsValid)
             {
@@ -66,9 +66,7 @@ namespace TrainersSchoolingSystem.Controllers
                 return RedirectToAction("Index");
             }
 
-            //ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", lookup.CreatedBy);
             ViewBag.LookupTypeId = new SelectList(db.LookupTypes, "LookupTypeId", "LookupTypeName", lookup.LookupTypeId);
-            //ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", lookup.UpdatedBy);
             return View(lookup);
         }
 
