@@ -24,7 +24,44 @@ namespace TrainersSchoolingSystem.Controllers
             var staffs = db.Staffs.Where(x => designationIds.Contains(x.Designation.Value)).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
             return View(staffs.ToList());
         }
+        public ActionResult GetTeachers()
+        {
+            var teachers = db.Staffs.Join(db.Designations.Where(x => x.Category == "Teaching"), a => a.Designation, b => b.DesignationId, (a, b) => a);
+            var enrolments = db.Enrolments.Where(x => x.IsActive.Value).ToList();
+            List<TeacherViewModel> modellist = new List<TeacherViewModel>();
+            foreach (var teacher in teachers)
+            {
+                TeacherViewModel model = new TeacherViewModel();
+                model = Mapper<TeacherViewModel>.GetObject(teacher);
+                model.Designation_ = Mapper<DesignationViewModel>.GetObject(teacher.Designation1);
+                if (teacher.Salaries.Count > 0)
+                    model.Salary_ = Mapper<SalaryViewModel>.GetObject(teacher.Salaries.FirstOrDefault());
+                if (teacher.StaffAttendances.Count > 0)
+                    model.Attendance = Mapper<StaffAttendanceViewModel>.GetObject(teacher.StaffAttendances.FirstOrDefault());
+                if (teacher.SalaryPayments.Count > 0)
+                {
+                    var payments = teacher.SalaryPayments.ToList();
+                    foreach (var payment in payments)
+                    {
+                        model.salaryPayment.Add(Mapper<SalaryPaymentViewModel>.GetObject(payment));
+                    }
+                }
+                if (teacher.SubjectAssignments.Count > 0)
+                {
+                    var subjects = teacher.SubjectAssignments.ToList();
+                    foreach (var subject in subjects)
+                    {
+                        SubjectAssignmentViewModel assignment = Mapper<SubjectAssignmentViewModel>.GetObject(subject);
+                        assignment.Class_ = Mapper<ClassViewModel>.GetObject(subject.Class1);
+                        assignment.Subject_ = Mapper<SubjectViewModel>.GetObject(subject.Subject1);
+                        model.subjects.Add(assignment);
+                    }
+                }
 
+                modellist.Add(model);
+            }
+            return Json(modellist, JsonRequestBehavior.AllowGet);
+        }
         // GET: Staffs/Details/5
         public ActionResult Details(int? id)
         {
@@ -62,6 +99,7 @@ namespace TrainersSchoolingSystem.Controllers
                 db.SaveChanges();
 
                 Salary salary = Mapper<Salary>.GetObject(teacher.Salary_);
+                salary = SalariesController.SalaryCalculation(salary);
                 salary.StaffId = staff.StaffId;
                 salary.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 salary.CreatedDate = DateTime.Now;

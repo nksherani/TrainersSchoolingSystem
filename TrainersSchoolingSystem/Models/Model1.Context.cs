@@ -54,5 +54,14 @@ namespace TrainersSchoolingSystem.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ResetDb");
         }
+    
+        public virtual ObjectResult<GenerateFeeSlips_Result> GenerateFeeSlips(Nullable<int> studentId)
+        {
+            var studentIdParameter = studentId.HasValue ?
+                new ObjectParameter("StudentId", studentId) :
+                new ObjectParameter("StudentId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GenerateFeeSlips_Result>("GenerateFeeSlips", studentIdParameter);
+        }
     }
 }

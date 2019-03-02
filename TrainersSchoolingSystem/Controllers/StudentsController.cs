@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -17,7 +18,6 @@ using TrainersSchoolingSystem.Utils;
 
 namespace TrainersSchoolingSystem.Controllers
 {
-    [Authorize(Roles = "Admin,Moderator")]
     [Authorize]
     public class StudentsController : Controller
     {
@@ -112,55 +112,55 @@ namespace TrainersSchoolingSystem.Controllers
             return Json("../Content/Temp/FeeSlips.html",JsonRequestBehavior.AllowGet);
         }
 
-        public string GenerateFeeSlips(BulkStudents bulk)
-        {
-            var stdIds = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
-            var enrolments = db.Enrolments.Where(x => x.IsActive.Value && stdIds.Contains(x.Student.Value)).ToList();
-            var students = db.Students.Where(x => stdIds.Contains(x.StudentId)).Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
-            List<StudentViewModel> modellist = new List<StudentViewModel>();
-            foreach (var student in students)
-            {
-                StudentViewModel model = new StudentViewModel();
-                model = Mapper<StudentViewModel>.GetObject(student);
-                model.Father_ = Mapper<ParentViewModel>.GetObject(student.Parent);
-                model.Mother_ = Mapper<ParentViewModel>.GetObject(student.Parent2);
-                if (student.Parent1 != null)
-                {
-                    model.Guardian_ = Mapper<GuardianViewModel>.GetObject(student.Parent1);
-                }
-                var enrolmentdb = enrolments.Where(x => x.Student == student.StudentId).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
-                model.Enrolment = Mapper<EnrolmentViewModel>.GetObject(enrolmentdb);
-                model.Enrolment.Class_ = Mapper<ClassViewModel>.GetObject(enrolmentdb.Class1);
-                modellist.Add(model);
-            }
-            modellist.AddRange(modellist);
-            modellist.AddRange(modellist);
-            string feeslips = "";
-            Server.MapPath("~/Content/FeeSlips/");
-            var csslines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlipHeader.html")).ToList();
-            foreach (var item in csslines)
-            {
-                feeslips += item;
-            }
-            int i = 0;
-            string feeslipsBody = "";
-            foreach (var studentView in modellist)
-            {
-                var html = GetFeeSlip(studentView);
-                if (i % 5 == 0)
-                    html += "<div style=\"width: 240px; height: 1px; background - color:white\"></div>";
+        //public string GenerateFeeSlips(BulkStudents bulk)
+        //{
+        //    var stdIds = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+        //    var enrolments = db.Enrolments.Where(x => x.IsActive.Value && stdIds.Contains(x.Student.Value)).ToList();
+        //    var students = db.Students.Where(x => stdIds.Contains(x.StudentId)).Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
+        //    List<StudentViewModel> modellist = new List<StudentViewModel>();
+        //    foreach (var student in students)
+        //    {
+        //        StudentViewModel model = new StudentViewModel();
+        //        model = Mapper<StudentViewModel>.GetObject(student);
+        //        model.Father_ = Mapper<ParentViewModel>.GetObject(student.Parent);
+        //        model.Mother_ = Mapper<ParentViewModel>.GetObject(student.Parent2);
+        //        if (student.Parent1 != null)
+        //        {
+        //            model.Guardian_ = Mapper<GuardianViewModel>.GetObject(student.Parent1);
+        //        }
+        //        var enrolmentdb = enrolments.Where(x => x.Student == student.StudentId).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
+        //        model.Enrolment = Mapper<EnrolmentViewModel>.GetObject(enrolmentdb);
+        //        model.Enrolment.Class_ = Mapper<ClassViewModel>.GetObject(enrolmentdb.Class1);
+        //        modellist.Add(model);
+        //    }
+        //    modellist.AddRange(modellist);
+        //    modellist.AddRange(modellist);
+        //    string feeslips = "";
+        //    Server.MapPath("~/Content/FeeSlips/");
+        //    var csslines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlipHeader.html")).ToList();
+        //    foreach (var item in csslines)
+        //    {
+        //        feeslips += item;
+        //    }
+        //    int i = 0;
+        //    string feeslipsBody = "";
+        //    foreach (var studentView in modellist)
+        //    {
+        //        var html = GetFeeSlip(studentView);
+        //        if (i % 5 == 0)
+        //            html += "<div style=\"width: 240px; height: 1px; background - color:white\"></div>";
 
-                feeslipsBody += html;
-                i++;
-            }
-            feeslips += feeslipsBody;
-            var path = Server.MapPath("~/Content/FeeSlips/");
-            var filename = DateTime.Now.ToString("ddMMyyyyhhmmss") + "_by_" + User.Identity.Name + ".pdf";
-            if (SavePdf2(filename, path, feeslips))
-                return "../Content/FeeSlips/" + filename;
-            return "error";
+        //        feeslipsBody += html;
+        //        i++;
+        //    }
+        //    feeslips += feeslipsBody;
+        //    var path = Server.MapPath("~/Content/FeeSlips/");
+        //    var filename = DateTime.Now.ToString("ddMMyyyyhhmmss") + "_by_" + User.Identity.Name + ".pdf";
+        //    if (SavePdf2(filename, path, feeslips))
+        //        return "../Content/FeeSlips/" + filename;
+        //    return "error";
 
-        }
+        //}
         bool SavePdf(string filename, string path, string html)
         {
             HtmlToPdf htmlToPdfConverter = new HtmlToPdf();
@@ -191,6 +191,9 @@ namespace TrainersSchoolingSystem.Controllers
         }
         private string GetFeeSlip(StudentViewModel studentView)
         {
+            SqlParameter StudentId = new SqlParameter("@StudentId", studentView.StudentId);
+            var FeeSlipData = db.Database.SqlQuery<FeeSlipModel>("exec GenerateFeeSlips @StudentId", StudentId).FirstOrDefault();
+
             string data = "";
             Server.MapPath("~/Content/FeeSlips/");
             string[] lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlip.html"));
@@ -202,13 +205,25 @@ namespace TrainersSchoolingSystem.Controllers
             data = data.Replace("__Picture__", "../"+GlobalData.configuration.Picture);
             data = data.Replace("__SchoolName__", GlobalData.configuration.SchoolName);
             data = data.Replace("__Campus__", GlobalData.configuration.Campus);
-            data = data.Replace("__Month__", DateTime.Now.ToString("mmm-yyyy"));
+            data = data.Replace("__Month__", DateTime.Now.ToString("MM-yyyy"));
             data = data.Replace("__IssueDate__", DateTime.Now.ToString("dd-MM-yyyy"));
             data = data.Replace("__DueDate__", DateTime.Now.ToString("10-MM-yyyy"));
             data = data.Replace("__Challan__", DateTime.Now.ToString() + studentView.StudentId);
             data = data.Replace("__GRNo__", studentView.Enrolment.GRNo);
             data = data.Replace("__StudentName__", studentView.FirstName + " " + studentView.LastName);
+            data = data.Replace("__Class__", FeeSlipData.Class);
             data = data.Replace("__FatherName__", studentView.Father_.Name);
+            data = data.Replace("__Arrears__", FeeSlipData.ArrearAmount.ToString());
+            data = data.Replace("__TuitionFee__", FeeSlipData.Fee);
+            data = data.Replace("__AdmissionFee__", "0");
+            data = data.Replace("__AnnualFee__", FeeSlipData.AnnualFee.ToString());
+            data = data.Replace("__OtherFee__", "0");
+            data = data.Replace("__LateFee__", GlobalData.feeSetup.LatePaymentSurcharge.ToString());
+            data = data.Replace("__LabCharges__", GlobalData.feeSetup.LabCharges.ToString());
+            data = data.Replace("__Till__", FeeSlipData.Fee);
+            data = data.Replace("__After__", (Convert.ToInt32(FeeSlipData.Fee) + GlobalData.feeSetup.LatePaymentSurcharge).ToString());
+
+
 
             return data;
         }
@@ -225,8 +240,8 @@ namespace TrainersSchoolingSystem.Controllers
                 flag = ChangeSection(bulk);
             else if (bulk.Action == "4")
                 flag = IncreaseFee(bulk);
-            else if (bulk.Action == "5")
-                path = GenerateFeeSlips(bulk);
+            //else if (bulk.Action == "5")
+            //    path = GenerateFeeSlips(bulk);
             if (path != "")
                 return Json(path, JsonRequestBehavior.AllowGet);
 
@@ -512,7 +527,17 @@ namespace TrainersSchoolingSystem.Controllers
                 enrolment.IsActive = true;
                 db.Enrolments.Add(enrolment);
                 db.Students.AddOrUpdate(std);
+
+                PaidFee admissionFee = new PaidFee();
+                admissionFee.StudentId = std.StudentId;
+                admissionFee.Description = "AdmissionFee";
+                admissionFee.CalculatedAmount = GlobalData.feeSetup.AdmissionFee;
+                admissionFee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                admissionFee.CreatedDate = DateTime.Now;
+
+
                 db.SaveChanges();
+
                 return RedirectToAction("Students");
             }
             List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();

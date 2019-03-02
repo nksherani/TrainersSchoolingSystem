@@ -21,7 +21,5 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public Nullable<int> UpdatedBy { get; set; }
 
-        public virtual TrainerUser TrainerUser { get; set; }
-        public virtual TrainerUser TrainerUser1 { get; set; }
     }
 }

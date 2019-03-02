@@ -174,7 +174,9 @@
           </Key>
           <Property Name="PaidFeeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="StudentId" Type="int" />
-          <Property Name="Amount" Type="int" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="CalculatedAmount" Type="int" />
+          <Property Name="ReceivedAmount" Type="int" />
           <Property Name="PaymentDate" Type="datetime" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
@@ -626,7 +628,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PaidFee__Created__7993056A">
+        <Association Name="FK__PaidFee__Created__125EB334">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="PaidFee" Type="Self.PaidFee" Multiplicity="*" />
           <ReferentialConstraint>
@@ -638,7 +640,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PaidFee__Student__789EE131">
+        <Association Name="FK__PaidFee__Student__116A8EFB">
           <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
           <End Role="PaidFee" Type="Self.PaidFee" Multiplicity="*" />
           <ReferentialConstraint>
@@ -650,7 +652,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PaidFee__Updated__7A8729A3">
+        <Association Name="FK__PaidFee__Updated__1352D76D">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="PaidFee" Type="Self.PaidFee" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1054,6 +1056,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="GenerateFeeSlips" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StudentId" Type="int" Mode="In" />
+        </Function>
         <Function Name="ResetDb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="TrainersModelStoreContainer">
           <EntitySet Name="Arrear" EntityType="Self.Arrear" Schema="dbo" store:Type="Tables" />
@@ -1171,15 +1176,15 @@
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="LookupType" EntitySet="LookupType" />
           </AssociationSet>
-          <AssociationSet Name="FK__PaidFee__Created__7993056A" Association="Self.FK__PaidFee__Created__7993056A">
+          <AssociationSet Name="FK__PaidFee__Created__125EB334" Association="Self.FK__PaidFee__Created__125EB334">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="PaidFee" EntitySet="PaidFee" />
           </AssociationSet>
-          <AssociationSet Name="FK__PaidFee__Student__789EE131" Association="Self.FK__PaidFee__Student__789EE131">
+          <AssociationSet Name="FK__PaidFee__Student__116A8EFB" Association="Self.FK__PaidFee__Student__116A8EFB">
             <End Role="Student" EntitySet="Student" />
             <End Role="PaidFee" EntitySet="PaidFee" />
           </AssociationSet>
-          <AssociationSet Name="FK__PaidFee__Updated__7A8729A3" Association="Self.FK__PaidFee__Updated__7A8729A3">
+          <AssociationSet Name="FK__PaidFee__Updated__1352D76D" Association="Self.FK__PaidFee__Updated__1352D76D">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="PaidFee" EntitySet="PaidFee" />
           </AssociationSet>
@@ -1448,15 +1453,15 @@
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="LookupType" EntitySet="LookupTypes" />
           </AssociationSet>
-          <AssociationSet Name="FK__PaidFee__Created__7993056A" Association="TrainersModel.FK__PaidFee__Created__7993056A">
+          <AssociationSet Name="FK__PaidFee__Created__125EB334" Association="TrainersModel.FK__PaidFee__Created__125EB334">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="PaidFee" EntitySet="PaidFees" />
           </AssociationSet>
-          <AssociationSet Name="FK__PaidFee__Student__789EE131" Association="TrainersModel.FK__PaidFee__Student__789EE131">
+          <AssociationSet Name="FK__PaidFee__Student__116A8EFB" Association="TrainersModel.FK__PaidFee__Student__116A8EFB">
             <End Role="Student" EntitySet="Students" />
             <End Role="PaidFee" EntitySet="PaidFees" />
           </AssociationSet>
-          <AssociationSet Name="FK__PaidFee__Updated__7A8729A3" Association="TrainersModel.FK__PaidFee__Updated__7A8729A3">
+          <AssociationSet Name="FK__PaidFee__Updated__1352D76D" Association="TrainersModel.FK__PaidFee__Updated__1352D76D">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="PaidFee" EntitySet="PaidFees" />
           </AssociationSet>
@@ -1568,6 +1573,9 @@
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <FunctionImport Name="GenerateFeeSlips" ReturnType="Collection(TrainersModel.GenerateFeeSlips_Result)">
+            <Parameter Name="StudentId" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="Arrear">
           <Key>
@@ -1764,15 +1772,17 @@
           </Key>
           <Property Name="PaidFeeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="StudentId" Type="Int32" />
-          <Property Name="Amount" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CalculatedAmount" Type="Int32" />
+          <Property Name="ReceivedAmount" Type="Int32" />
           <Property Name="PaymentDate" Type="DateTime" Precision="3" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
-          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__PaidFee__Created__7993056A" FromRole="PaidFee" ToRole="TrainerUser" />
-          <NavigationProperty Name="Student" Relationship="TrainersModel.FK__PaidFee__Student__789EE131" FromRole="PaidFee" ToRole="Student" />
-          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__PaidFee__Updated__7A8729A3" FromRole="PaidFee" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__PaidFee__Created__125EB334" FromRole="PaidFee" ToRole="TrainerUser" />
+          <NavigationProperty Name="Student" Relationship="TrainersModel.FK__PaidFee__Student__116A8EFB" FromRole="PaidFee" ToRole="Student" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__PaidFee__Updated__1352D76D" FromRole="PaidFee" ToRole="TrainerUser" />
         </EntityType>
         <EntityType Name="Parent">
           <Key>
@@ -1925,7 +1935,7 @@
           <Property Name="UpdatedBy" Type="Int32" />
           <NavigationProperty Name="Arrears" Relationship="TrainersModel.FK__Arrear__StudentI__695C9DA1" FromRole="Student" ToRole="Arrear" />
           <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Stude__703EA55A" FromRole="Student" ToRole="Enrolment" />
-          <NavigationProperty Name="PaidFees" Relationship="TrainersModel.FK__PaidFee__Student__789EE131" FromRole="Student" ToRole="PaidFee" />
+          <NavigationProperty Name="PaidFees" Relationship="TrainersModel.FK__PaidFee__Student__116A8EFB" FromRole="Student" ToRole="PaidFee" />
           <NavigationProperty Name="Parent" Relationship="TrainersModel.FK__Student__Father__25DB9BFC" FromRole="Student" ToRole="Parent" />
           <NavigationProperty Name="Parent1" Relationship="TrainersModel.FK__Student__Guardia__27C3E46E" FromRole="Student" ToRole="Parent" />
           <NavigationProperty Name="Parent2" Relationship="TrainersModel.FK__Student__Mother__26CFC035" FromRole="Student" ToRole="Parent" />
@@ -1997,8 +2007,8 @@
           <NavigationProperty Name="Lookups1" Relationship="TrainersModel.FK__Lookup__UpdatedB__5C6CB6D7" FromRole="TrainerUser" ToRole="Lookup" />
           <NavigationProperty Name="LookupTypes" Relationship="TrainersModel.FK__LookupTyp__Creat__5F492382" FromRole="TrainerUser" ToRole="LookupType" />
           <NavigationProperty Name="LookupTypes1" Relationship="TrainersModel.FK__LookupTyp__Updat__603D47BB" FromRole="TrainerUser" ToRole="LookupType" />
-          <NavigationProperty Name="PaidFees" Relationship="TrainersModel.FK__PaidFee__Created__7993056A" FromRole="TrainerUser" ToRole="PaidFee" />
-          <NavigationProperty Name="PaidFees1" Relationship="TrainersModel.FK__PaidFee__Updated__7A8729A3" FromRole="TrainerUser" ToRole="PaidFee" />
+          <NavigationProperty Name="PaidFees" Relationship="TrainersModel.FK__PaidFee__Created__125EB334" FromRole="TrainerUser" ToRole="PaidFee" />
+          <NavigationProperty Name="PaidFees1" Relationship="TrainersModel.FK__PaidFee__Updated__1352D76D" FromRole="TrainerUser" ToRole="PaidFee" />
           <NavigationProperty Name="Parents" Relationship="TrainersModel.FK__Parent__CreatedB__29AC2CE0" FromRole="TrainerUser" ToRole="Parent" />
           <NavigationProperty Name="Parents1" Relationship="TrainersModel.FK__Parent__UpdatedB__28B808A7" FromRole="TrainerUser" ToRole="Parent" />
           <NavigationProperty Name="Salaries" Relationship="TrainersModel.FK__Salary__CreatedB__06ED0088" FromRole="TrainerUser" ToRole="Salary" />
@@ -2348,7 +2358,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PaidFee__Created__7993056A">
+        <Association Name="FK__PaidFee__Created__125EB334">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.PaidFee" Role="PaidFee" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2360,7 +2370,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PaidFee__Student__789EE131">
+        <Association Name="FK__PaidFee__Student__116A8EFB">
           <End Type="TrainersModel.Student" Role="Student" Multiplicity="0..1" />
           <End Type="TrainersModel.PaidFee" Role="PaidFee" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2372,7 +2382,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PaidFee__Updated__7A8729A3">
+        <Association Name="FK__PaidFee__Updated__1352D76D">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.PaidFee" Role="PaidFee" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2700,6 +2710,18 @@
           <End Type="TrainersModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="TrainersModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
+        <ComplexType Name="GenerateFeeSlips_Result">
+          <Property Type="Int32" Name="StudentId" Nullable="false" />
+          <Property Type="String" Name="GRNo" Nullable="true" />
+          <Property Type="Int32" Name="RollNo" Nullable="true" />
+          <Property Type="String" Name="FirstName" Nullable="true" />
+          <Property Type="String" Name="LastName" Nullable="true" />
+          <Property Type="String" Name="Class" Nullable="false" />
+          <Property Type="String" Name="Fee" Nullable="true" />
+          <Property Type="Int32" Name="AnnualFee" Nullable="true" />
+          <Property Type="Int32" Name="ArrearAmount" Nullable="false" />
+          <Property Type="String" Name="ArrearType" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2880,7 +2902,9 @@
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="ReceivedAmount" ColumnName="ReceivedAmount" />
+                <ScalarProperty Name="CalculatedAmount" ColumnName="CalculatedAmount" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="StudentId" ColumnName="StudentId" />
                 <ScalarProperty Name="PaidFeeId" ColumnName="PaidFeeId" />
               </MappingFragment>
@@ -3072,6 +3096,22 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="GenerateFeeSlips" FunctionName="TrainersModel.Store.GenerateFeeSlips">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TrainersModel.GenerateFeeSlips_Result">
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="GRNo" ColumnName="GRNo" />
+                <ScalarProperty Name="RollNo" ColumnName="RollNo" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Class" ColumnName="Class" />
+                <ScalarProperty Name="Fee" ColumnName="Fee" />
+                <ScalarProperty Name="AnnualFee" ColumnName="AnnualFee" />
+                <ScalarProperty Name="ArrearAmount" ColumnName="ArrearAmount" />
+                <ScalarProperty Name="ArrearType" ColumnName="ArrearType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -22,11 +22,8 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public Nullable<int> UpdatedBy { get; set; }
 
-        public StaffViewModel Teacher_ { get; set; }
         public SubjectViewModel Subject_ { get; set; }
         public ClassViewModel Class_ { get; set; }
 
-        public TrainerUserViewModel CreatedBy_ { get; set; }
-        public TrainerUserViewModel UpdatedBy_ { get; set; }
     }
 }

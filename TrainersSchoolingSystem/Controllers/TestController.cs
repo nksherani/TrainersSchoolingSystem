@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -30,8 +31,20 @@ namespace TrainersSchoolingSystem.Controllers
             db.SaveChanges();
             return $"Roles {rolename} has been added successfully";
         }
-        
 
+        public ActionResult GetFeeSlipData()
+        {
+            List<FeeSlipModel> list = new List<FeeSlipModel>();
+            for (int i = 0; i < 500; i++)
+            {
+                SqlParameter StudentId = new SqlParameter("@StudentId", 6);
+                //SqlParameter endDate = new SqlParameter("@endDate", "Value");
+                //db.Database.SqlQuery<yourObjectNameToCAST>("exec yourStoreProcedureName @startDate, @endDate", startDate, endDate).ToList();
+                var data = db.Database.SqlQuery<FeeSlipModel>("exec GenerateFeeSlips @StudentId", StudentId).FirstOrDefault();
+                list.Add(data);
+            }
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
 
         // GET: Test/Details/5
         public ActionResult Details(int id)

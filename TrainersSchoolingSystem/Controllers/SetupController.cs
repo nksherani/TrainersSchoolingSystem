@@ -33,7 +33,99 @@ namespace TrainersSchoolingSystem.Controllers
         {
             return View();
         }
+        // GET: Setup/Create
+        public ActionResult FeeSetup()
+        {
+            return View();
+        }
+        // POST: Setup/Create
+        [HttpPost]
+        public ActionResult FeeSetup(FeeSetup feeSetup)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    
+                    var properties = feeSetup.GetType().GetProperties();
+                    int i = 1;
+                    foreach (var property in properties)
+                    {
+                        Fee fee = new Fee();
+                        //config.ConfigurationId = i++;
+                        fee.FeeType = property.Name;
+                        fee.Amount = (int)property.GetValue(feeSetup);
+                        fee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                        fee.CreatedDate = DateTime.Now;
+                        db.Fees.Add(fee);
+                    }
 
+                    db.SaveChanges();
+                    GlobalData.RefreshConfiguration();
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return View();
+                }
+
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        // GET: Setup/Edit/5
+        public ActionResult FeeUpdate()
+        {
+            FeeSetup feesetup = new FeeSetup();
+            var fee = db.Fees.ToList();
+            var properties = feesetup.GetType().GetProperties();
+            int i = 1;
+            foreach (var property in properties)
+            {
+                property.SetValue(feesetup, fee.Where(x => x.FeeType == property.Name).FirstOrDefault().Amount);
+            }
+            return View(feesetup);
+        }
+        // POST: Setup/Edit/5
+        [HttpPost]
+        public ActionResult FeeUpdate(FeeSetup feesetup)
+        {
+            try
+            {
+                var feedb = db.Fees.ToList();
+                // TODO: Add update logic here
+                if (ModelState.IsValid)
+                {
+                    var properties = feesetup.GetType().GetProperties();
+                    int i = 1;
+                    foreach (var property in properties)
+                    {
+                        Fee fee = feedb.Where(x => x.FeeType == property.Name).FirstOrDefault();
+                        //config.ConfigurationId = i++;
+                        fee.FeeType = property.Name;
+                        fee.Amount = (int)property.GetValue(feesetup);
+                        fee.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                        fee.UpdatedDate = DateTime.Now;
+                        db.Fees.AddOrUpdate(fee);
+                    }
+
+                    db.SaveChanges();
+                    GlobalData.RefreshConfiguration();
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return View();
+                }
+            }
+            catch
+            {
+                ViewBag.FirstMonth = new SelectList(Constants.months, "Key", "Value");
+                return View();
+            }
+        }
         // GET: Setup/Create
         public ActionResult Create()
         {
@@ -79,7 +171,7 @@ namespace TrainersSchoolingSystem.Controllers
                     db.SaveChanges();
                     InitLookups();
                     GlobalData.RefreshConfiguration();
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("FeeSetup", "Setup");
                 }
                 else
                 {
@@ -233,51 +325,8 @@ namespace TrainersSchoolingSystem.Controllers
                     continue;
                 property.SetValue(configuration, configurationdb.Where(x => x.Key == property.Name).FirstOrDefault().Value);
             }
-            List<KeyValuePair<int, string>> Months = new List<KeyValuePair<int, string>>();
-            Months.Add(new KeyValuePair<int, string>(1, "January"));
-            Months.Add(new KeyValuePair<int, string>(2, "February"));
-            Months.Add(new KeyValuePair<int, string>(3, "March"));
-            Months.Add(new KeyValuePair<int, string>(4, "April"));
-            Months.Add(new KeyValuePair<int, string>(5, "May"));
-            Months.Add(new KeyValuePair<int, string>(6, "June"));
-            Months.Add(new KeyValuePair<int, string>(7, "July"));
-            Months.Add(new KeyValuePair<int, string>(8, "August"));
-            Months.Add(new KeyValuePair<int, string>(9, "September"));
-            Months.Add(new KeyValuePair<int, string>(10, "October"));
-            Months.Add(new KeyValuePair<int, string>(11, "November"));
-            Months.Add(new KeyValuePair<int, string>(12, "December"));
-
-            ViewBag.FirstMonth = new SelectList(Months, "Key", "Value", Months[Convert.ToInt32(configuration.FirstMonth)]);
+            ViewBag.FirstMonth = new SelectList(Constants.months, "Key", "Value",Constants.months[Convert.ToInt32(configuration.FirstMonth)]);
             return View(configuration);
-        }
-        [HttpPost]
-        public string Temp(HttpPostedFileBase file)
-        {
-            string path = "";
-            string pic = "";
-            var path_ = Server.MapPath("~/Content/Temp");
-            if(Directory.Exists(path_))
-            {
-                var files = System.IO.Directory.EnumerateFiles(path_);
-                foreach (var item in files)
-                {
-                    if (System.IO.File.Exists(item))
-                    {
-                        System.IO.File.Delete(item);
-                    }
-                }
-            }
-            
-
-            if (file != null)
-            {
-                pic = System.IO.Path.GetFileName(file.FileName);
-                path = System.IO.Path.Combine(
-                                       Server.MapPath("~/Content/Temp"), pic);
-                // file is uploaded
-                file.SaveAs(path);
-            }
-            return $"../Content/Temp/{pic}";
         }
         // POST: Setup/Edit/5
         [HttpPost]
@@ -321,44 +370,46 @@ namespace TrainersSchoolingSystem.Controllers
                 }
                 else
                 {
-                    List<KeyValuePair<int, string>> Months = new List<KeyValuePair<int, string>>();
-                    Months.Add(new KeyValuePair<int, string>(1, "January"));
-                    Months.Add(new KeyValuePair<int, string>(2, "February"));
-                    Months.Add(new KeyValuePair<int, string>(3, "March"));
-                    Months.Add(new KeyValuePair<int, string>(4, "April"));
-                    Months.Add(new KeyValuePair<int, string>(5, "May"));
-                    Months.Add(new KeyValuePair<int, string>(6, "June"));
-                    Months.Add(new KeyValuePair<int, string>(7, "July"));
-                    Months.Add(new KeyValuePair<int, string>(8, "August"));
-                    Months.Add(new KeyValuePair<int, string>(9, "September"));
-                    Months.Add(new KeyValuePair<int, string>(10, "October"));
-                    Months.Add(new KeyValuePair<int, string>(11, "November"));
-                    Months.Add(new KeyValuePair<int, string>(12, "December"));
-
-                    ViewBag.FirstMonth = new SelectList(Months, "Key", "Value", Convert.ToInt32(configuration.FirstMonth));
+                    ViewBag.FirstMonth = new SelectList(Constants.months, "Key", "Value", Convert.ToInt32(configuration.FirstMonth));
                     return View();
                 }
             }
             catch
             {
-                List<KeyValuePair<int, string>> Months = new List<KeyValuePair<int, string>>();
-                Months.Add(new KeyValuePair<int, string>(1, "January"));
-                Months.Add(new KeyValuePair<int, string>(2, "February"));
-                Months.Add(new KeyValuePair<int, string>(3, "March"));
-                Months.Add(new KeyValuePair<int, string>(4, "April"));
-                Months.Add(new KeyValuePair<int, string>(5, "May"));
-                Months.Add(new KeyValuePair<int, string>(6, "June"));
-                Months.Add(new KeyValuePair<int, string>(7, "July"));
-                Months.Add(new KeyValuePair<int, string>(8, "August"));
-                Months.Add(new KeyValuePair<int, string>(9, "September"));
-                Months.Add(new KeyValuePair<int, string>(10, "October"));
-                Months.Add(new KeyValuePair<int, string>(11, "November"));
-                Months.Add(new KeyValuePair<int, string>(12, "December"));
-
-                ViewBag.FirstMonth = new SelectList(Months, "Key", "Value");
+                ViewBag.FirstMonth = new SelectList(Constants.months, "Key", "Value");
                 return View();
             }
         }
+        [HttpPost]
+        public string Temp(HttpPostedFileBase file)
+        {
+            string path = "";
+            string pic = "";
+            var path_ = Server.MapPath("~/Content/Temp");
+            if(Directory.Exists(path_))
+            {
+                var files = System.IO.Directory.EnumerateFiles(path_);
+                foreach (var item in files)
+                {
+                    if (System.IO.File.Exists(item))
+                    {
+                        System.IO.File.Delete(item);
+                    }
+                }
+            }
+            
+
+            if (file != null)
+            {
+                pic = System.IO.Path.GetFileName(file.FileName);
+                path = System.IO.Path.Combine(
+                                       Server.MapPath("~/Content/Temp"), pic);
+                // file is uploaded
+                file.SaveAs(path);
+            }
+            return $"../Content/Temp/{pic}";
+        }
+       
 
         // GET: Setup/Delete/5
         public ActionResult Delete(int id)

@@ -278,9 +278,12 @@
     <Compile Include="Models\DTOs\ConfigurationViewModel.cs" />
     <Compile Include="Models\DTOs\DesignationViewModel.cs" />
     <Compile Include="Models\DTOs\EnrolmentViewModel.cs" />
+    <Compile Include="Models\DTOs\FeeSetup.cs" />
+    <Compile Include="Models\DTOs\FeeSlipModel.cs" />
     <Compile Include="Models\DTOs\FeeViewModel.cs" />
     <Compile Include="Models\DTOs\GuardianViewModel.cs" />
     <Compile Include="Models\DTOs\ParentViewModel.cs" />
+    <Compile Include="Models\DTOs\SalaryPaymentViewModel.cs" />
     <Compile Include="Models\DTOs\SalaryViewModel.cs" />
     <Compile Include="Models\DTOs\StaffAttendanceViewModel.cs" />
     <Compile Include="Models\DTOs\StaffViewModel.cs" />
@@ -293,6 +296,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Fee.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GenerateFeeSlips_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
@@ -1242,6 +1248,9 @@
     <Content Include="Views\Teachers\Appoint.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\SalaryViewModel.cshtml" />
     <Content Include="Views\Teachers\UpdateData.cshtml" />
+    <Content Include="Views\Teachers\Index.cshtml" />
+    <Content Include="Views\Setup\FeeSetup.cshtml" />
+    <Content Include="Views\Setup\FeeUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

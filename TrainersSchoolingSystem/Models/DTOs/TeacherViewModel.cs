@@ -54,5 +54,17 @@ namespace TrainersSchoolingSystem.Models.DTOs
         [Required]
         [Display(Name = "Salary")]
         public SalaryViewModel Salary_ { get; set; }
+        [Display(Name = "Designation")]
+        public DesignationViewModel Designation_ { get; set; }
+        [Display(Name = "Attendance")]
+        public StaffAttendanceViewModel Attendance { get; set; }
+        public List<SalaryPaymentViewModel> salaryPayment { get; set; }
+        public List<SubjectAssignmentViewModel> subjects { get; set; }
+
+        public TeacherViewModel()
+        {
+            salaryPayment = new List<SalaryPaymentViewModel>();
+            subjects = new List<SubjectAssignmentViewModel>();
+        }
     }
 }

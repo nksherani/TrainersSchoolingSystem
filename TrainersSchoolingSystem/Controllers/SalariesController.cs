@@ -54,12 +54,7 @@ namespace TrainersSchoolingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                salary.GrossPay = (salary.BasicPay.HasValue ? salary.BasicPay.Value : 0) +
-                    (salary.Bonus.HasValue ? salary.Bonus.Value : 0);
-                salary.NetPay = (salary.GrossPay.HasValue ? salary.GrossPay.Value : 0) -
-                    (salary.PF.HasValue ? salary.PF.Value : 0) -
-                    (salary.EOBI.HasValue ? salary.EOBI.Value : 0) -
-                    (salary.LoanDeduction.HasValue ? salary.LoanDeduction.Value : 0);
+                salary = SalaryCalculation(salary);
                 salary.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 salary.CreatedDate = DateTime.Now;
                 db.Salaries.Add(salary);
@@ -71,7 +66,17 @@ namespace TrainersSchoolingSystem.Controllers
             ViewBag.StaffId = new SelectList(db.Staffs.Where(x => !tempStaff.Contains(x.StaffId)), "StaffId", "FirstName");
             return View(salary);
         }
+        public static Salary SalaryCalculation(Salary salary)
+        {
+            salary.GrossPay = (salary.BasicPay.HasValue ? salary.BasicPay.Value : 0) +
+                    (salary.Bonus.HasValue ? salary.Bonus.Value : 0);
+            salary.NetPay = (salary.GrossPay.HasValue ? salary.GrossPay.Value : 0) -
+                (salary.PF.HasValue ? salary.PF.Value : 0) -
+                (salary.EOBI.HasValue ? salary.EOBI.Value : 0) -
+                (salary.LoanDeduction.HasValue ? salary.LoanDeduction.Value : 0);
 
+            return salary;
+        }
         // GET: Salaries/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -97,13 +102,7 @@ namespace TrainersSchoolingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                salary.GrossPay = (salary.BasicPay.HasValue ? salary.BasicPay.Value : 0) +
-                    (salary.Bonus.HasValue ? salary.Bonus.Value : 0);
-                salary.NetPay = (salary.GrossPay.HasValue ? salary.GrossPay.Value : 0) -
-                    (salary.PF.HasValue ? salary.PF.Value : 0) -
-                    (salary.EOBI.HasValue ? salary.EOBI.Value : 0) -
-                    (salary.LoanDeduction.HasValue ? salary.LoanDeduction.Value : 0);
-
+                salary = SalaryCalculation(salary);
                 var Salarydb = db.Salaries.Find(salary.SalaryId);
                 Salarydb.BasicPay = salary.BasicPay;
                 Salarydb.Bonus = salary.Bonus;
