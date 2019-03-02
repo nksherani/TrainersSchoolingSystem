@@ -40,6 +40,7 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: Designations/Create
         public ActionResult Create()
         {
+            ViewBag.Category = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Category"), "LookupText", "LookupText");
             return View();
         }
 
@@ -58,7 +59,7 @@ namespace TrainersSchoolingSystem.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.Category = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Category"), "LookupText", "LookupText");
             return View(designation);
         }
 
@@ -88,6 +89,7 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 var designationdb = db.Designations.Find(designation.DesignationId);
                 designationdb.DesignationName = designation.DesignationName;
+                designationdb.Category = designation.Category;
                 designationdb.LateComingScale = designation.LateComingScale;
                 designationdb.PaidLeaves = designation.PaidLeaves;
                 designationdb.ShortLeavesScale = designation.ShortLeavesScale;
@@ -98,8 +100,7 @@ namespace TrainersSchoolingSystem.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", designation.CreatedBy);
-            ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", designation.UpdatedBy);
+            ViewBag.Category = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Category"), "LookupText", "LookupText", designation.Category);
             return View(designation);
         }
 
@@ -115,6 +116,7 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Category = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Category"), "LookupText", "LookupText", designation.Category);
             return View(designation);
         }
 

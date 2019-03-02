@@ -53,6 +53,8 @@ namespace TrainersSchoolingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (!salaryPayment.PaymentDate.HasValue)
+                    salaryPayment.PaymentDate = DateTime.Now;
                 salaryPayment.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 salaryPayment.CreatedDate = DateTime.Now;
                 db.SalaryPayments.Add(salaryPayment);
@@ -89,6 +91,8 @@ namespace TrainersSchoolingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (!salaryPayment.PaymentDate.HasValue)
+                    salaryPayment.PaymentDate = DateTime.Now;
                 var salaryPaymentdb = db.SalaryPayments.Find(salaryPayment.SalaryPaymentId);
                 salaryPaymentdb.Amount = salaryPayment.Amount;
                 salaryPaymentdb.PaymentDate = salaryPayment.PaymentDate;

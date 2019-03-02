@@ -22,6 +22,7 @@ namespace TrainersSchoolingSystem.Models
     
         public int DesignationId { get; set; }
         public string DesignationName { get; set; }
+        public string Category { get; set; }
         public Nullable<int> PaidLeaves { get; set; }
         public Nullable<int> ShortLeavesScale { get; set; }
         public Nullable<int> LateComingScale { get; set; }

@@ -15,6 +15,7 @@ namespace TrainersSchoolingSystem.Models
     public partial class Salary
     {
         public int SalaryId { get; set; }
+        public Nullable<int> StaffId { get; set; }
         public Nullable<decimal> BasicPay { get; set; }
         public Nullable<decimal> Bonus { get; set; }
         public Nullable<decimal> PF { get; set; }
@@ -22,7 +23,6 @@ namespace TrainersSchoolingSystem.Models
         public Nullable<decimal> LoanDeduction { get; set; }
         public Nullable<decimal> GrossPay { get; set; }
         public Nullable<decimal> NetPay { get; set; }
-        public Nullable<int> StaffId { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> UpdatedDate { get; set; }

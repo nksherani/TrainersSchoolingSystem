@@ -25,6 +25,7 @@ $(function () {
 
     $("#DateOfBirth").datepicker();
     $("#PaymentDate").datepicker();
+    //console.log($("#PaymentDate"));
     $("#JoiningDate").datepicker();
     $("#EndDate").datepicker();
 

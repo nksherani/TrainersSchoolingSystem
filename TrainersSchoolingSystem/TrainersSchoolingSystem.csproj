@@ -242,6 +242,7 @@
     <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Controllers\SubjectAssignmentsController.cs" />
     <Compile Include="Controllers\SubjectsController.cs" />
+    <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\TrainerUsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -1238,6 +1239,9 @@
     <Content Include="Views\SalaryPayments\Details.cshtml" />
     <Content Include="Views\SalaryPayments\Edit.cshtml" />
     <Content Include="Views\SalaryPayments\Index.cshtml" />
+    <Content Include="Views\Teachers\Appoint.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\SalaryViewModel.cshtml" />
+    <Content Include="Views\Teachers\UpdateData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

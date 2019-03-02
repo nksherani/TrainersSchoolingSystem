@@ -26,6 +26,10 @@ namespace TrainersSchoolingSystem.Controllers
             UserManager = userManager;
             
         }
+        public TrainerUsersController()
+        {
+
+        }
         public ApplicationUserManager UserManager
         {
             get

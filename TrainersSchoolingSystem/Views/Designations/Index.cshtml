@@ -15,6 +15,9 @@
             @Html.DisplayNameFor(model => model.DesignationName)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Category)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.PaidLeaves)
         </th>
         <th>
@@ -44,6 +47,9 @@
             @Html.DisplayFor(modelItem => item.DesignationName)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.Category)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.PaidLeaves)
         </td>
         <td>
@@ -65,9 +71,9 @@
             @Html.DisplayFor(modelItem => item.TrainerUser1.Username)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.DesignationId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.DesignationId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.DesignationId })
+            @Html.ActionLink("Edit", "Edit", new { id = item.DesignationId }) |
+            @Html.ActionLink("Details", "Details", new { id = item.DesignationId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.DesignationId })
         </td>
     </tr>
 }

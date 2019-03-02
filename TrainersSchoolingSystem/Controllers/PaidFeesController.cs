@@ -40,7 +40,13 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: PaidFees/Create
         public ActionResult Create()
         {
-            ViewBag.StudentId = new SelectList(db.Students, "StudentId", "FirstName");
+            var tempStudents = db.PaidFees
+                .Where(x=>x.PaymentDate.Value.Month==DateTime.Today.Month &&
+                x.PaymentDate.Value.Year == DateTime.Today.Year)
+                .Join(db.Students, a => a.StudentId, b => b.StudentId, (a, b) => b.StudentId);
+            ViewBag.StudentId = new SelectList(db.Students.Where(x => !tempStudents.Contains(x.StudentId)), "StudentId", "FirstName");
+
+            //ViewBag.StudentId = new SelectList(db.Students, "StudentId", "FirstName");
             return View();
         }
 
@@ -53,6 +59,8 @@ namespace TrainersSchoolingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (!paidFee.PaymentDate.HasValue)
+                    paidFee.PaymentDate = DateTime.Now;
                 paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 paidFee.CreatedDate = DateTime.Now;
                 db.PaidFees.Add(paidFee);
@@ -60,7 +68,11 @@ namespace TrainersSchoolingSystem.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.StudentId = new SelectList(db.Students, "StudentId", "FirstName", paidFee.StudentId);
+            var tempStudents = db.PaidFees
+                            .Where(x => x.PaymentDate.Value.Month == DateTime.Today.Month &&
+                            x.PaymentDate.Value.Year == DateTime.Today.Year)
+                            .Join(db.Students, a => a.StudentId, b => b.StudentId, (a, b) => b.StudentId);
+            ViewBag.StudentId = new SelectList(db.Students.Where(x => !tempStudents.Contains(x.StudentId)), "StudentId", "FirstName");
             return View(paidFee);
         }
 
@@ -89,6 +101,8 @@ namespace TrainersSchoolingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (!paidFee.PaymentDate.HasValue)
+                    paidFee.PaymentDate = DateTime.Now;
                 var paidfeedb = db.PaidFees.Find(paidFee.PaidFeeId);
                 paidfeedb.PaidFeeId = paidFee.PaidFeeId;
                 paidfeedb.PaymentDate = paidFee.PaymentDate;

@@ -40,7 +40,8 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: Salaries/Create
         public ActionResult Create()
         {
-            ViewBag.StaffId = new SelectList(db.Staffs, "StaffId", "FirstName");
+            var tempStaff = db.Salaries.Join(db.Staffs, a => a.StaffId, b => b.StaffId, (a, b) => b.StaffId);
+            ViewBag.StaffId = new SelectList(db.Staffs.Where(x=>!tempStaff.Contains(x.StaffId)), "StaffId", "FirstName");
             return View();
         }
 
@@ -49,10 +50,16 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create( Salary salary)
+        public ActionResult Create(Salary salary)
         {
             if (ModelState.IsValid)
             {
+                salary.GrossPay = (salary.BasicPay.HasValue ? salary.BasicPay.Value : 0) +
+                    (salary.Bonus.HasValue ? salary.Bonus.Value : 0);
+                salary.NetPay = (salary.GrossPay.HasValue ? salary.GrossPay.Value : 0) -
+                    (salary.PF.HasValue ? salary.PF.Value : 0) -
+                    (salary.EOBI.HasValue ? salary.EOBI.Value : 0) -
+                    (salary.LoanDeduction.HasValue ? salary.LoanDeduction.Value : 0);
                 salary.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 salary.CreatedDate = DateTime.Now;
                 db.Salaries.Add(salary);
@@ -60,7 +67,8 @@ namespace TrainersSchoolingSystem.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.StaffId = new SelectList(db.Staffs, "StaffId", "FirstName", salary.StaffId);
+            var tempStaff = db.Salaries.Join(db.Staffs, a => a.StaffId, b => b.StaffId, (a, b) => b.StaffId);
+            ViewBag.StaffId = new SelectList(db.Staffs.Where(x => !tempStaff.Contains(x.StaffId)), "StaffId", "FirstName");
             return View(salary);
         }
 
@@ -76,7 +84,7 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.StaffId = new SelectList(db.Staffs, "StaffId", "FirstName", salary.StaffId);
+            ViewBag.StaffId = new SelectList(db.Staffs, "StaffId", "FirstName", salary.Staff.StaffId);
             return View(salary);
         }
 
@@ -89,20 +97,28 @@ namespace TrainersSchoolingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
+                salary.GrossPay = (salary.BasicPay.HasValue ? salary.BasicPay.Value : 0) +
+                    (salary.Bonus.HasValue ? salary.Bonus.Value : 0);
+                salary.NetPay = (salary.GrossPay.HasValue ? salary.GrossPay.Value : 0) -
+                    (salary.PF.HasValue ? salary.PF.Value : 0) -
+                    (salary.EOBI.HasValue ? salary.EOBI.Value : 0) -
+                    (salary.LoanDeduction.HasValue ? salary.LoanDeduction.Value : 0);
+
                 var Salarydb = db.Salaries.Find(salary.SalaryId);
                 Salarydb.BasicPay = salary.BasicPay;
                 Salarydb.Bonus = salary.Bonus;
                 Salarydb.PF = salary.PF;
                 Salarydb.EOBI = salary.EOBI;
                 Salarydb.LoanDeduction = salary.LoanDeduction;
-                Salarydb.GrossPay = salary.NetPay;
+                Salarydb.GrossPay = salary.GrossPay;
+                Salarydb.NetPay = salary.NetPay;
                 Salarydb.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 Salarydb.UpdatedDate = DateTime.Now;
                 db.Salaries.AddOrUpdate(Salarydb);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.StaffId = new SelectList(db.Staffs, "StaffId", "FirstName", salary.StaffId);
+            ViewBag.StaffId = new SelectList(db.Staffs, "StaffId", "FirstName",salary.Staff.StaffId);
             return View(salary);
         }
 

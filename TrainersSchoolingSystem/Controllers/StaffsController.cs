@@ -43,7 +43,6 @@ namespace TrainersSchoolingSystem.Controllers
         {
             ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName");
             ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText");
-            ViewBag.Category = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Category"), "LookupText", "LookupText");
 
             //ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username");
             //ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username");
@@ -55,7 +54,7 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StaffId,FirstName,LastName,Designation,Gender,DateOfBirth,Age,FatherName,SpouseName,Mobile,LandLine,PostalCode,StreetAddress,City,JoiningDate,EndDate,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Staff staff)
+        public ActionResult Create( Staff staff)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +66,6 @@ namespace TrainersSchoolingSystem.Controllers
             }
             ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName");
             ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText");
-            ViewBag.Category = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Category"), "LookupText", "LookupText");
             //ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", staff.CreatedBy);
             //ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", staff.UpdatedBy);
             return View(staff);
@@ -87,10 +85,7 @@ namespace TrainersSchoolingSystem.Controllers
             }
             ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName",staff.Designation);
             ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText", staff.Gender);
-            ViewBag.Category = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Category"), "LookupText", "LookupText", staff.Category);
 
-            //ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", staff.CreatedBy);
-            //ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", staff.UpdatedBy);
             return View(staff);
         }
 
@@ -99,7 +94,7 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "StaffId,FirstName,LastName,Designation,Gender,DateOfBirth,Age,FatherName,SpouseName,Mobile,LandLine,PostalCode,StreetAddress,City,JoiningDate,EndDate,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Staff staff)
+        public ActionResult Edit( Staff staff)
         {
             if (ModelState.IsValid)
             {
@@ -128,10 +123,7 @@ namespace TrainersSchoolingSystem.Controllers
             }
             ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName",staff.Designation);
             ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText",staff.Gender);
-            ViewBag.Category = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Category"), "LookupText", "LookupText", staff.Category);
 
-            //ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", staff.CreatedBy);
-            //ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", staff.UpdatedBy);
             return View(staff);
         }
 

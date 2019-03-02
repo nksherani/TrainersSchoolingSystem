@@ -187,6 +187,7 @@ namespace TrainersSchoolingSystem.Controllers
             Designation designation = new Designation();
             designation.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
             designation.CreatedDate = DateTime.Now;
+            designation.Category = "Teaching";
             designation.DesignationName = "Teacher";
             designation.LateComingScale = 3;
             designation.PaidLeaves = 13;
@@ -197,7 +198,6 @@ namespace TrainersSchoolingSystem.Controllers
 
             Staff staff = new Staff();
             staff.Age = 20;
-            staff.Category = "Teaching";
             staff.City = "Karachi";
             staff.DateOfBirth = DateTime.Now.AddYears(-20);
             staff.Designation = designation.DesignationId;

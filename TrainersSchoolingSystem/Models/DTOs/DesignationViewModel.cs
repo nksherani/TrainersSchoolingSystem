@@ -11,6 +11,8 @@ namespace TrainersSchoolingSystem.Models.DTOs
         [Key]
         public int DesignationId { get; set; }
         public string DesignationName { get; set; }
+        [Required]
+        public string Category { get; set; }
         public Nullable<int> PaidLeaves { get; set; }
         public Nullable<int> ShortLeavesScale { get; set; }
         public Nullable<int> LateComingScale { get; set; }
