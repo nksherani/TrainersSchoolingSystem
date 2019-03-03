@@ -1323,6 +1323,9 @@
       <Schema Namespace="TrainersModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="TrainersEntities" annotation:LazyLoadingEnabled="true" >
           <FunctionImport Name="ResetDb" />
+          <FunctionImport Name="GenerateFeeSlips" ReturnType="Collection(TrainersModel.GenerateFeeSlips_Result)">
+          <Parameter Name="StudentId" Mode="In" Type="Int32" />
+          </FunctionImport>
           <EntitySet Name="Arrears" EntityType="TrainersModel.Arrear" />
           <EntitySet Name="AspNetRoles" EntityType="TrainersModel.AspNetRole" />
           <EntitySet Name="AspNetUserClaims" EntityType="TrainersModel.AspNetUserClaim" />
@@ -1573,10 +1576,19 @@
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
-          <FunctionImport Name="GenerateFeeSlips" ReturnType="Collection(TrainersModel.GenerateFeeSlips_Result)">
-            <Parameter Name="StudentId" Mode="In" Type="Int32" />
-          </FunctionImport>
           </EntityContainer>
+        <ComplexType Name="GenerateFeeSlips_Result">
+          <Property Type="Int32" Name="StudentId" Nullable="false" />
+          <Property Type="String" Name="GRNo" Nullable="true" />
+          <Property Type="Int32" Name="RollNo" Nullable="true" />
+          <Property Type="String" Name="FirstName" Nullable="true" />
+          <Property Type="String" Name="LastName" Nullable="true" />
+          <Property Type="String" Name="Class" Nullable="false" />
+          <Property Type="String" Name="Fee" Nullable="true" />
+          <Property Type="Int32" Name="AnnualFee" Nullable="true" />
+          <Property Type="Int32" Name="ArrearAmount" Nullable="false" />
+          <Property Type="String" Name="ArrearType" Nullable="true" />
+        </ComplexType>
         <EntityType Name="Arrear">
           <Key>
             <PropertyRef Name="ArrearId" />
@@ -2710,18 +2722,6 @@
           <End Type="TrainersModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="TrainersModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
-        <ComplexType Name="GenerateFeeSlips_Result">
-          <Property Type="Int32" Name="StudentId" Nullable="false" />
-          <Property Type="String" Name="GRNo" Nullable="true" />
-          <Property Type="Int32" Name="RollNo" Nullable="true" />
-          <Property Type="String" Name="FirstName" Nullable="true" />
-          <Property Type="String" Name="LastName" Nullable="true" />
-          <Property Type="String" Name="Class" Nullable="false" />
-          <Property Type="String" Name="Fee" Nullable="true" />
-          <Property Type="Int32" Name="AnnualFee" Nullable="true" />
-          <Property Type="Int32" Name="ArrearAmount" Nullable="false" />
-          <Property Type="String" Name="ArrearType" Nullable="true" />
-        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2729,6 +2729,22 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="TrainersModelStoreContainer" CdmEntityContainer="TrainersEntities" >
           <FunctionImportMapping FunctionImportName="ResetDb" FunctionName="TrainersModel.Store.ResetDb" />
+          <FunctionImportMapping FunctionImportName="GenerateFeeSlips" FunctionName="TrainersModel.Store.GenerateFeeSlips">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TrainersModel.GenerateFeeSlips_Result">
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="GRNo" ColumnName="GRNo" />
+                <ScalarProperty Name="RollNo" ColumnName="RollNo" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Class" ColumnName="Class" />
+                <ScalarProperty Name="Fee" ColumnName="Fee" />
+                <ScalarProperty Name="AnnualFee" ColumnName="AnnualFee" />
+                <ScalarProperty Name="ArrearAmount" ColumnName="ArrearAmount" />
+                <ScalarProperty Name="ArrearType" ColumnName="ArrearType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="Arrears">
             <EntityTypeMapping TypeName="TrainersModel.Arrear">
               <MappingFragment StoreEntitySet="Arrear">
@@ -3096,22 +3112,6 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
-          <FunctionImportMapping FunctionImportName="GenerateFeeSlips" FunctionName="TrainersModel.Store.GenerateFeeSlips">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="TrainersModel.GenerateFeeSlips_Result">
-                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
-                <ScalarProperty Name="GRNo" ColumnName="GRNo" />
-                <ScalarProperty Name="RollNo" ColumnName="RollNo" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="Class" ColumnName="Class" />
-                <ScalarProperty Name="Fee" ColumnName="Fee" />
-                <ScalarProperty Name="AnnualFee" ColumnName="AnnualFee" />
-                <ScalarProperty Name="ArrearAmount" ColumnName="ArrearAmount" />
-                <ScalarProperty Name="ArrearType" ColumnName="ArrearType" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

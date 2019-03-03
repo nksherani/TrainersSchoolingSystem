@@ -77,8 +77,8 @@ namespace TrainersSchoolingSystem.Controllers
                 model.Enrolment.Class_ = Mapper<ClassViewModel>.GetObject(enrolmentdb.Class1);
                 modellist.Add(model);
             }
-            modellist.AddRange(modellist);
-            modellist.AddRange(modellist);
+            //modellist.AddRange(modellist);
+            //modellist.AddRange(modellist);
             //string feeslips = "";
             string css = "";
             Server.MapPath("~/Content/FeeSlips/");
@@ -102,14 +102,14 @@ namespace TrainersSchoolingSystem.Controllers
             strBody.Append("<html>" +
             "<head><title>Fee Slips</title>");
 
-            strBody.Append(css+ "</head>");
+            strBody.Append(css + "</head>");
             strBody.Append("<body lang=EN-US style='tab-interval:.5in'>" +
-                                    feeslipsBody  + 
+                                    feeslipsBody +
                                     "</body></html>");
 
             var filePath = Server.MapPath("~/Content/Temp/FeeSlips.html");
             System.IO.File.WriteAllText(filePath, strBody.ToString());
-            return Json("../Content/Temp/FeeSlips.html",JsonRequestBehavior.AllowGet);
+            return Json("../Content/Temp/FeeSlips.html", JsonRequestBehavior.AllowGet);
         }
 
         //public string GenerateFeeSlips(BulkStudents bulk)
@@ -178,11 +178,11 @@ namespace TrainersSchoolingSystem.Controllers
         {
             var word = new Microsoft.Office.Interop.Word.Application();
             word.Visible = false;
-            
+
             //html = html.Replace("Content")
             var filePath = Server.MapPath("~/Content/Temp/Html2PdfTest.html");
             System.IO.File.WriteAllText(filePath, html);
-            var savePathPdf = path+filename;
+            var savePathPdf = path + filename;
             var wordDoc = word.Documents.Open(FileName: filePath, ReadOnly: false);
             wordDoc.PageSetup.PaperSize = WdPaperSize.wdPaperA4;
             wordDoc.SaveAs2(FileName: savePathPdf, FileFormat: WdSaveFormat.wdFormatPDF);
@@ -191,6 +191,10 @@ namespace TrainersSchoolingSystem.Controllers
         }
         private string GetFeeSlip(StudentViewModel studentView)
         {
+            var lastdate = db.PaidFees.Where(x => x.StudentId == studentView.StudentId 
+            && x.Description=="MonthlyFee" && x.ReceivedAmount.HasValue)?.OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
+            if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28)
+                return "";
             SqlParameter StudentId = new SqlParameter("@StudentId", studentView.StudentId);
             var FeeSlipData = db.Database.SqlQuery<FeeSlipModel>("exec GenerateFeeSlips @StudentId", StudentId).FirstOrDefault();
 
@@ -202,7 +206,10 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 data += item;
             }
-            data = data.Replace("__Picture__", "../"+GlobalData.configuration.Picture);
+            var totalFee = FeeSlipData.ArrearAmount +
+                Convert.ToInt32(FeeSlipData.Fee) + FeeSlipData.AdmissionFee +
+                FeeSlipData.AnnualFee + GlobalData.feeSetup.LabCharges;
+            data = data.Replace("__Picture__", "../" + GlobalData.configuration.Picture);
             data = data.Replace("__SchoolName__", GlobalData.configuration.SchoolName);
             data = data.Replace("__Campus__", GlobalData.configuration.Campus);
             data = data.Replace("__Month__", DateTime.Now.ToString("MM-yyyy"));
@@ -215,16 +222,79 @@ namespace TrainersSchoolingSystem.Controllers
             data = data.Replace("__FatherName__", studentView.Father_.Name);
             data = data.Replace("__Arrears__", FeeSlipData.ArrearAmount.ToString());
             data = data.Replace("__TuitionFee__", FeeSlipData.Fee);
-            data = data.Replace("__AdmissionFee__", "0");
+            data = data.Replace("__AdmissionFee__", FeeSlipData.AdmissionFee.ToString());
             data = data.Replace("__AnnualFee__", FeeSlipData.AnnualFee.ToString());
             data = data.Replace("__OtherFee__", "0");
             data = data.Replace("__LateFee__", GlobalData.feeSetup.LatePaymentSurcharge.ToString());
             data = data.Replace("__LabCharges__", GlobalData.feeSetup.LabCharges.ToString());
-            data = data.Replace("__Till__", FeeSlipData.Fee);
-            data = data.Replace("__After__", (Convert.ToInt32(FeeSlipData.Fee) + GlobalData.feeSetup.LatePaymentSurcharge).ToString());
+            data = data.Replace("__Till__", totalFee.ToString());
+            data = data.Replace("__After__", (totalFee + GlobalData.feeSetup.LatePaymentSurcharge).ToString());
 
-
-
+            var feeDb = db.PaidFees.Where(x => !x.ReceivedAmount.HasValue && x.StudentId == studentView.StudentId).ToList();
+            List<PaidFee> temp = new List<PaidFee>();
+            foreach (var item in feeDb)
+            {
+                if ((DateTime.Now - item.CreatedDate).Value.Days < 28)
+                    temp.Add(item);
+            }
+            feeDb = temp;
+            if (FeeSlipData.Fee != null && FeeSlipData.Fee != "")
+            {
+                PaidFee paidFee = new PaidFee();
+                var count = feeDb.Where(x => x.Description == "MonthlyFee").ToList();
+                if (count.Count > 0)
+                    paidFee = feeDb.Where(x => x.Description == "MonthlyFee").FirstOrDefault();
+                paidFee.StudentId = studentView.StudentId;
+                paidFee.CalculatedAmount = Convert.ToInt32(FeeSlipData.Fee);
+                paidFee.Description = "MonthlyFee";
+                if (paidFee.CreatedDate.HasValue)
+                    paidFee.UpdatedDate = DateTime.Now;
+                else
+                    paidFee.CreatedDate = DateTime.Now;
+                if (paidFee.CreatedBy.HasValue)
+                    paidFee.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                else
+                    paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                db.PaidFees.AddOrUpdate(paidFee);
+            }
+            if (GlobalData.feeSetup.LabCharges > 0)
+            {
+                PaidFee paidFee = new PaidFee();
+                var count = feeDb.Where(x => x.Description == "LabCharges").Count();
+                if ( count> 0)
+                    paidFee = feeDb.Where(x => x.Description == "LabCharges").FirstOrDefault();
+                paidFee.StudentId = studentView.StudentId;
+                paidFee.CalculatedAmount = GlobalData.feeSetup.LabCharges;
+                paidFee.Description = "LabCharges";
+                if (paidFee.CreatedDate.HasValue)
+                    paidFee.UpdatedDate = DateTime.Now;
+                else
+                    paidFee.CreatedDate = DateTime.Now;
+                if (paidFee.CreatedBy.HasValue)
+                    paidFee.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                else
+                    paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                db.PaidFees.AddOrUpdate(paidFee);
+            }
+            if (FeeSlipData.AnnualFee > 0)
+            {
+                PaidFee paidFee = new PaidFee();
+                if (feeDb.Where(x => x.Description == "AnnualFee").Count() > 0)
+                    paidFee = feeDb.Where(x => x.Description == "AnnualFee").FirstOrDefault();
+                paidFee.StudentId = studentView.StudentId;
+                paidFee.CalculatedAmount = FeeSlipData.AnnualFee;
+                paidFee.Description = "AnnualFee";
+                if (paidFee.CreatedDate.HasValue)
+                    paidFee.UpdatedDate = DateTime.Now;
+                else
+                    paidFee.CreatedDate = DateTime.Now;
+                if (paidFee.CreatedBy.HasValue)
+                    paidFee.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                else
+                    paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                db.PaidFees.AddOrUpdate(paidFee);
+            }
+            db.SaveChanges();
             return data;
         }
         [HttpPost]
