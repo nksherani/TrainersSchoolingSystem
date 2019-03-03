@@ -191,8 +191,8 @@ namespace TrainersSchoolingSystem.Controllers
         }
         private string GetFeeSlip(StudentViewModel studentView)
         {
-            var lastdate = db.PaidFees.Where(x => x.StudentId == studentView.StudentId 
-            && x.Description=="MonthlyFee" && x.ReceivedAmount.HasValue)?.OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
+            var lastdate = db.PaidFees.Where(x => x.StudentId == studentView.StudentId
+            && x.Description == "MonthlyFee" && x.ReceivedAmount.HasValue)?.OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
             if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28)
                 return "";
             SqlParameter StudentId = new SqlParameter("@StudentId", studentView.StudentId);
@@ -206,6 +206,21 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 data += item;
             }
+            if (FeeSlipData.ArrearType == "Receivable")
+            {
+                FeeSlipData.ArrearAmount += FeeSlipData.UnpaidAmount;
+            }
+                
+            else
+            {
+                FeeSlipData.ArrearAmount -= FeeSlipData.UnpaidAmount;
+                if(FeeSlipData.ArrearAmount<0)
+                {
+                    FeeSlipData.ArrearType = "Receivable";
+                }
+                FeeSlipData.ArrearAmount *= -1;
+            }
+            
             var totalFee = FeeSlipData.ArrearAmount +
                 Convert.ToInt32(FeeSlipData.Fee) + FeeSlipData.AdmissionFee +
                 FeeSlipData.AnnualFee + GlobalData.feeSetup.LabCharges;
@@ -261,7 +276,7 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 PaidFee paidFee = new PaidFee();
                 var count = feeDb.Where(x => x.Description == "LabCharges").Count();
-                if ( count> 0)
+                if (count > 0)
                     paidFee = feeDb.Where(x => x.Description == "LabCharges").FirstOrDefault();
                 paidFee.StudentId = studentView.StudentId;
                 paidFee.CalculatedAmount = GlobalData.feeSetup.LabCharges;

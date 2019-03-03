@@ -27,7 +27,9 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public int AnnualFee { get; set; }
         public int ArrearAmount { get; set; }
         public string ArrearType { get; set; }
+        public int UnpaidAmount { get; set; }
         public int AdmissionFee { get; set; }
+        public int ReceivedAmount { get; set; }
 
     }
 }

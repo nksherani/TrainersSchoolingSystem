@@ -63,5 +63,10 @@ namespace TrainersSchoolingSystem.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GenerateFeeSlips_Result>("GenerateFeeSlips", studentIdParameter);
         }
+    
+        public virtual ObjectResult<GetUnpaidStudents_Result> GetUnpaidStudents()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetUnpaidStudents_Result>("GetUnpaidStudents");
+        }
     }
 }

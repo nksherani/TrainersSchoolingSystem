@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewBag.Title = "Unpaid Fee Details";
+}
+
+<h2>Unpaid Fee details</h2>
+<div id="grid"></div>
+
+<script>
+    var grid;
+    $(document).ready(function () {
+        $("#grid").kendoGrid({
+            dataSource: {
+                type: "jsonp",
+                transport: {
+                    read: "../Fees/GetUnpaidFees",
+                    //update: "../Fees/PayFee",
+                    update: {
+                        url: "../Fees/PayFee", //specify the URL from which should update the records. This is the Update method of the Products.svc service.
+                        contentType: "application/json; charset=utf-8", // tells the web service to serialize JSON
+                        type: "POST" //use HTTP POST request as the default GET is not allowed for svc
+                    },
+                    parameterMap: function (options, operation) {
+                        
+                        if (operation != "read") {
+                            return JSON.stringify({ models: options.models })
+                        }
+                        
+                    }
+                },
+                ServerOperation:false,
+                batch: true,
+                pageSize: 20,
+                schema: {
+                    model: {
+                        id: "StudentId",
+                        fields: {
+                            "FirstName": { type: "string", editable: false },
+                            "LastName": { type: "string", editable: false },
+                            "GRNo": { type: "string", editable: false },
+                            "RollNo": { type: "string", editable: false },
+                            "Class": { type: "string", editable: false },
+                            "UnpaidAmount": { type: "number", editable: false },
+                            "ReceivedAmount": {
+                                type: "number", editable: true,
+                                validation: {
+                                    validationMessage: "Received Amount should not exceed Due Amount",
+                                    custom: ReceivedAmountValidation
+                                }
+                            }
+                        }
+                    }
+                },
+            },
+            change: onChange,
+            height: 550,
+            editable: true,
+            groupable: true,
+            sortable: true,
+            navigatable: true,
+            filterable: {
+                mode: "row"
+            },
+            pageable: {
+                refresh: true,
+                pageSizes: true,
+                buttonCount: 5
+            },
+            toolbar: ["save", "cancel"],
+
+            columns: [
+                {
+                    field: "StudentId",
+                    title: "ID",
+                    width: 30
+                }, {
+                    template: "#: FirstName # #: LastName #",
+                    field: "FirstName",
+                    title: "Name",
+                    width: 80
+                }, {
+                    field: "GRNo",
+                    title: "GRNo",
+                    width: 80
+                }, {
+                    field: "RollNo",
+                    title: "RollNo",
+                    width: 80
+                }, {
+                    field: "Class",
+                    title: "Class",
+                    width: 80
+                }, {
+                    field: "UnpaidAmount",
+                    title: "Due Amount",
+                    width: 80
+                }, 
+                {
+                    field: "ReceivedAmount",
+                    title: "Received Amount",
+                    width: 80
+                }]
+        });
+       
+        grid = $('#grid').data('kendoGrid');
+        
+    });
+    function onChange(arg) {
+        //if (grid.selectedKeyNames().length > 0)
+    }
+    function ReceivedAmountValidation(element) {
+        var columnIndex = 0;
+        for (columnIndex; columnIndex < grid.columns.length; columnIndex++) {
+            if (grid.columns[columnIndex].field == "UnpaidAmount") {
+                break;
+            }
+        }
+        //console.log(element[0].value);
+        var Received = element[0].value;
+        var Unpaid = $(element).closest("tr").find("td:eq(" + columnIndex + ")").text();
+        return (parseInt(Received) <= parseInt(Unpaid));
+    }
+    
+    function BulkAjax(formData) {
+        $.ajax({
+            url: "../Fees/PayFee",
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify(formData),
+            contentType: "application/json;charset=utf-8",
+            success: function (data_) {
+            },
+            error: function (data_) {
+            }
+        });
+    }
+</script>

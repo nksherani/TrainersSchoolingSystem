@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using TrainersSchoolingSystem.Models;
+using TrainersSchoolingSystem.Models.DTOs;
 
 namespace TrainersSchoolingSystem.Controllers
 {
@@ -15,7 +16,91 @@ namespace TrainersSchoolingSystem.Controllers
     public class FeesController : Controller
     {
         private TrainersEntities db = new TrainersEntities();
-        
+        public ActionResult UnpaidFees()
+        {
+            return View();
+        }
+        public ActionResult GetUnpaidFees()
+        {
+            var UnpaidList = db.Database.SqlQuery<FeeSlipModel>("GetUnpaidStudents").ToList();
+            return Json(UnpaidList, JsonRequestBehavior.AllowGet);
+        }
+        //public void PayFee([System.Web.Http.FromUri]string models)
+        [HttpPost]
+        public ActionResult PayFee(List<FeeSlipModel> models)
+        {
+            var studentIds = models.Select(x => x.StudentId).ToList();
+            var arrears = db.Arrears.Where(x => studentIds.Contains(x.StudentId.Value));
+            var paidfees = db.PaidFees.Where(x => studentIds.Contains(x.StudentId.Value) && !x.ReceivedAmount.HasValue);
+            var userId = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).
+                            FirstOrDefault().TrainerUserId;
+            foreach (var fee in models)
+            {
+                int ReceivedAmount = fee.ReceivedAmount;
+                if (fee.ReceivedAmount == fee.UnpaidAmount)
+                {
+                    var temp1 = paidfees.Where(x => x.StudentId == fee.StudentId).ToList();
+                    foreach (var item in temp1)
+                    {
+                        item.ReceivedAmount = item.CalculatedAmount;
+                        item.PaymentDate = DateTime.Now;
+                        db.PaidFees.AddOrUpdate(item);
+                    }
+                    var temp2 = arrears.Where(x => x.StudentId == fee.StudentId).ToList();
+                    if (temp2.Count > 0)
+                    {
+                        temp2.FirstOrDefault().Amount = 0;
+                        temp2.FirstOrDefault().ArrearType = "Receivable";
+                        temp2.FirstOrDefault().UpdatedDate = DateTime.Now;
+                        temp2.FirstOrDefault().UpdatedBy = userId;
+                        db.Arrears.AddOrUpdate(temp2.FirstOrDefault());
+                    }
+
+                }
+                else if (fee.ReceivedAmount < fee.UnpaidAmount)
+                {
+                    var temp1 = paidfees.Where(x => x.StudentId == fee.StudentId).ToList();
+                    foreach (var item in temp1)
+                    {
+                        if (item.CalculatedAmount < fee.ReceivedAmount)
+                        {
+                            item.ReceivedAmount = item.CalculatedAmount;
+                            fee.ReceivedAmount -= item.ReceivedAmount.Value;
+                        }
+                        else
+                        {
+                            item.ReceivedAmount = fee.ReceivedAmount;
+                            fee.ReceivedAmount = 0;
+                        }
+                        item.PaymentDate = DateTime.Now;
+                        db.PaidFees.AddOrUpdate(item);
+
+                    }
+                    var temp2 = arrears.Where(x => x.StudentId == fee.StudentId).ToList();
+                    if (temp2.Count > 0)
+                    {
+                        temp2.FirstOrDefault().Amount = fee.UnpaidAmount-fee.ReceivedAmount;
+                        temp2.FirstOrDefault().UpdatedDate = DateTime.Now;
+                        temp2.FirstOrDefault().UpdatedBy = userId;
+                        temp2.FirstOrDefault().ArrearType = "Receivable";
+                        db.Arrears.AddOrUpdate(temp2.FirstOrDefault());
+                    }
+                    else
+                    {
+                        Arrear arrear = new Arrear();
+                        arrear.StudentId = fee.StudentId;
+                        arrear.Amount = fee.UnpaidAmount - ReceivedAmount;
+                        arrear.CreatedDate = DateTime.Now;
+                        arrear.CreatedBy = userId;
+                        arrear.ArrearType = "Receivable";
+                        db.Arrears.AddOrUpdate(arrear);
+                    }
+                }
+            }
+            db.SaveChanges();
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
         // GET: Fees
         public ActionResult Index()
         {
