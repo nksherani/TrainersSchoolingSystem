@@ -23,6 +23,8 @@ namespace TrainersSchoolingSystem.Models
             this.Classes1 = new HashSet<Class>();
             this.Configurations = new HashSet<Configuration>();
             this.Configurations1 = new HashSet<Configuration>();
+            this.DailyAttendances = new HashSet<DailyAttendance>();
+            this.DailyAttendances1 = new HashSet<DailyAttendance>();
             this.Designations = new HashSet<Designation>();
             this.Designations1 = new HashSet<Designation>();
             this.Enrolments = new HashSet<Enrolment>();
@@ -80,6 +82,10 @@ namespace TrainersSchoolingSystem.Models
         public virtual ICollection<Configuration> Configurations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Configuration> Configurations1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DailyAttendance> DailyAttendances { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DailyAttendance> DailyAttendances1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Designation> Designations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

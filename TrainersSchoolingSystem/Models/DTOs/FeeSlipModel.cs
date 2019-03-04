@@ -22,6 +22,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
         [Required]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
+        public string FatherName { get; set; }
         public string Class { get; set; }
         public string Fee { get; set; }
         public int AnnualFee { get; set; }
@@ -30,6 +31,5 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public int UnpaidAmount { get; set; }
         public int AdmissionFee { get; set; }
         public int ReceivedAmount { get; set; }
-
     }
 }

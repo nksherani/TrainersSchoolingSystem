@@ -5,51 +5,68 @@
 
 <h2>Students</h2>
 <label>Select a bulk Action to Perform on Selected Students </label>
-<input id="action" @*value="1"*@ />
-<input id="class" />
-<input id="section" />
-<input type="text" id="fee" name="fee" placeholder="100" />
+<input id="action" />
 <input type="button" disabled id="btnPerformAction" value="Perform Action" />
 
 <img id="loading" hidden src="~/Content/loading.gif" style="width:60px;height:50px;" />
-<a href="#" class="k-button" id="DownloadFeeSlips">Download Fee Slips</a>
 
-<div id="error2" class="alert alert-danger">
-    <strong>No class is selected!</strong> Please select a class.
-</div>
-<div id="error3" class="alert alert-danger">
-    <strong>No section is selected!</strong> Please select a section.
-</div>
-<div id="error4" class="alert alert-danger">
-    <strong>Fee field is empty!</strong> Please enter the amount to be increased e.g 100.
-</div>
 <div id="error1" class="alert alert-danger">
-    <strong>No selection is made!</strong> Please select students for bulk operation.
+    <strong>No selection is made!</strong> Please select teacher for bulk operation.
 </div>
 
 <div id="grid"></div>
 
 <script>
-    var grid, action, class_, section, fee, error1, error2, error3, error4;
+    function GetStatus(index) {
+        var temp = [
+            { Status: "Not Selected", value: 0 },
+            { Status: "Absent", value: 1 },
+            { Status: "Present", value: 2 },
+            { Status: "ShortLeave", value: 3 },
+            { Status: "LateArrival", value: 4 }
+        ];
+        return temp[index]["Status"];
+    }
+    var grid, action, error1;
     $(document).ready(function () {
-        /////////////
-
-        ////////////
+        console.log("status"+GetStatus(0));
+        console.log("status"+GetStatus(0));
         $("#btnPerformAction").kendoButton();
-        //////////
+        
         $("#grid").kendoGrid({
             dataSource: {
                 type: "jsonp",
                 transport: {
-                    read: "../Teachers/GetTeachers"
+                    read: "../Teachers/GetCurrentTeachers",
+                    update: {
+                        url: "../Teachers/MarkAttendance", //specify the URL from which should update the records. This is the Update method of the Products.svc service.
+                        contentType: "application/json; charset=utf-8", // tells the web service to serialize JSON
+                        type: "POST" //use HTTP POST request as the default GET is not allowed for svc
+                    },
+                    parameterMap: function (options, operation) {
+
+                        if (operation != "read") {
+                            return JSON.stringify({ models: options.models })
+                        }
+
+                    }
                 },
+                ServerOperation: false,
+                batch: true,
                 pageSize: 20,
                 schema: {
                     model: {
-                        id: "StaffId",
+                        id: "TeacherId",
                         fields: {
-                            //"INVOICE_NUMBER": { type: "number" },
-                            "FirstName": { type: "string" }
+                            "TeacherId": { type: "number", editable: false },
+                            "Name": { type: "string", editable: false },
+                            "Gender": { type: "string", editable: false },
+                            "Designation": { type: "string", editable: false },
+                            "DateOfBirth": { type: "date", editable: false },
+                            "JoiningDate": { type: "date", editable: false },
+                            "Mobile": { type: "date", editable: false },
+                            "Address": { type: "date", editable: false },
+                            "Age": { type: "number", editable: false }
                         }
                     }
                 },
@@ -58,6 +75,8 @@
             height: 550,
             groupable: true,
             sortable: true,
+            editable: true,
+            toolbar: ["save", "cancel"],
             //selectable: true,
             filterable: {
                 mode: "row"
@@ -69,26 +88,58 @@
             },
             persistSelection: true,
             columns: [
-                { selectable: true, width: "10px" },
+                { selectable: true, width: "20px" },
                 {
-                    field: "StaffId",
+                    field: "TeacherId",
                     title: "ID",
                     width: 30
                 }, {
-                    template: "#: FirstName # #: LastName #",
-                    field: "FirstName",
+                    field: "Name",
                     title: "Name",
                     width: 80
+                }, {
+                    field: "Gender",
+                    title: "Gender",
+                    width: 80
+                }, {
+                    field: "DateOfBirth",
+                    title: "Date of Birth",
+                    width: 80,
+                    template: "#= kendo.toString(kendo.parseDate(DateOfBirth, 'yyyy-MM-dd'), 'dd-MMM-yyyy') #"
+                }, {
+                    field: "Age",
+                    title: "Age",
+                    width: 80
+                }, {
+                    field: "Designation",
+                    title: "Designation",
+                    width: 80
+                }, {
+                    field: "JoiningDate",
+                    title: "Joining Date",
+                    width: 80,
+                    template: "#= kendo.toString(kendo.parseDate(JoiningDate, 'yyyy-MM-dd'), 'dd-MMM-yyyy') #"
+                }, {
+                    field: "Mobile",
+                    title: "Mobile",
+                    width: 80
+                }, {
+                    field: "Address",
+                    title: "Address",
+                    width: 80
+                }, {
+                    field: "Status",
+                    title: "Status",
+                    editor: statusDropDownEditor,
+                    //template: "#=Status#",
+                    template: "#=GetStatus(Status)#",
+                    width: 100
                 }]
         });
-        //////////
-        var data = [
-            { text: "Promote to Upper Class", value: "1" },
-            { text: "Change Class", value: "2" },
-            { text: "Change Section", value: "3" },
-            { text: "Increase Fee", value: "4" },
-            { text: "Generate Fee Challan", value: "5" }
 
+        var data = [
+            { text: "Terminate", value: "1" },
+            { text: "Generate Pay Slip", value: "2" }
         ];
 
         // create DropDownList from input HTML element
@@ -101,137 +152,46 @@
             optionLabel: "Select an action...",
             change: onChangeAction
         });
-        ///////
-        $("#section").kendoDropDownList({
-            dataTextField: "LookupText",
-            dataValueField: "LookupId",
-            //height: 400,
-            index: 0,
-            optionLabel: "Select a section...",
-            change: onChangeSection,
-            dataSource: {
-                type: "jsonp",
-                transport: {
-                    read: "../Lookups/GetLookups?Type=Section"
-                }
-            }
-        });
-        /////////
-        $("#class").kendoDropDownList({
-            dataTextField: "Text",
-            dataValueField: "Value",
-            change: onChangeClass,
-            //height: 400,
-            index: 0,
-            optionLabel: "Select a class...",
-            dataSource: {
-                type: "jsonp",
-                transport: {
-                    read: "../Classes/GetClasses"
-                }
-            }
-        });
-        ///////
+        
         grid = $('#grid').data('kendoGrid');
         action = $('#action').data('kendoDropDownList');
-        class_ = $('#class').data('kendoDropDownList');
-        section = $('#section').data('kendoDropDownList');
-        fee = $("#fee");
+       
         error1 = $("#error1");
-        error2 = $("#error2");
-        error3 = $("#error3");
-        error4 = $("#error4");
-        link = $("#DownloadFeeSlips");
-        HideControls();
+        
         HideErrors();
-        ////////
+
         $("#btnPerformAction").click(function () {
-            var studentIds = grid.selectedKeyNames()/*.join(", ")*/;
+            var TeacherIds = grid.selectedKeyNames();
             var iserror = false;
-            if (studentIds.length == 0) {
+            if (TeacherIds.length == 0) {
                 $("#error1").show();
                 iserror = true;
             }
-            if (action.value() == 2 && class_.value() == 0) {
-                iserror = true;
-                $("#error2").show();
-            }
-            if (action.value() == 3 && section.value() == 0) {
-                iserror = true;
-                $("#error3").show();
-            }
-            if (action.value() == 4 && fee.val() == "") {
-                iserror = true;
-                $("#error4").show();
-            }
+            
             if (iserror)
                 return;
             $("#loading").show();
 
             var formData = {
                 "Action": action.value(),
-                "Ids": studentIds,
-                "Class": class_.value(),
-                "Section": section.value(),
-                "Fee": fee.val()
+                "Ids": TeacherIds,
             };
             console.log(formData);
-            if (action.value() == 5)
-                FeeSlipsAjax(formData);
-            else
-                BulkAjax(formData);
+            FeeSlipsAjax(formData);
+            
         });
     });
-    function BulkAjax(formData) {
-        $.ajax({
-            url: "../Students/Bulk",
-            type: "POST",
-            dataType: "json",
-            data: JSON.stringify(formData),
-            contentType: "application/json;charset=utf-8",
-            success: function (data_) {
-                $("#loading").hide();
-
-                //alert(data_);
-                console.log(data_);
-                var grid = $('#grid').data('kendoGrid');
-                grid.dataSource.read();
-                grid.refresh();
-                action.value(0);
-                HideControls();
-                if (formData["Action"] == "5") {
-                    link.prop("href", data_);
-                    link.show();
-                }
-
-            },
-            error: function (data_) {
-                $("#loading").hide();
-
-                alert(data_.responseText)
-                console.log("error");
-            }
-        });
-    }
     function FeeSlipsAjax(formData) {
         $.ajax({
-            url: "../Students/GenerateFeeSlips2",
+            url: "../Teachers/GeneratePaySlips",
             type: "POST",
-            //dataType: "application/msword",
             data: JSON.stringify(formData),
             contentType: "application/json;charset=utf-8",
             success: function (data_) {
                 $("#loading").hide();
-
-                //alert(data_);
                 console.log(data_);
                 action.value(0);
-                HideControls();
-                //if (formData["Action"] == "5") {
-                //    link.prop("href", data_);
-                //    link.show();
-                //}
-                var win = window.open('../Content/Temp/FeeSlips.html', '_blank');
+                var win = window.open('../Content/Temp/PaySlips.html', '_blank');
                 if (win) {
                     //Browser has allowed it to be opened
                     win.focus();
@@ -257,46 +217,31 @@
 
     }
     function onChangeAction(arg) {
-
-        HideControls();
-        HideErrors();
-        console.log(action.value());
-        console.log($("#btnPerformAction"));
-        if (action.value() != 0) {
-            $("#btnPerformAction").prop('disabled', false);
-            $("#btnPerformAction").removeClass('k-state-disabled');
-        }
-        else {
-            $("#btnPerformAction").prop('disabled', true);
-        }
-        if (action.value() == 2) {
-            class_.wrapper.show();
-        }
-        else if (action.value() == 3) {
-            section.wrapper.show();
-        }
-        else if (action.value() == 4) {
-            fee.show();
-        }
+       
     }
+    
     function HideErrors() {
         error1.hide();
-        error2.hide();
-        error3.hide();
-        error4.hide();
     }
-    function HideControls() {
-        class_.wrapper.hide();
-        section.wrapper.hide();
-        fee.hide();
-        link.hide();
-    }
-    function onChangeClass(arg) {
-        if (class_.value() != 0)
-            error2.hide();
-    }
-    function onChangeSection(arg) {
-        if (section.value() != 0)
-            error3.hide();
+    function statusDropDownEditor(container, options) {
+       
+        console.log(options);
+        var temp = [
+            //{ Status: "Not Selected", value: 0 },
+            { Status: "Absent", value: 1 },
+            { Status: "Present", value: 2 },
+            { Status: "ShortLeave", value: 3 },
+            { Status: "LateArrival", value: 4 }
+        ];
+        $('<input required name="' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "Status",
+                dataValueField: "value",
+                dataSource: temp,
+                autoBind: true,
+                index: 0,
+                optionLabel: "Select status...",
+            });
     }
 </script>

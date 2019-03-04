@@ -59,29 +59,8 @@ namespace TrainersSchoolingSystem.Controllers
         public ActionResult GenerateFeeSlips2(BulkStudents bulk)
         {
             var stdIds = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
-            var enrolments = db.Enrolments.Where(x => x.IsActive.Value && stdIds.Contains(x.Student.Value)).ToList();
-            var students = db.Students.Where(x => stdIds.Contains(x.StudentId)).Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
-            List<StudentViewModel> modellist = new List<StudentViewModel>();
-            foreach (var student in students)
-            {
-                StudentViewModel model = new StudentViewModel();
-                model = Mapper<StudentViewModel>.GetObject(student);
-                model.Father_ = Mapper<ParentViewModel>.GetObject(student.Parent);
-                model.Mother_ = Mapper<ParentViewModel>.GetObject(student.Parent2);
-                if (student.Parent1 != null)
-                {
-                    model.Guardian_ = Mapper<GuardianViewModel>.GetObject(student.Parent1);
-                }
-                var enrolmentdb = enrolments.Where(x => x.Student == student.StudentId).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
-                model.Enrolment = Mapper<EnrolmentViewModel>.GetObject(enrolmentdb);
-                model.Enrolment.Class_ = Mapper<ClassViewModel>.GetObject(enrolmentdb.Class1);
-                modellist.Add(model);
-            }
-            //modellist.AddRange(modellist);
-            //modellist.AddRange(modellist);
-            //string feeslips = "";
+            
             string css = "";
-            Server.MapPath("~/Content/FeeSlips/");
             var csslines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlipHeader.html")).ToList();
             foreach (var item in csslines)
             {
@@ -89,9 +68,9 @@ namespace TrainersSchoolingSystem.Controllers
             }
             int i = 0;
             string feeslipsBody = "";
-            foreach (var studentView in modellist)
+            foreach (var id in stdIds)
             {
-                var html = GetFeeSlip(studentView);
+                var html = GetFeeSlip(id);
                 if (i % 5 == 0)
                     html += "<div style=\"width: 240px; height: 1px; background - color:white\"></div>";
 
@@ -111,56 +90,130 @@ namespace TrainersSchoolingSystem.Controllers
             System.IO.File.WriteAllText(filePath, strBody.ToString());
             return Json("../Content/Temp/FeeSlips.html", JsonRequestBehavior.AllowGet);
         }
+        private string GetFeeSlip(int studentid)
+        {
+            var lastdate = db.PaidFees.Where(x => x.StudentId == studentid
+            && x.Description == "MonthlyFee" && x.ReceivedAmount.HasValue)?.OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
+            if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28)
+                return "";
+            SqlParameter StudentId = new SqlParameter("@StudentId", studentid);
+            var FeeSlipData = db.Database.SqlQuery<FeeSlipModel>("exec GenerateFeeSlips @StudentId", StudentId).FirstOrDefault();
 
-        //public string GenerateFeeSlips(BulkStudents bulk)
-        //{
-        //    var stdIds = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
-        //    var enrolments = db.Enrolments.Where(x => x.IsActive.Value && stdIds.Contains(x.Student.Value)).ToList();
-        //    var students = db.Students.Where(x => stdIds.Contains(x.StudentId)).Include(s => s.Parent).Include(s => s.Parent1).Include(s => s.Parent2).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
-        //    List<StudentViewModel> modellist = new List<StudentViewModel>();
-        //    foreach (var student in students)
-        //    {
-        //        StudentViewModel model = new StudentViewModel();
-        //        model = Mapper<StudentViewModel>.GetObject(student);
-        //        model.Father_ = Mapper<ParentViewModel>.GetObject(student.Parent);
-        //        model.Mother_ = Mapper<ParentViewModel>.GetObject(student.Parent2);
-        //        if (student.Parent1 != null)
-        //        {
-        //            model.Guardian_ = Mapper<GuardianViewModel>.GetObject(student.Parent1);
-        //        }
-        //        var enrolmentdb = enrolments.Where(x => x.Student == student.StudentId).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
-        //        model.Enrolment = Mapper<EnrolmentViewModel>.GetObject(enrolmentdb);
-        //        model.Enrolment.Class_ = Mapper<ClassViewModel>.GetObject(enrolmentdb.Class1);
-        //        modellist.Add(model);
-        //    }
-        //    modellist.AddRange(modellist);
-        //    modellist.AddRange(modellist);
-        //    string feeslips = "";
-        //    Server.MapPath("~/Content/FeeSlips/");
-        //    var csslines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlipHeader.html")).ToList();
-        //    foreach (var item in csslines)
-        //    {
-        //        feeslips += item;
-        //    }
-        //    int i = 0;
-        //    string feeslipsBody = "";
-        //    foreach (var studentView in modellist)
-        //    {
-        //        var html = GetFeeSlip(studentView);
-        //        if (i % 5 == 0)
-        //            html += "<div style=\"width: 240px; height: 1px; background - color:white\"></div>";
+            string data = "";
+            Server.MapPath("~/Content/FeeSlips/");
+            string[] lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlip.html"));
 
-        //        feeslipsBody += html;
-        //        i++;
-        //    }
-        //    feeslips += feeslipsBody;
-        //    var path = Server.MapPath("~/Content/FeeSlips/");
-        //    var filename = DateTime.Now.ToString("ddMMyyyyhhmmss") + "_by_" + User.Identity.Name + ".pdf";
-        //    if (SavePdf2(filename, path, feeslips))
-        //        return "../Content/FeeSlips/" + filename;
-        //    return "error";
+            foreach (var item in lines)
+            {
+                data += item;
+            }
+            if (FeeSlipData.ArrearType == "Receivable")
+            {
+                FeeSlipData.ArrearAmount += FeeSlipData.UnpaidAmount;
+            }
 
-        //}
+            else
+            {
+                FeeSlipData.ArrearAmount -= FeeSlipData.UnpaidAmount;
+                if (FeeSlipData.ArrearAmount < 0)
+                {
+                    FeeSlipData.ArrearType = "Receivable";
+                }
+                FeeSlipData.ArrearAmount *= -1;
+            }
+
+            var totalFee = FeeSlipData.ArrearAmount +
+                Convert.ToInt32(FeeSlipData.Fee) + FeeSlipData.AdmissionFee +
+                FeeSlipData.AnnualFee + GlobalData.feeSetup.LabCharges;
+            data = data.Replace("__Picture__", "../" + GlobalData.configuration.Picture);
+            data = data.Replace("__SchoolName__", GlobalData.configuration.SchoolName);
+            data = data.Replace("__Campus__", GlobalData.configuration.Campus);
+            data = data.Replace("__Month__", DateTime.Now.ToString("MM-yyyy"));
+            data = data.Replace("__IssueDate__", DateTime.Now.ToString("dd-MM-yyyy"));
+            data = data.Replace("__DueDate__", DateTime.Now.ToString("10-MM-yyyy"));
+            data = data.Replace("__Challan__", DateTime.Now.ToString() + studentid);
+            data = data.Replace("__GRNo__", FeeSlipData.GRNo);
+            data = data.Replace("__StudentName__", FeeSlipData.FirstName + " " + FeeSlipData.LastName);
+            data = data.Replace("__Class__", FeeSlipData.Class);
+            data = data.Replace("__FatherName__", FeeSlipData.FatherName);
+            data = data.Replace("__Arrears__", FeeSlipData.ArrearAmount.ToString());
+            data = data.Replace("__TuitionFee__", FeeSlipData.Fee);
+            data = data.Replace("__AdmissionFee__", FeeSlipData.AdmissionFee.ToString());
+            data = data.Replace("__AnnualFee__", FeeSlipData.AnnualFee.ToString());
+            data = data.Replace("__OtherFee__", "0");
+            data = data.Replace("__LateFee__", GlobalData.feeSetup.LatePaymentSurcharge.ToString());
+            data = data.Replace("__LabCharges__", GlobalData.feeSetup.LabCharges.ToString());
+            data = data.Replace("__Till__", totalFee.ToString());
+            data = data.Replace("__After__", (totalFee + GlobalData.feeSetup.LatePaymentSurcharge).ToString());
+
+            var feeDb = db.PaidFees.Where(x => !x.ReceivedAmount.HasValue && x.StudentId == studentid).ToList();
+            List<PaidFee> temp = new List<PaidFee>();
+            foreach (var item in feeDb)
+            {
+                if ((DateTime.Now - item.CreatedDate).Value.TotalDays < 28)
+                    temp.Add(item);
+            }
+            feeDb = temp;
+            if (FeeSlipData.Fee != null && FeeSlipData.Fee != "")
+            {
+                PaidFee paidFee = new PaidFee();
+                var count = feeDb.Where(x => x.Description == "MonthlyFee").ToList();
+                if (count.Count > 0)
+                    paidFee = feeDb.Where(x => x.Description == "MonthlyFee").FirstOrDefault();
+                paidFee.StudentId = studentid;
+                paidFee.CalculatedAmount = Convert.ToInt32(FeeSlipData.Fee);
+                paidFee.Description = "MonthlyFee";
+                if (paidFee.CreatedDate.HasValue)
+                    paidFee.UpdatedDate = DateTime.Now;
+                else
+                    paidFee.CreatedDate = DateTime.Now;
+                if (paidFee.CreatedBy.HasValue)
+                    paidFee.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                else
+                    paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                db.PaidFees.AddOrUpdate(paidFee);
+            }
+            if (GlobalData.feeSetup.LabCharges > 0)
+            {
+                PaidFee paidFee = new PaidFee();
+                var count = feeDb.Where(x => x.Description == "LabCharges").Count();
+                if (count > 0)
+                    paidFee = feeDb.Where(x => x.Description == "LabCharges").FirstOrDefault();
+                paidFee.StudentId = studentid;
+                paidFee.CalculatedAmount = GlobalData.feeSetup.LabCharges;
+                paidFee.Description = "LabCharges";
+                if (paidFee.CreatedDate.HasValue)
+                    paidFee.UpdatedDate = DateTime.Now;
+                else
+                    paidFee.CreatedDate = DateTime.Now;
+                if (paidFee.CreatedBy.HasValue)
+                    paidFee.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                else
+                    paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                db.PaidFees.AddOrUpdate(paidFee);
+            }
+            if (FeeSlipData.AnnualFee > 0)
+            {
+                PaidFee paidFee = new PaidFee();
+                if (feeDb.Where(x => x.Description == "AnnualFee").Count() > 0)
+                    paidFee = feeDb.Where(x => x.Description == "AnnualFee").FirstOrDefault();
+                paidFee.StudentId = studentid;
+                paidFee.CalculatedAmount = FeeSlipData.AnnualFee;
+                paidFee.Description = "AnnualFee";
+                if (paidFee.CreatedDate.HasValue)
+                    paidFee.UpdatedDate = DateTime.Now;
+                else
+                    paidFee.CreatedDate = DateTime.Now;
+                if (paidFee.CreatedBy.HasValue)
+                    paidFee.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                else
+                    paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                db.PaidFees.AddOrUpdate(paidFee);
+            }
+            db.SaveChanges();
+            return data;
+        }
+
         bool SavePdf(string filename, string path, string html)
         {
             HtmlToPdf htmlToPdfConverter = new HtmlToPdf();
@@ -188,129 +241,6 @@ namespace TrainersSchoolingSystem.Controllers
             wordDoc.SaveAs2(FileName: savePathPdf, FileFormat: WdSaveFormat.wdFormatPDF);
             wordDoc.Close();
             return true;
-        }
-        private string GetFeeSlip(StudentViewModel studentView)
-        {
-            var lastdate = db.PaidFees.Where(x => x.StudentId == studentView.StudentId
-            && x.Description == "MonthlyFee" && x.ReceivedAmount.HasValue)?.OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
-            if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28)
-                return "";
-            SqlParameter StudentId = new SqlParameter("@StudentId", studentView.StudentId);
-            var FeeSlipData = db.Database.SqlQuery<FeeSlipModel>("exec GenerateFeeSlips @StudentId", StudentId).FirstOrDefault();
-
-            string data = "";
-            Server.MapPath("~/Content/FeeSlips/");
-            string[] lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlip.html"));
-
-            foreach (var item in lines)
-            {
-                data += item;
-            }
-            if (FeeSlipData.ArrearType == "Receivable")
-            {
-                FeeSlipData.ArrearAmount += FeeSlipData.UnpaidAmount;
-            }
-                
-            else
-            {
-                FeeSlipData.ArrearAmount -= FeeSlipData.UnpaidAmount;
-                if(FeeSlipData.ArrearAmount<0)
-                {
-                    FeeSlipData.ArrearType = "Receivable";
-                }
-                FeeSlipData.ArrearAmount *= -1;
-            }
-            
-            var totalFee = FeeSlipData.ArrearAmount +
-                Convert.ToInt32(FeeSlipData.Fee) + FeeSlipData.AdmissionFee +
-                FeeSlipData.AnnualFee + GlobalData.feeSetup.LabCharges;
-            data = data.Replace("__Picture__", "../" + GlobalData.configuration.Picture);
-            data = data.Replace("__SchoolName__", GlobalData.configuration.SchoolName);
-            data = data.Replace("__Campus__", GlobalData.configuration.Campus);
-            data = data.Replace("__Month__", DateTime.Now.ToString("MM-yyyy"));
-            data = data.Replace("__IssueDate__", DateTime.Now.ToString("dd-MM-yyyy"));
-            data = data.Replace("__DueDate__", DateTime.Now.ToString("10-MM-yyyy"));
-            data = data.Replace("__Challan__", DateTime.Now.ToString() + studentView.StudentId);
-            data = data.Replace("__GRNo__", studentView.Enrolment.GRNo);
-            data = data.Replace("__StudentName__", studentView.FirstName + " " + studentView.LastName);
-            data = data.Replace("__Class__", FeeSlipData.Class);
-            data = data.Replace("__FatherName__", studentView.Father_.Name);
-            data = data.Replace("__Arrears__", FeeSlipData.ArrearAmount.ToString());
-            data = data.Replace("__TuitionFee__", FeeSlipData.Fee);
-            data = data.Replace("__AdmissionFee__", FeeSlipData.AdmissionFee.ToString());
-            data = data.Replace("__AnnualFee__", FeeSlipData.AnnualFee.ToString());
-            data = data.Replace("__OtherFee__", "0");
-            data = data.Replace("__LateFee__", GlobalData.feeSetup.LatePaymentSurcharge.ToString());
-            data = data.Replace("__LabCharges__", GlobalData.feeSetup.LabCharges.ToString());
-            data = data.Replace("__Till__", totalFee.ToString());
-            data = data.Replace("__After__", (totalFee + GlobalData.feeSetup.LatePaymentSurcharge).ToString());
-
-            var feeDb = db.PaidFees.Where(x => !x.ReceivedAmount.HasValue && x.StudentId == studentView.StudentId).ToList();
-            List<PaidFee> temp = new List<PaidFee>();
-            foreach (var item in feeDb)
-            {
-                if ((DateTime.Now - item.CreatedDate).Value.Days < 28)
-                    temp.Add(item);
-            }
-            feeDb = temp;
-            if (FeeSlipData.Fee != null && FeeSlipData.Fee != "")
-            {
-                PaidFee paidFee = new PaidFee();
-                var count = feeDb.Where(x => x.Description == "MonthlyFee").ToList();
-                if (count.Count > 0)
-                    paidFee = feeDb.Where(x => x.Description == "MonthlyFee").FirstOrDefault();
-                paidFee.StudentId = studentView.StudentId;
-                paidFee.CalculatedAmount = Convert.ToInt32(FeeSlipData.Fee);
-                paidFee.Description = "MonthlyFee";
-                if (paidFee.CreatedDate.HasValue)
-                    paidFee.UpdatedDate = DateTime.Now;
-                else
-                    paidFee.CreatedDate = DateTime.Now;
-                if (paidFee.CreatedBy.HasValue)
-                    paidFee.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                else
-                    paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                db.PaidFees.AddOrUpdate(paidFee);
-            }
-            if (GlobalData.feeSetup.LabCharges > 0)
-            {
-                PaidFee paidFee = new PaidFee();
-                var count = feeDb.Where(x => x.Description == "LabCharges").Count();
-                if (count > 0)
-                    paidFee = feeDb.Where(x => x.Description == "LabCharges").FirstOrDefault();
-                paidFee.StudentId = studentView.StudentId;
-                paidFee.CalculatedAmount = GlobalData.feeSetup.LabCharges;
-                paidFee.Description = "LabCharges";
-                if (paidFee.CreatedDate.HasValue)
-                    paidFee.UpdatedDate = DateTime.Now;
-                else
-                    paidFee.CreatedDate = DateTime.Now;
-                if (paidFee.CreatedBy.HasValue)
-                    paidFee.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                else
-                    paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                db.PaidFees.AddOrUpdate(paidFee);
-            }
-            if (FeeSlipData.AnnualFee > 0)
-            {
-                PaidFee paidFee = new PaidFee();
-                if (feeDb.Where(x => x.Description == "AnnualFee").Count() > 0)
-                    paidFee = feeDb.Where(x => x.Description == "AnnualFee").FirstOrDefault();
-                paidFee.StudentId = studentView.StudentId;
-                paidFee.CalculatedAmount = FeeSlipData.AnnualFee;
-                paidFee.Description = "AnnualFee";
-                if (paidFee.CreatedDate.HasValue)
-                    paidFee.UpdatedDate = DateTime.Now;
-                else
-                    paidFee.CreatedDate = DateTime.Now;
-                if (paidFee.CreatedBy.HasValue)
-                    paidFee.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                else
-                    paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                db.PaidFees.AddOrUpdate(paidFee);
-            }
-            db.SaveChanges();
-            return data;
         }
         [HttpPost]
         public ActionResult Bulk(BulkStudents bulk)

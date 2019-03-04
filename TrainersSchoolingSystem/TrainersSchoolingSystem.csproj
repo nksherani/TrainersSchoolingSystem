@@ -269,6 +269,9 @@
     <Compile Include="Models\Configuration.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DailyAttendance.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Designation.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -283,6 +286,7 @@
     <Compile Include="Models\DTOs\GuardianViewModel.cs" />
     <Compile Include="Models\DTOs\PaidFeeViewModel.cs" />
     <Compile Include="Models\DTOs\ParentViewModel.cs" />
+    <Compile Include="Models\DTOs\PaySlipModel.cs" />
     <Compile Include="Models\DTOs\SalaryPaymentViewModel.cs" />
     <Compile Include="Models\DTOs\SalaryViewModel.cs" />
     <Compile Include="Models\DTOs\StaffAttendanceViewModel.cs" />
@@ -290,6 +294,7 @@
     <Compile Include="Models\DTOs\StudentViewModel.cs" />
     <Compile Include="Models\DTOs\SubjectAssignmentViewModel.cs" />
     <Compile Include="Models\DTOs\SubjectViewModel.cs" />
+    <Compile Include="Models\DTOs\TeacherSP.cs" />
     <Compile Include="Models\DTOs\TeacherViewModel.cs" />
     <Compile Include="Models\DTOs\TrainerUserViewModel.cs" />
     <Compile Include="Models\Enrolment.cs">
@@ -299,6 +304,12 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GenerateFeeSlips_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GeneratePaySlips_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetCurrentTeachers_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetUnpaidStudents_Result.cs">
@@ -711,6 +722,7 @@
     <Content Include="Content\kendo\2017.2.621\Uniform\sprite_kpi.png" />
     <Content Include="Content\kendo\2017.2.621\Uniform\sprite_kpi_2x.png" />
     <Content Include="Content\loading.gif" />
+    <Content Include="Content\PaySlip.html" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

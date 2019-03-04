@@ -34,6 +34,7 @@ namespace TrainersSchoolingSystem.Models
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Class> Classes { get; set; }
         public virtual DbSet<Configuration> Configurations { get; set; }
+        public virtual DbSet<DailyAttendance> DailyAttendances { get; set; }
         public virtual DbSet<Designation> Designations { get; set; }
         public virtual DbSet<Enrolment> Enrolments { get; set; }
         public virtual DbSet<Fee> Fees { get; set; }
@@ -67,6 +68,20 @@ namespace TrainersSchoolingSystem.Models
         public virtual ObjectResult<GetUnpaidStudents_Result> GetUnpaidStudents()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetUnpaidStudents_Result>("GetUnpaidStudents");
+        }
+    
+        public virtual ObjectResult<GeneratePaySlips_Result> GeneratePaySlips(Nullable<int> teacherId)
+        {
+            var teacherIdParameter = teacherId.HasValue ?
+                new ObjectParameter("TeacherId", teacherId) :
+                new ObjectParameter("TeacherId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GeneratePaySlips_Result>("GeneratePaySlips", teacherIdParameter);
+        }
+    
+        public virtual ObjectResult<GetCurrentTeachers_Result> GetCurrentTeachers()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCurrentTeachers_Result>("GetCurrentTeachers");
         }
     }
 }

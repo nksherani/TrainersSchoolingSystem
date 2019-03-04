@@ -10,9 +10,18 @@ using TrainersSchoolingSystem.Models;
 using TrainersSchoolingSystem.Models.DTOs;
 using TrainersSchoolingSystem.Utils;
 using System.Net;
+using System.Text;
+using System.Data.SqlClient;
 
 namespace TrainersSchoolingSystem.Controllers
 {
+    public enum AttendanceStatus
+    {
+        Absent = 1,
+        Present,
+        ShortLeave,
+        LateArrival
+    }
     public class TeachersController : Controller
     {
         private TrainersEntities db = new TrainersEntities();
@@ -20,11 +29,200 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: Teachers
         public ActionResult Index()
         {
-            var designationIds = db.Designations.Where(x => x.Category == "Teaching").Select(x => x.DesignationId).ToList();
-            var staffs = db.Staffs.Where(x => designationIds.Contains(x.Designation.Value)).Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
-            return View(staffs.ToList());
+            return View();
         }
-        public ActionResult GetTeachers()
+        public ActionResult GetCurrentTeachers()
+        {
+            var teachers = db.Database.SqlQuery<TeacherSP>("GetCurrentTeachers").ToList();
+            return Json(teachers, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult MarkAttendance(List<TeacherSP> models)
+        {
+            var Ids = models.Select(x => x.TeacherId).ToList();
+            var userId = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            var AttendanceSummary = db.StaffAttendances.Where(x => Ids.Contains(x.StaffId.Value));
+            foreach (var item in models)
+            {
+                if (item.Status > 0)
+                {
+                    var existing = db.DailyAttendances
+                        .Where(x => x.StaffId == item.TeacherId).OrderByDescending(x => x.CreatedDate)?
+                        .FirstOrDefault();
+                    string prevStatus = "";
+                    if (existing == null || (DateTime.Now - existing.CreatedDate).Value.TotalHours > 24)
+                        existing = new DailyAttendance();
+                    else
+                        prevStatus = existing.Status;
+                    existing.StaffId = item.TeacherId;
+                    existing.Status = Enum.GetName(typeof(AttendanceStatus), item.Status);
+                    existing.AttendanceDate = DateTime.Now;
+                    if (existing.CreatedBy.HasValue)
+                    {
+                        existing.UpdatedBy = userId;
+                        existing.UpdatedDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        existing.CreatedBy = userId;
+                        existing.CreatedDate = DateTime.Now;
+                    }
+                    db.DailyAttendances.AddOrUpdate(existing);
+                    var smry = AttendanceSummary.Where(x => x.StaffId == item.TeacherId).FirstOrDefault();
+                    if (smry == null)
+                    {
+                        smry = new StaffAttendance();
+                        smry.StaffId = item.TeacherId;
+                        smry.CreatedBy = userId;
+                        smry.CreatedDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        smry.UpdatedBy = userId;
+                        smry.UpdatedDate = DateTime.Now;
+                    }
+                    if (prevStatus!=existing.Status)
+                    {
+                        if (existing.Status == AttendanceStatus.Absent.ToString())
+                        {
+                            if (smry.Absents.HasValue)
+                                smry.Absents++;
+                            else
+                                smry.Absents = 1;
+                        }
+                        else if (existing.Status == AttendanceStatus.Present.ToString())
+                        {
+                            if (smry.WorkingDays.HasValue)
+                                smry.WorkingDays++;
+                            else
+                                smry.WorkingDays = 1;
+                        }
+                        else if (existing.Status == AttendanceStatus.LateArrival.ToString())
+                        {
+                            if (smry.LateComings.HasValue)
+                                smry.LateComings++;
+                            else
+                                smry.LateComings = 1;
+                        }
+                        else if (existing.Status == AttendanceStatus.ShortLeave.ToString())
+                        {
+                            if (smry.ShortLeaves.HasValue)
+                                smry.ShortLeaves++;
+                            else
+                                smry.ShortLeaves = 1;
+                        }
+                        if(prevStatus == AttendanceStatus.Absent.ToString())
+                        {
+                            smry.Absents--;
+                        }
+                        else if (prevStatus == AttendanceStatus.Present.ToString())
+                        {
+                            smry.WorkingDays--;
+                        }
+                        else if (prevStatus == AttendanceStatus.ShortLeave.ToString())
+                        {
+                            smry.ShortLeaves--;
+                        }
+                        else if (prevStatus == AttendanceStatus.LateArrival.ToString())
+                        {
+                            smry.LateComings--;
+                        }
+                    }
+
+                    db.StaffAttendances.AddOrUpdate(smry);
+                }
+
+            }
+            db.SaveChanges();
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GeneratePaySlips(BulkStudents bulk)
+        {
+            var stdIds = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+
+            string css = "";
+            var csslines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlipHeader.html")).ToList();
+            foreach (var item in csslines)
+            {
+                css += item;
+            }
+            int i = 0;
+            string feeslipsBody = "";
+            foreach (var id in stdIds)
+            {
+                var html = GetPaySlip(id);
+                if (i % 5 == 0)
+                    html += "<div style=\"width: 240px; height: 1px; background - color:white\"></div>";
+
+                feeslipsBody += html;
+                i++;
+            }
+            StringBuilder strBody = new StringBuilder();
+            strBody.Append("<html>" +
+            "<head><title>Fee Slips</title>");
+
+            strBody.Append(css + "</head>");
+            strBody.Append("<body lang=EN-US style='tab-interval:.5in'>" +
+                                    feeslipsBody +
+                                    "</body></html>");
+
+            var filePath = Server.MapPath("~/Content/Temp/PaySlips.html");
+            System.IO.File.WriteAllText(filePath, strBody.ToString());
+            return Json("../Content/Temp/PaySlips.html", JsonRequestBehavior.AllowGet);
+        }
+        private string GetPaySlip(int TeacherId)
+        {
+            var lastdate = db.PaidFees.Where(x => x.StudentId == TeacherId
+            && x.Description == "MonthlyFee" && x.ReceivedAmount.HasValue)?.OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
+            if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28)
+                return "";
+            SqlParameter teacherId = new SqlParameter("@TeacherId", TeacherId);
+            var PaySlipData = db.Database.SqlQuery<PaySlipModel>("exec GeneratePaySlips @TeacherId", teacherId).FirstOrDefault();
+            string data = "";
+            string[] lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "PaySlip.html"));
+
+
+            data = data.Replace("__Picture__", "../" + GlobalData.configuration.Picture);
+            data = data.Replace("__SchoolName__", GlobalData.configuration.SchoolName);
+            data = data.Replace("__Campus__", GlobalData.configuration.Campus);
+            data = data.Replace("__Month__", DateTime.Now.ToString("MM-yyyy"));
+            data = data.Replace("__IssueDate__", DateTime.Now.ToString("dd-MM-yyyy"));
+            data = data.Replace("__DueDate__", DateTime.Now.ToString("10-MM-yyyy"));
+            data = data.Replace("__Challan__", DateTime.Now.ToString() + TeacherId);
+            data = data.Replace("__TeacherId__", PaySlipData.TeacherId.ToString());
+            data = data.Replace("__Name__", PaySlipData.Name);
+            data = data.Replace("__Designation__", PaySlipData.Designation);
+            data = data.Replace("__JoiningDate__", PaySlipData.JoiningDate.ToString("dd-MM-yyyy"));
+            data = data.Replace("__BasicPay__", PaySlipData.BasicPay.ToString());
+            data = data.Replace("__Bonus__", PaySlipData.Bonus.ToString());
+            data = data.Replace("__ProvidentFund__", PaySlipData.PF.ToString());
+            data = data.Replace("__EOBI__", PaySlipData.EOBI.ToString());
+            data = data.Replace("__EOBI__", PaySlipData.LoanDeduction.ToString());
+            data = data.Replace("__GrossPay__", PaySlipData.GrossPay.ToString());
+            data = data.Replace("__NetPay__", PaySlipData.NetPay.ToString());
+
+            var lastPayment = db.SalaryPayments.Where(x => x.StaffId == TeacherId).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
+            var userid = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            if (lastPayment != null && lastPayment.CreatedDate.Value.ToString("MM-yyyy") == DateTime.Now.ToString("MM-yyyy"))
+            {
+                lastPayment.Amount = PaySlipData.NetPay;
+                lastPayment.UpdatedDate = DateTime.Now;
+                lastPayment.UpdatedBy = userid;
+            }
+            else
+            {
+                lastPayment = new SalaryPayment();
+                lastPayment.StaffId = PaySlipData.TeacherId;
+                lastPayment.Amount = PaySlipData.NetPay;
+                lastPayment.CreatedDate = DateTime.Now;
+                lastPayment.CreatedBy = userid;
+            }
+            db.SalaryPayments.AddOrUpdate(lastPayment);
+            db.SaveChanges();
+            return data;
+        }
+
+        public ActionResult GetTeachersMasterData()
         {
             var teachers = db.Staffs.Join(db.Designations.Where(x => x.Category == "Teaching"), a => a.Designation, b => b.DesignationId, (a, b) => a);
             var enrolments = db.Enrolments.Where(x => x.IsActive.Value).ToList();

@@ -19,6 +19,7 @@ namespace TrainersSchoolingSystem.Models
         {
             this.Arrears = new HashSet<Arrear>();
             this.Classes = new HashSet<Class>();
+            this.DailyAttendances = new HashSet<DailyAttendance>();
             this.Salaries = new HashSet<Salary>();
             this.SalaryPayments = new HashSet<SalaryPayment>();
             this.StaffAttendances = new HashSet<StaffAttendance>();
@@ -50,6 +51,8 @@ namespace TrainersSchoolingSystem.Models
         public virtual ICollection<Arrear> Arrears { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Class> Classes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DailyAttendance> DailyAttendances { get; set; }
         public virtual Designation Designation1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Salary> Salaries { get; set; }
