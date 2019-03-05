@@ -100,7 +100,7 @@
           <Key>
             <PropertyRef Name="DailyAttendanceId" />
           </Key>
-          <Property Name="DailyAttendanceId" Type="int" Nullable="false" />
+          <Property Name="DailyAttendanceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="StaffId" Type="int" />
           <Property Name="Status" Type="varchar(max)" />
           <Property Name="AttendanceDate" Type="datetime" />
@@ -473,7 +473,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__DailyAtte__Creat__1FB8AE52">
+        <Association Name="FK__DailyAtte__Creat__247D636F">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="DailyAttendance" Type="Self.DailyAttendance" Multiplicity="*" />
           <ReferentialConstraint>
@@ -485,7 +485,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__DailyAtte__Staff__1EC48A19">
+        <Association Name="FK__DailyAtte__Staff__23893F36">
           <End Role="Staff" Type="Self.Staff" Multiplicity="0..1" />
           <End Role="DailyAttendance" Type="Self.DailyAttendance" Multiplicity="*" />
           <ReferentialConstraint>
@@ -497,7 +497,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__DailyAtte__Updat__20ACD28B">
+        <Association Name="FK__DailyAtte__Updat__257187A8">
           <End Role="TrainerUser" Type="Self.TrainerUser" Multiplicity="0..1" />
           <End Role="DailyAttendance" Type="Self.DailyAttendance" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1175,15 +1175,15 @@
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="Configuration" EntitySet="Configuration" />
           </AssociationSet>
-          <AssociationSet Name="FK__DailyAtte__Creat__1FB8AE52" Association="Self.FK__DailyAtte__Creat__1FB8AE52">
+          <AssociationSet Name="FK__DailyAtte__Creat__247D636F" Association="Self.FK__DailyAtte__Creat__247D636F">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="DailyAttendance" EntitySet="DailyAttendance" />
           </AssociationSet>
-          <AssociationSet Name="FK__DailyAtte__Staff__1EC48A19" Association="Self.FK__DailyAtte__Staff__1EC48A19">
+          <AssociationSet Name="FK__DailyAtte__Staff__23893F36" Association="Self.FK__DailyAtte__Staff__23893F36">
             <End Role="Staff" EntitySet="Staff" />
             <End Role="DailyAttendance" EntitySet="DailyAttendance" />
           </AssociationSet>
-          <AssociationSet Name="FK__DailyAtte__Updat__20ACD28B" Association="Self.FK__DailyAtte__Updat__20ACD28B">
+          <AssociationSet Name="FK__DailyAtte__Updat__257187A8" Association="Self.FK__DailyAtte__Updat__257187A8">
             <End Role="TrainerUser" EntitySet="TrainerUser" />
             <End Role="DailyAttendance" EntitySet="DailyAttendance" />
           </AssociationSet>
@@ -1394,6 +1394,10 @@
           <Parameter Name="StudentId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetUnpaidStudents" ReturnType="Collection(TrainersModel.GetUnpaidStudents_Result)" />
+          <FunctionImport Name="GeneratePaySlips" ReturnType="Collection(TrainersModel.GeneratePaySlips_Result)">
+          <Parameter Name="TeacherId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetCurrentTeachers" ReturnType="Collection(TrainersModel.GetCurrentTeachers_Result)" />
           <EntitySet Name="Arrears" EntityType="TrainersModel.Arrear" />
           <EntitySet Name="AspNetRoles" EntityType="TrainersModel.AspNetRole" />
           <EntitySet Name="AspNetUserClaims" EntityType="TrainersModel.AspNetUserClaim" />
@@ -1473,15 +1477,15 @@
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="Configuration" EntitySet="Configurations" />
           </AssociationSet>
-          <AssociationSet Name="FK__DailyAtte__Creat__1FB8AE52" Association="TrainersModel.FK__DailyAtte__Creat__1FB8AE52">
+          <AssociationSet Name="FK__DailyAtte__Creat__247D636F" Association="TrainersModel.FK__DailyAtte__Creat__247D636F">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="DailyAttendance" EntitySet="DailyAttendances" />
           </AssociationSet>
-          <AssociationSet Name="FK__DailyAtte__Staff__1EC48A19" Association="TrainersModel.FK__DailyAtte__Staff__1EC48A19">
+          <AssociationSet Name="FK__DailyAtte__Staff__23893F36" Association="TrainersModel.FK__DailyAtte__Staff__23893F36">
             <End Role="Staff" EntitySet="Staffs" />
             <End Role="DailyAttendance" EntitySet="DailyAttendances" />
           </AssociationSet>
-          <AssociationSet Name="FK__DailyAtte__Updat__20ACD28B" Association="TrainersModel.FK__DailyAtte__Updat__20ACD28B">
+          <AssociationSet Name="FK__DailyAtte__Updat__257187A8" Association="TrainersModel.FK__DailyAtte__Updat__257187A8">
             <End Role="TrainerUser" EntitySet="TrainerUsers" />
             <End Role="DailyAttendance" EntitySet="DailyAttendances" />
           </AssociationSet>
@@ -1657,10 +1661,6 @@
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
-          <FunctionImport Name="GeneratePaySlips" ReturnType="Collection(TrainersModel.GeneratePaySlips_Result)">
-            <Parameter Name="TeacherId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="GetCurrentTeachers" ReturnType="Collection(TrainersModel.GetCurrentTeachers_Result)" />
           </EntityContainer>
         <ComplexType Name="GenerateFeeSlips_Result">
           <Property Type="Int32" Name="StudentId" Nullable="false" />
@@ -1684,6 +1684,33 @@
           <Property Type="Int32" Name="UnpaidAmount" Nullable="false" />
           <Property Type="Int32" Name="ArrearAmount" Nullable="false" />
           <Property Type="String" Name="ArrearType" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GeneratePaySlips_Result">
+          <Property Type="String" Name="Month" Nullable="false" MaxLength="61" />
+          <Property Type="DateTime" Name="IssueDate" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="TeacherId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" />
+          <Property Type="String" Name="Designation" Nullable="true" />
+          <Property Type="DateTime" Name="JoiningDate" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="BasicPay" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="Bonus" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="PF" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="EOBI" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="LoanDeduction" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="GrossPay" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="NetPay" Nullable="true" Precision="18" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="GetCurrentTeachers_Result">
+          <Property Type="Int32" Name="TeacherId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" />
+          <Property Type="String" Name="Gender" Nullable="true" />
+          <Property Type="DateTime" Name="DateOfBirth" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Age" Nullable="false" />
+          <Property Type="String" Name="Designation" Nullable="true" />
+          <Property Type="DateTime" Name="JoiningDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Mobile" Nullable="true" />
+          <Property Type="String" Name="Address" Nullable="true" />
+          <Property Type="Int32" Name="Status" Nullable="false" />
         </ComplexType>
         <EntityType Name="Arrear">
           <Key>
@@ -1790,7 +1817,7 @@
           <Key>
             <PropertyRef Name="DailyAttendanceId" />
           </Key>
-          <Property Name="DailyAttendanceId" Type="Int32" Nullable="false" />
+          <Property Name="DailyAttendanceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="StaffId" Type="Int32" />
           <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="AttendanceDate" Type="DateTime" Precision="3" />
@@ -1798,9 +1825,9 @@
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__DailyAtte__Creat__1FB8AE52" FromRole="DailyAttendance" ToRole="TrainerUser" />
-          <NavigationProperty Name="Staff" Relationship="TrainersModel.FK__DailyAtte__Staff__1EC48A19" FromRole="DailyAttendance" ToRole="Staff" />
-          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__DailyAtte__Updat__20ACD28B" FromRole="DailyAttendance" ToRole="TrainerUser" />
+          <NavigationProperty Name="TrainerUser" Relationship="TrainersModel.FK__DailyAtte__Creat__247D636F" FromRole="DailyAttendance" ToRole="TrainerUser" />
+          <NavigationProperty Name="Staff" Relationship="TrainersModel.FK__DailyAtte__Staff__23893F36" FromRole="DailyAttendance" ToRole="Staff" />
+          <NavigationProperty Name="TrainerUser1" Relationship="TrainersModel.FK__DailyAtte__Updat__257187A8" FromRole="DailyAttendance" ToRole="TrainerUser" />
         </EntityType>
         <EntityType Name="Designation">
           <Key>
@@ -1999,7 +2026,7 @@
           <Property Name="UpdatedBy" Type="Int32" />
           <NavigationProperty Name="Arrears" Relationship="TrainersModel.FK__Arrear__StaffId__18178C8A" FromRole="Staff" ToRole="Arrear" />
           <NavigationProperty Name="Classes" Relationship="TrainersModel.FK__Class__ClassAdvi__33008CF0" FromRole="Staff" ToRole="Class" />
-          <NavigationProperty Name="DailyAttendances" Relationship="TrainersModel.FK__DailyAtte__Staff__1EC48A19" FromRole="Staff" ToRole="DailyAttendance" />
+          <NavigationProperty Name="DailyAttendances" Relationship="TrainersModel.FK__DailyAtte__Staff__23893F36" FromRole="Staff" ToRole="DailyAttendance" />
           <NavigationProperty Name="Designation1" Relationship="TrainersModel.FK__Staff__Designati__0BB1B5A5" FromRole="Staff" ToRole="Designation" />
           <NavigationProperty Name="Salaries" Relationship="TrainersModel.FK__Salary__StaffId__08D548FA" FromRole="Staff" ToRole="Salary" />
           <NavigationProperty Name="SalaryPayments" Relationship="TrainersModel.FK__SalaryPay__Staff__7D63964E" FromRole="Staff" ToRole="SalaryPayment" />
@@ -2122,8 +2149,8 @@
           <NavigationProperty Name="Classes1" Relationship="TrainersModel.FK__Class__UpdatedBy__04459E07" FromRole="TrainerUser" ToRole="Class" />
           <NavigationProperty Name="Configurations" Relationship="TrainersModel.FK__Configura__Creat__5B438874" FromRole="TrainerUser" ToRole="Configuration" />
           <NavigationProperty Name="Configurations1" Relationship="TrainersModel.FK__Configura__Updat__5C37ACAD" FromRole="TrainerUser" ToRole="Configuration" />
-          <NavigationProperty Name="DailyAttendances" Relationship="TrainersModel.FK__DailyAtte__Creat__1FB8AE52" FromRole="TrainerUser" ToRole="DailyAttendance" />
-          <NavigationProperty Name="DailyAttendances1" Relationship="TrainersModel.FK__DailyAtte__Updat__20ACD28B" FromRole="TrainerUser" ToRole="DailyAttendance" />
+          <NavigationProperty Name="DailyAttendances" Relationship="TrainersModel.FK__DailyAtte__Creat__247D636F" FromRole="TrainerUser" ToRole="DailyAttendance" />
+          <NavigationProperty Name="DailyAttendances1" Relationship="TrainersModel.FK__DailyAtte__Updat__257187A8" FromRole="TrainerUser" ToRole="DailyAttendance" />
           <NavigationProperty Name="Designations" Relationship="TrainersModel.FK__Designati__Creat__0CA5D9DE" FromRole="TrainerUser" ToRole="Designation" />
           <NavigationProperty Name="Designations1" Relationship="TrainersModel.FK__Designati__Updat__0D99FE17" FromRole="TrainerUser" ToRole="Designation" />
           <NavigationProperty Name="Enrolments" Relationship="TrainersModel.FK__Enrolment__Creat__6D6238AF" FromRole="TrainerUser" ToRole="Enrolment" />
@@ -2329,7 +2356,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__DailyAtte__Creat__1FB8AE52">
+        <Association Name="FK__DailyAtte__Creat__247D636F">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.DailyAttendance" Role="DailyAttendance" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2341,7 +2368,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__DailyAtte__Staff__1EC48A19">
+        <Association Name="FK__DailyAtte__Staff__23893F36">
           <End Type="TrainersModel.Staff" Role="Staff" Multiplicity="0..1" />
           <End Type="TrainersModel.DailyAttendance" Role="DailyAttendance" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2353,7 +2380,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__DailyAtte__Updat__20ACD28B">
+        <Association Name="FK__DailyAtte__Updat__257187A8">
           <End Type="TrainersModel.TrainerUser" Role="TrainerUser" Multiplicity="0..1" />
           <End Type="TrainersModel.DailyAttendance" Role="DailyAttendance" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2873,33 +2900,6 @@
           <End Type="TrainersModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="TrainersModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
-        <ComplexType Name="GeneratePaySlips_Result">
-          <Property Type="String" Name="Month" Nullable="false" MaxLength="61" />
-          <Property Type="DateTime" Name="IssueDate" Nullable="false" Precision="23" />
-          <Property Type="Int32" Name="TeacherId" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="false" />
-          <Property Type="String" Name="Designation" Nullable="true" />
-          <Property Type="DateTime" Name="JoiningDate" Nullable="true" Precision="23" />
-          <Property Type="Decimal" Name="BasicPay" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Decimal" Name="Bonus" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Decimal" Name="PF" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Decimal" Name="EOBI" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Decimal" Name="LoanDeduction" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Decimal" Name="GrossPay" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Decimal" Name="NetPay" Nullable="true" Precision="18" Scale="0" />
-        </ComplexType>
-        <ComplexType Name="GetCurrentTeachers_Result">
-          <Property Type="Int32" Name="TeacherId" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="false" />
-          <Property Type="String" Name="Gender" Nullable="true" />
-          <Property Type="DateTime" Name="DateOfBirth" Nullable="true" Precision="23" />
-          <Property Type="Int32" Name="Age" Nullable="false" />
-          <Property Type="String" Name="Designation" Nullable="true" />
-          <Property Type="DateTime" Name="JoiningDate" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Mobile" Nullable="true" />
-          <Property Type="String" Name="Address" Nullable="true" />
-          <Property Type="Int32" Name="Status" Nullable="false" />
-        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2935,6 +2935,41 @@
                 <ScalarProperty Name="UnpaidAmount" ColumnName="UnpaidAmount" />
                 <ScalarProperty Name="ArrearAmount" ColumnName="ArrearAmount" />
                 <ScalarProperty Name="ArrearType" ColumnName="ArrearType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GeneratePaySlips" FunctionName="TrainersModel.Store.GeneratePaySlips">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TrainersModel.GeneratePaySlips_Result">
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="IssueDate" ColumnName="IssueDate" />
+                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+                <ScalarProperty Name="BasicPay" ColumnName="BasicPay" />
+                <ScalarProperty Name="Bonus" ColumnName="Bonus" />
+                <ScalarProperty Name="PF" ColumnName="PF" />
+                <ScalarProperty Name="EOBI" ColumnName="EOBI" />
+                <ScalarProperty Name="LoanDeduction" ColumnName="LoanDeduction" />
+                <ScalarProperty Name="GrossPay" ColumnName="GrossPay" />
+                <ScalarProperty Name="NetPay" ColumnName="NetPay" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetCurrentTeachers" FunctionName="TrainersModel.Store.GetCurrentTeachers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TrainersModel.GetCurrentTeachers_Result">
+                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -3319,41 +3354,6 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
-          <FunctionImportMapping FunctionImportName="GeneratePaySlips" FunctionName="TrainersModel.Store.GeneratePaySlips">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="TrainersModel.GeneratePaySlips_Result">
-                <ScalarProperty Name="Month" ColumnName="Month" />
-                <ScalarProperty Name="IssueDate" ColumnName="IssueDate" />
-                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Designation" ColumnName="Designation" />
-                <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
-                <ScalarProperty Name="BasicPay" ColumnName="BasicPay" />
-                <ScalarProperty Name="Bonus" ColumnName="Bonus" />
-                <ScalarProperty Name="PF" ColumnName="PF" />
-                <ScalarProperty Name="EOBI" ColumnName="EOBI" />
-                <ScalarProperty Name="LoanDeduction" ColumnName="LoanDeduction" />
-                <ScalarProperty Name="GrossPay" ColumnName="GrossPay" />
-                <ScalarProperty Name="NetPay" ColumnName="NetPay" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetCurrentTeachers" FunctionName="TrainersModel.Store.GetCurrentTeachers">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="TrainersModel.GetCurrentTeachers_Result">
-                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Gender" ColumnName="Gender" />
-                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
-                <ScalarProperty Name="Age" ColumnName="Age" />
-                <ScalarProperty Name="Designation" ColumnName="Designation" />
-                <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
-                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
