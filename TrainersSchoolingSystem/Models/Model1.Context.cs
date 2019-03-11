@@ -88,5 +88,20 @@ namespace TrainersSchoolingSystem.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<temp_Result>("temp");
         }
+    
+        public virtual ObjectResult<ClasswiseCount_Result> ClasswiseCount()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ClasswiseCount_Result>("ClasswiseCount");
+        }
+    
+        public virtual ObjectResult<MonthlyFeeCollection_Result> MonthlyFeeCollection()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MonthlyFeeCollection_Result>("MonthlyFeeCollection");
+        }
+    
+        public virtual ObjectResult<MonthlySalaryPayments_Result> MonthlySalaryPayments()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MonthlySalaryPayments_Result>("MonthlySalaryPayments");
+        }
     }
 }

@@ -4,14 +4,13 @@
     ViewBag.Title = "FeeSetup";
 }
 
-<h2>FeeSetup</h2>
+<h2>Fee Presets</h2>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
 <div class="form-horizontal">
-    <h4>FeeSetup</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
@@ -53,6 +52,3 @@
 </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

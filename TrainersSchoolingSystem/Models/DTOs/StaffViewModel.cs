@@ -17,6 +17,9 @@ namespace TrainersSchoolingSystem.Models.DTOs
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
         [Required]
+        [Display(Name = "CNIC")]
+        public string CNIC { get; set; }
+        [Required]
         public Nullable<int> Designation { get; set; }
        
         [Required]

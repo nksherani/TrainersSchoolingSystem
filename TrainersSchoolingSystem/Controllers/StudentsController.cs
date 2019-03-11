@@ -699,11 +699,28 @@ namespace TrainersSchoolingSystem.Controllers
                     var mother = Mapper<Parent>.GetObject(student.Mother_);
                     father.Relation = "Father";
                     mother.Relation = "Mother";
-                    db.Parents.Add(father);
-                    db.SaveChanges();
+                    var temp = db.Parents.Where(x => x.CNIC == father.CNIC).ToList();
+                    if (temp.Count==0)
+                    {
+                        db.Parents.Add(father);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        father = temp.FirstOrDefault();
+                    }
                     std.Father = father.ParentId;
-                    db.Parents.Add(mother);
-                    db.SaveChanges();
+
+                    temp = db.Parents.Where(x => x.CNIC == mother.CNIC).ToList();
+                    if (temp.Count == 0)
+                    {
+                        db.Parents.Add(mother);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        mother = temp.FirstOrDefault();
+                    }
                     std.Mother = mother.ParentId;
 
                     if (student.Guardian_.Name != null)
@@ -711,8 +728,18 @@ namespace TrainersSchoolingSystem.Controllers
                         student.Guardian_.CreatedBy = student.CreatedBy;
                         student.Guardian_.CreatedDate = student.CreatedDate;
                         var guardian = Mapper<Parent>.GetObject(student.Guardian_);
-                        db.Parents.Add(guardian);
-                        db.SaveChanges();
+
+                        temp = db.Parents.Where(x => x.CNIC == guardian.CNIC).ToList();
+                        if (temp.Count == 0)
+                        {
+                            db.Parents.Add(guardian);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            guardian = temp.FirstOrDefault();
+                        }
+
                         std.Guardian = guardian.ParentId;
                     }
                     var enrolment = Mapper<Enrolment>.GetObject(student.Enrolment);

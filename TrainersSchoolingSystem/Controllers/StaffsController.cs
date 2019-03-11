@@ -101,6 +101,7 @@ namespace TrainersSchoolingSystem.Controllers
                 var staffdb = db.Staffs.Find(staff.StaffId);
                 staffdb.FirstName = staff.FirstName;
                 staffdb.LastName = staff.LastName;
+                staffdb.CNIC = staff.CNIC;
                 staffdb.Designation = staff.Designation;
                 staffdb.Gender = staff.Gender;
                 staffdb.DateOfBirth = staff.DateOfBirth;

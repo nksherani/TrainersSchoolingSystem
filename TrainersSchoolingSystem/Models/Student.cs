@@ -26,6 +26,7 @@ namespace TrainersSchoolingSystem.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public Nullable<System.DateTime> DateOfBirth { get; set; }
+        public Nullable<int> FamilyCode { get; set; }
         public Nullable<int> Age { get; set; }
         public string PlaceOfBirth { get; set; }
         public string Religion { get; set; }

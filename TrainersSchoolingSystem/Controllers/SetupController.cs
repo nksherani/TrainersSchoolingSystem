@@ -16,7 +16,7 @@ namespace TrainersSchoolingSystem.Controllers
     public class SetupController : Controller
     {
         TrainersEntities db = new TrainersEntities();
-        
+
         // GET: Setup
         public ActionResult Index()
         {
@@ -46,7 +46,7 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    
+
                     var properties = feeSetup.GetType().GetProperties();
                     int i = 1;
                     foreach (var property in properties)
@@ -54,7 +54,7 @@ namespace TrainersSchoolingSystem.Controllers
                         Fee fee = new Fee();
                         //config.ConfigurationId = i++;
                         fee.FeeType = property.Name;
-                        fee.Amount = (int)property.GetValue(feeSetup);
+                        fee.Amount = (decimal)property.GetValue(feeSetup);
                         fee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                         fee.CreatedDate = DateTime.Now;
                         db.Fees.Add(fee);
@@ -68,10 +68,21 @@ namespace TrainersSchoolingSystem.Controllers
                 {
                     return View();
                 }
-
             }
-            catch
+            catch (Exception ex)
             {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
                 return View();
             }
         }
@@ -271,7 +282,7 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 lookup = new Lookup();
                 lookup.LookupTypeId = lookupType5.LookupTypeId;
-                lookup.LookupText = (i+1).ToString();
+                lookup.LookupText = (i + 1).ToString();
                 lookup.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
                 lookup.CreatedDate = DateTime.Now;
                 db.Lookups.Add(lookup);
@@ -325,7 +336,7 @@ namespace TrainersSchoolingSystem.Controllers
                     continue;
                 property.SetValue(configuration, configurationdb.Where(x => x.Key == property.Name).FirstOrDefault().Value);
             }
-            ViewBag.FirstMonth = new SelectList(Constants.months, "Key", "Value",Constants.months[Convert.ToInt32(configuration.FirstMonth)]);
+            ViewBag.FirstMonth = new SelectList(Constants.months, "Key", "Value", Constants.months[Convert.ToInt32(configuration.FirstMonth)]);
             return View(configuration);
         }
         // POST: Setup/Edit/5
@@ -386,7 +397,7 @@ namespace TrainersSchoolingSystem.Controllers
             string path = "";
             string pic = "";
             var path_ = Server.MapPath("~/Content/Temp");
-            if(Directory.Exists(path_))
+            if (Directory.Exists(path_))
             {
                 var files = System.IO.Directory.EnumerateFiles(path_);
                 foreach (var item in files)
@@ -397,7 +408,7 @@ namespace TrainersSchoolingSystem.Controllers
                     }
                 }
             }
-            
+
 
             if (file != null)
             {
@@ -409,7 +420,7 @@ namespace TrainersSchoolingSystem.Controllers
             }
             return $"../Content/Temp/{pic}";
         }
-       
+
 
         // GET: Setup/Delete/5
         public ActionResult Delete(int id)

@@ -17,6 +17,10 @@ namespace TrainersSchoolingSystem.Models.DTOs
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
         [Required]
+        [Display(Name = "CNIC")]
+        [RegularExpression("^[0-9]{5}-[0-9]{7}-[0-9]{1}$", ErrorMessage = "Enter CNIC in proper format like 12345-1234567-1")]
+        public string CNIC { get; set; }
+        [Required]
         public Nullable<int> Designation { get; set; }
         
         [Required]

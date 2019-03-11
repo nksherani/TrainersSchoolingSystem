@@ -14,6 +14,8 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public string FirstName { get; set; }
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
+        [Display(Name = "Family Code")]
+        public string FamilyCode { get; set; }
         [Required]
         [Display(Name = "Date of Birth")]
         public Nullable<DateTime> DateOfBirth { get; set; }

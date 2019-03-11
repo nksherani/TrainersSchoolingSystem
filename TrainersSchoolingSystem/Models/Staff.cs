@@ -29,6 +29,7 @@ namespace TrainersSchoolingSystem.Models
         public int StaffId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string CNIC { get; set; }
         public Nullable<int> Designation { get; set; }
         public string Gender { get; set; }
         public Nullable<System.DateTime> DateOfBirth { get; set; }
