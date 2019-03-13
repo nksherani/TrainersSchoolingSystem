@@ -45,6 +45,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus, Version=4.5.3.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.1\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="HiQPdf.Free, Version=10.17.0.0, Culture=neutral, PublicKeyToken=acd8b62594985b24, processorArchitecture=MSIL">
       <HintPath>..\packages\hiqpdf.free.10.17.0\lib\net40\HiQPdf.Free.dll</HintPath>
     </Reference>
@@ -56,6 +59,7 @@
       <HintPath>..\packages\Microsoft.Office.Interop.Word.15.0.4797.1003\lib\net20\Microsoft.Office.Interop.Word.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -227,10 +231,12 @@
     <Compile Include="Controllers\DesignationsController.cs" />
     <Compile Include="Controllers\EnrolmentsController.cs" />
     <Compile Include="Controllers\FeesController.cs" />
+    <Compile Include="Controllers\GeneralStaffController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LookupsController.cs" />
     <Compile Include="Controllers\LookupTypesController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MigrationController.cs" />
     <Compile Include="Controllers\PaidFeesController.cs" />
     <Compile Include="Controllers\ParentsController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
@@ -288,6 +294,7 @@
     <Compile Include="Models\DTOs\FeeSetup.cs" />
     <Compile Include="Models\DTOs\FeeSlipModel.cs" />
     <Compile Include="Models\DTOs\FeeViewModel.cs" />
+    <Compile Include="Models\DTOs\GeneralStaffViewModel.cs" />
     <Compile Include="Models\DTOs\GuardianViewModel.cs" />
     <Compile Include="Models\DTOs\PaidFeeViewModel.cs" />
     <Compile Include="Models\DTOs\ParentViewModel.cs" />
@@ -296,6 +303,7 @@
     <Compile Include="Models\DTOs\SalaryPaymentViewModel.cs" />
     <Compile Include="Models\DTOs\SalaryViewModel.cs" />
     <Compile Include="Models\DTOs\StaffAttendanceViewModel.cs" />
+    <Compile Include="Models\DTOs\StaffPaySlipModel.cs" />
     <Compile Include="Models\DTOs\StaffViewModel.cs" />
     <Compile Include="Models\DTOs\StudentViewModel.cs" />
     <Compile Include="Models\DTOs\SubjectAssignmentViewModel.cs" />
@@ -1286,11 +1294,13 @@
     <Content Include="Views\Reports\MonthlySalaryPayments.cshtml" />
     <Content Include="Views\Reports\MonthlyFeeCollection.cshtml" />
     <Content Include="Views\Reports\ClasswiseCount.cshtml" />
+    <Content Include="Views\Migration\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\FeeSlips\" />
     <Folder Include="Content\Temp\" />
+    <Folder Include="Views\GeneralStaff\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
