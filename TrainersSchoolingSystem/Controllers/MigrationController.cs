@@ -33,6 +33,7 @@ namespace TrainersSchoolingSystem.Controllers
                 var path = Path.Combine(directory, fileName);
                 file.SaveAs(path);
                 ProcessDesignationsData(path);
+                ProcessStaffData(path);
             }
             ViewBag.Message = "Data Uploaded Successfully";
             return RedirectToAction("Index");
@@ -56,13 +57,20 @@ namespace TrainersSchoolingSystem.Controllers
                     Designation des = new Designation();
                     des.DesignationName = workSheet.Cells[i, 2].Text;
                     if (designationdb.Where(x => x.DesignationName == des.DesignationName).Count() > 0)
+                    {
                         des = designationdb.Where(x => x.DesignationName == des.DesignationName).FirstOrDefault();
+                        des.UpdatedBy = userid;
+                        des.UpdatedDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        des.CreatedDate = DateTime.Now;
+                        des.CreatedBy = userid;
+                    }
                     des.Category = workSheet.Cells[i, 3].Text;
                     des.PaidLeaves = Convert.ToInt32(workSheet.Cells[i, 4].Text == "" ? "0" : workSheet.Cells[i, 4].Text);
-                    des.ShortLeavesScale = Convert.ToInt32(workSheet.Cells[i, 5].Text==""? "0": workSheet.Cells[i, 5].Text);
+                    des.ShortLeavesScale = Convert.ToInt32(workSheet.Cells[i, 5].Text == "" ? "0" : workSheet.Cells[i, 5].Text);
                     des.LateComingScale = Convert.ToInt32(workSheet.Cells[i, 6].Text == "" ? "0" : workSheet.Cells[i, 6].Text);
-                    des.CreatedDate = DateTime.Now;
-                    des.CreatedBy = userid;
                     db.Designations.AddOrUpdate(des);
 
                 }
@@ -71,12 +79,15 @@ namespace TrainersSchoolingSystem.Controllers
             db.SaveChanges();
             return true;
         }
-        private bool ProcessTeachersData(string path)
+        private bool ProcessStaffData(string path)
         {
             var package = new ExcelPackage(new FileInfo(path));
-
+            //List<ExcelRange> list = new List<ExcelRange>();
             ExcelWorksheet workSheet = package.Workbook.Worksheets[2];
-            List<ExcelRange> list = new List<ExcelRange>();
+            var staffdb = db.Staffs.ToList();
+            var designations = db.Designations.ToList();
+            var salaries = db.Salaries.ToList();
+            var userid = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
             for (int i = workSheet.Dimension.Start.Row;
                      i <= workSheet.Dimension.End.Row;
                      i++)
@@ -85,62 +96,59 @@ namespace TrainersSchoolingSystem.Controllers
                 int temp = 0;
                 if (int.TryParse(cellValue, out temp))
                 {
-                    list.Add(workSheet.Cells[i, 1, workSheet.Dimension.End.Row, workSheet.Dimension.End.Column]);
+                    //list.Add(workSheet.Cells[i, 1, i, workSheet.Dimension.End.Column]);
+                    Staff staff = new Staff();
+                    List<string> name = workSheet.Cells[i, 5].Text.Split(' ').ToList();
+                    staff.FirstName = name.FirstOrDefault();
+                    staff.LastName = name.Skip(1).Aggregate<string, string>("", (a, b) => a + " " + b);
+                    if (staffdb.Where(x => x.FirstName == staff.FirstName && x.LastName == staff.LastName).Count() > 0)
+                    {
+                        staff = staffdb.Where(x => x.FirstName == staff.FirstName && x.LastName == staff.LastName).FirstOrDefault();
+                        staff.UpdatedBy = userid;
+                        staff.UpdatedDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        staff.CreatedDate = DateTime.Now;
+                        staff.CreatedBy = userid;
+                    }
+                    var ndes = workSheet.Cells[i, 10].Text;
+                    var des = designations.Where(x => x.DesignationName.ToLower().Contains(ndes.ToLower()) ||
+                    ndes.ToLower().Contains(x.DesignationName.ToLower())
+                    ).FirstOrDefault();
+                    if (des != null)
+                        staff.Designation = des.DesignationId;
+                    staff.Qualification = workSheet.Cells[i, 11].Text;
+                    DateTime date;
+                    if (DateTime.TryParse(workSheet.Cells[i, 12].Text, out date))
+                        staff.JoiningDate = date;
+                    
+                    db.Staffs.AddOrUpdate(staff);
+                    db.SaveChanges();
+                    Salary salary = new Salary();
+                    if(salaries.Where(x=>x.StaffId==staff.StaffId).Count()>0)
+                    {
+                        salary = salaries.Where(x => x.StaffId == staff.StaffId).FirstOrDefault();
+                        salary.UpdatedBy = userid;
+                        salary.UpdatedDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        salary.StaffId = staff.StaffId;
+                        salary.CreatedBy = userid;
+                        salary.CreatedDate = DateTime.Now;
+                    }
+                    if(workSheet.Cells[i, 14].Text!="")
+                    {
+                        salary.BasicPay = Convert.ToDecimal(workSheet.Cells[i, 14].Text);
+                        salary.GrossPay = Convert.ToDecimal(workSheet.Cells[i, 14].Text);
+                        salary.NetPay = Convert.ToDecimal(workSheet.Cells[i, 14].Text);
+                    }
+                    db.Salaries.AddOrUpdate(salary);
                 }
+
             }
-            return true;
-        }
-        private bool ProcessClassesData(string path)
-        {
-            var package = new ExcelPackage(new FileInfo(path));
-
-            ExcelWorksheet workSheet = package.Workbook.Worksheets[3];
-            List<ExcelRange> list = new List<ExcelRange>();
-            for (int i = workSheet.Dimension.Start.Row;
-                     i <= workSheet.Dimension.End.Row;
-                     i++)
-            {
-                string cellValue = workSheet.Cells[i, 1].Text;
-                int temp = 0;
-                if (int.TryParse(cellValue, out temp))
-                {
-                    list.Add(workSheet.Cells[i, 1, workSheet.Dimension.End.Row, workSheet.Dimension.End.Column]);
-                }
-            }
-            return true;
-        }
-        private bool ProcessSubjectsData(string path)
-        {
-            var package = new ExcelPackage(new FileInfo(path));
-
-            ExcelWorksheet workSheet = package.Workbook.Worksheets[4];
-            List<ExcelRange> list = new List<ExcelRange>();
-            for (int i = workSheet.Dimension.Start.Row;
-                     i <= workSheet.Dimension.End.Row;
-                     i++)
-            {
-                string cellValue = workSheet.Cells[i, 1].Text;
-                int temp = 0;
-                if (int.TryParse(cellValue, out temp))
-                {
-                    list.Add(workSheet.Cells[i, 1, workSheet.Dimension.End.Row, workSheet.Dimension.End.Column]);
-                }
-            }
-            return true;
-        }
-
-        private bool ProcessStudentsData(string path)
-        {
-            var package = new ExcelPackage(new FileInfo(path));
-
-            ExcelWorksheet workSheet = package.Workbook.Worksheets[1];
-
-            for (int i = workSheet.Dimension.Start.Row;
-                     i <= workSheet.Dimension.End.Row;
-                     i++)
-            {
-                object cellValue = workSheet.Cells[i, 0].Value;
-            }
+            db.SaveChanges();
             return true;
         }
         // GET: Migration/Details/5
