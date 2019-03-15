@@ -222,13 +222,14 @@
             data: JSON.stringify(formData),
             contentType: "application/json;charset=utf-8",
             success: function (data_) {
+                console.log(data_);
                 $("#loading").hide();
                 $('#grid').data('kendoGrid').dataSource.read();
                 $('#grid').data('kendoGrid').refresh();
                 console.log(action.value());
 
                 if (action.value() == 2) {
-                    var win = window.open('../Content/Temp/PaySlips.html', '_blank');
+                    var win = window.open(data_, '_blank');
                     if (win) {
                         //Browser has allowed it to be opened
                         win.focus();

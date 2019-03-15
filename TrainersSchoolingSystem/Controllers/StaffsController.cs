@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -189,26 +190,26 @@ namespace TrainersSchoolingSystem.Controllers
                     if (item.Status > 0)
                     {
                         var existing = db.DailyAttendances
-                            .Where(x => x.StaffId == item.StaffId).OrderByDescending(x => x.CreatedDate)?
+                            .Where(x => x.StaffId == item.StaffId && x.AttendanceDate == DateTime.Today)?
                             .FirstOrDefault();
                         string prevStatus = "";
-                        if (existing == null || (DateTime.Now - existing.CreatedDate).Value.TotalHours > 24)
+                        if (existing == null)
+                        {
                             existing = new DailyAttendance();
-                        else
-                            prevStatus = existing.Status;
-                        existing.StaffId = item.StaffId;
-                        existing.Status = Enum.GetName(typeof(AttendanceStatus), item.Status);
-                        existing.AttendanceDate = DateTime.Now;
-                        if (existing.CreatedBy.HasValue)
-                        {
-                            existing.UpdatedBy = userId;
-                            existing.UpdatedDate = DateTime.Now;
-                        }
-                        else
-                        {
                             existing.CreatedBy = userId;
                             existing.CreatedDate = DateTime.Now;
                         }
+                        else
+                        {
+                            prevStatus = existing.Status;
+                            existing.UpdatedBy = userId;
+                            existing.UpdatedDate = DateTime.Now;
+                        }
+                        existing.StaffId = item.StaffId;
+                        existing.Status = Enum.GetName(typeof(AttendanceStatus), item.Status);
+                        existing.AttendanceDate = DateTime.Today;
+
+
                         db.DailyAttendances.AddOrUpdate(existing);
                         var smry = AttendanceSummary.Where(x => x.StaffId == item.StaffId).FirstOrDefault();
                         if (smry == null)
@@ -335,6 +336,7 @@ namespace TrainersSchoolingSystem.Controllers
 
         public ActionResult GeneratePaySlips(Bulk bulk)
         {
+            string fname = "payslips" + DateTime.Now.ToString("ddMMyyyyhhmmss") + ".html";
             try
             {
                 var staffids = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
@@ -366,8 +368,13 @@ namespace TrainersSchoolingSystem.Controllers
                 strBody.Append("<body lang=EN-US style='tab-interval:.5in'>" +
                                         feeslipsBody +
                                         "</body></html>");
+                string folderpath = Server.MapPath("~/Content/Temp");
+                if (!Directory.Exists(folderpath))
+                {
+                    Directory.CreateDirectory(folderpath);
+                }
 
-                var filePath = Server.MapPath("~/Content/Temp/PaySlips.html");
+                var filePath = Server.MapPath("~/Content/Temp/" + fname);
                 System.IO.File.WriteAllText(filePath, strBody.ToString());
             }
             catch (Exception ex)
@@ -385,7 +392,7 @@ namespace TrainersSchoolingSystem.Controllers
                     Logger.Fatal(ex.InnerException.StackTrace);
                 }
             }
-            return Json("../Content/Temp/PaySlips.html", JsonRequestBehavior.AllowGet);
+            return Json("../Content/Temp/" + fname, JsonRequestBehavior.AllowGet);
         }
         private string GetPaySlip(int StaffId, int month)
         {

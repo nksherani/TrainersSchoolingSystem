@@ -105,10 +105,9 @@ namespace TrainersSchoolingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!paidFee.PaymentDate.HasValue)
-                    paidFee.PaymentDate = DateTime.Now;
                 var paidfeedb = db.PaidFees.Find(paidFee.PaidFeeId);
                 paidfeedb.PaidFeeId = paidFee.PaidFeeId;
+                paidfeedb.CalculatedAmount = paidFee.CalculatedAmount;
                 paidfeedb.PaymentDate = paidFee.PaymentDate;
                 paidfeedb.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 paidfeedb.UpdatedDate = DateTime.Now;

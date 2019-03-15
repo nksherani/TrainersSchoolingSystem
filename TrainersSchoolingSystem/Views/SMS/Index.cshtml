@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewBag.Title = "Students";
+}
+
+<h2>Students</h2>
+<label>Select a bulk Action to Perform on Selected Students </label>
+<input id="ip" name="ip" />
+<textarea type="text" id="message" name="message" placeholder="100" />
+<input type="button" disabled id="btnPerformAction" value="Send SMS" />
+
+<img id="loading" hidden src="~/Content/loading.gif" style="width:60px;height:50px;" />
+<a href="#" class="k-button" id="DownloadFeeSlips">Download Fee Slips</a>
+
+<div id="error2" class="alert alert-danger">
+    <strong>No Student is selected!</strong> Please select a student.
+</div>
+
+<div id="error1" class="alert alert-danger">
+    <strong>Message is empty!</strong>
+</div>
+
+<div id="grid"></div>
+
+<script>
+    var grid, ip, msg, error1, error2;
+    $(document).ready(function () {
+        $("#btnPerformAction").kendoButton();
+        $("#grid").kendoGrid({
+            dataSource: {
+                type: "jsonp",
+                transport: {
+                    read: "../Students/GetStudents"
+                },
+                pageSize: 20,
+                schema: {
+                    model: {
+                        id: "StudentId",
+                        fields: {
+                            "FirstName": { type: "string" }
+                        }
+                    }
+                },
+            },
+            change: onChange,
+            height: 550,
+            groupable: true,
+            sortable: true,
+            filterable: {
+                mode: "row"
+            },
+            pageable: {
+                refresh: true,
+                pageSizes: true,
+                buttonCount: 5
+            },
+            persistSelection: true,
+            columns: [
+                { selectable: true, width: "50px" },
+                {
+                    field: "StudentId",
+                    title: "ID",
+                    width: 30
+                }, {
+                    template: "#: FirstName # #: LastName #",
+                    field: "FirstName",
+                    title: "Name",
+                    width: 80
+                }, {
+                    field: "Father_.Name",
+                    title: "Father's Name",
+                    width: 80
+                }, {
+                    field: "Father_.Mobile",
+                    title: "Contact",
+                    width: 80
+                }, {
+                    field: "Enrolment.Class_.ClassName",
+                    title: "Class",
+                    width: 80
+                }, {
+                    field: "Enrolment.Class_.Section",
+                    title: "Section",
+                    width: 80
+                },
+                {
+                    field: "Enrolment.Fee",
+                    title: "Fee",
+                    width: 80
+                }]
+        });
+        grid = $('#grid').data('kendoGrid');
+        ip = $('#ip').val();
+        msg = $("#message").text();
+        error1 = $("#error1");
+        error2 = $("#error2");
+        $("#btnPerformAction").click(function () {
+            var studentIds = grid.selectedKeyNames()/*.join(", ")*/;
+            var iserror = false;
+            if (msg == "") {
+                $("#error1").show();
+                iserror = true;
+            }
+            if (ip == "") {
+                iserror = true;
+                $("#error2").show();
+            }
+            if (iserror)
+                return;
+            $("#loading").show();
+
+            var formData = {
+                "Action": ip,
+                "Ids": studentIds,
+                "Class": msg
+            };
+            console.log(formData);
+            SendSMS(formData);
+        });
+    });
+    function SendSMS(formData) {
+        $.ajax({
+            url: "../SMS/SendBulk",
+            type: "POST",
+            data: JSON.stringify(formData),
+            contentType: "application/json;charset=utf-8",
+            success: function (data_) {
+                $("#loading").hide();
+                console.log(data_);
+            },
+            error: function (data_) {
+                $("#loading").hide();
+                console.log(data_);
+                alert(data_.responseText);
+                console.log("error");
+            }
+        });
+    }
+    function onChange(arg) {
+        if (grid.selectedKeyNames().length > 0)
+            error1.hide();
+    }
+    function onChangeAction(arg) {
+    }
+
+</script>

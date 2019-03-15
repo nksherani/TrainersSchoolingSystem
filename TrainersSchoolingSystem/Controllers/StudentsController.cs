@@ -63,6 +63,8 @@ namespace TrainersSchoolingSystem.Controllers
         }
         public ActionResult GenerateFeeSlips2(Bulk bulk)
         {
+            string fname = "FeeSlips" + DateTime.Now.ToString("ddMMyyyyhhmmss") + ".html";
+
             var stdIds = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
 
             string css = "";
@@ -94,10 +96,16 @@ namespace TrainersSchoolingSystem.Controllers
             strBody.Append("<body lang=EN-US style='tab-interval:.5in'>" +
                                     feeslipsBody +
                                     "</body></html>");
-
+            string folderpath = Server.MapPath("~/Content/Temp");
+            if (!Directory.Exists(folderpath))
+            {
+                Directory.CreateDirectory(folderpath);
+            }
             var filePath = Server.MapPath("~/Content/Temp/FeeSlips.html");
             System.IO.File.WriteAllText(filePath, strBody.ToString());
-            return Json("../Content/Temp/FeeSlips.html", JsonRequestBehavior.AllowGet);
+            //return Json("../Content/Temp/FeeSlips.html", JsonRequestBehavior.AllowGet);
+            return Json("../Content/Temp/" + fname, JsonRequestBehavior.AllowGet);
+
         }
         private string GetFeeSlip(int studentid, int month)
         {
@@ -236,6 +244,7 @@ namespace TrainersSchoolingSystem.Controllers
                     {
                         paidFee = new PaidFee();
                         paidFee.ChallanNo = FeeSlipData.ChallanNo;
+                        paidFee.Month = month;
                     }
                     paidFee.StudentId = studentid;
                     paidFee.CalculatedAmount = FeeSlipData.AnnualFee;

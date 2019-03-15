@@ -25,7 +25,12 @@ namespace TrainersSchoolingSystem.Controllers
 
             if (file.ContentLength > 0)
             {
-                string directory = Server.MapPath("~/App_Data/uploads");
+                string directory = Server.MapPath("~/App_Data");
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+                directory = Server.MapPath("~/App_Data/uploads");
                 if (!Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);

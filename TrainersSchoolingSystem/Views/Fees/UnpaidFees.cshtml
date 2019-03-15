@@ -133,7 +133,7 @@
         //console.log(element[0].value);
         var Received = element[0].value;
         var Unpaid = $(element).closest("tr").find("td:eq(" + columnIndex + ")").text();
-        return (parseInt(Received) <= parseInt(Unpaid));
+        return (parseInt(Received) <= parseInt(Unpaid)+100);
     }
 
 

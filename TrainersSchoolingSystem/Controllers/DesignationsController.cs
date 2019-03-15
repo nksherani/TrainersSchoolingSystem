@@ -76,6 +76,7 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Category = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Category").ToList(), "LookupText", "LookupText", designation.Category);
             return View(designation);
         }
 

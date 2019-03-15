@@ -37,9 +37,13 @@ namespace TrainersSchoolingSystem.Controllers
             client.GetAsync(url);
             return View();
         }
+        public ActionResult SendBulk(Bulk bulk)
+        {
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
 
-        // GET: SMS/Create
-        public ActionResult Create()
+            // GET: SMS/Create
+            public ActionResult Create()
         {
             return View();
         }

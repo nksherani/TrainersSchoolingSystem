@@ -1311,6 +1311,7 @@
     <Content Include="Views\Staffs\Appoint.cshtml" />
     <Content Include="Views\Staffs\UpdateData.cshtml" />
     <Content Include="Views\SMS\Send.cshtml" />
+    <Content Include="Views\SMS\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

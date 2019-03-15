@@ -78,7 +78,7 @@ namespace TrainersSchoolingSystem.Controllers
                             prevStatus = existing.Status;
                         existing.StaffId = item.TeacherId;
                         existing.Status = Enum.GetName(typeof(AttendanceStatus), item.Status);
-                        existing.AttendanceDate = DateTime.Now;
+                        existing.AttendanceDate = DateTime.Today;
                         if (existing.CreatedBy.HasValue)
                         {
                             existing.UpdatedBy = userId;
