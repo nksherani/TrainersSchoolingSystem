@@ -70,13 +70,13 @@ namespace TrainersSchoolingSystem.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetUnpaidStudents_Result>("GetUnpaidStudents");
         }
     
-        public virtual ObjectResult<GeneratePaySlips_Result> GeneratePaySlips(Nullable<int> teacherId)
+        public virtual ObjectResult<GeneratePaySlips_Result> GeneratePaySlips(Nullable<int> staffId)
         {
-            var teacherIdParameter = teacherId.HasValue ?
-                new ObjectParameter("TeacherId", teacherId) :
-                new ObjectParameter("TeacherId", typeof(int));
+            var staffIdParameter = staffId.HasValue ?
+                new ObjectParameter("StaffId", staffId) :
+                new ObjectParameter("StaffId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GeneratePaySlips_Result>("GeneratePaySlips", teacherIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GeneratePaySlips_Result>("GeneratePaySlips", staffIdParameter);
         }
     
         public virtual ObjectResult<GetCurrentTeachers_Result> GetCurrentTeachers()
@@ -102,6 +102,21 @@ namespace TrainersSchoolingSystem.Models
         public virtual ObjectResult<MonthlySalaryPayments_Result> MonthlySalaryPayments()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MonthlySalaryPayments_Result>("MonthlySalaryPayments");
+        }
+    
+        public virtual ObjectResult<GetCurrentStaff_Result> GetCurrentStaff()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCurrentStaff_Result>("GetCurrentStaff");
+        }
+    
+        public virtual int HardReset()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("HardReset");
+        }
+    
+        public virtual int SoftReset()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SoftReset");
         }
     }
 }

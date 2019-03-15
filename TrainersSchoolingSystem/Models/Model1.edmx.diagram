@@ -5,32 +5,32 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="0e3dc420495648019fab2a11e3ab7283" Name="Diagram1" >
-        <EntityTypeShape EntityType="TrainersModel.Arrear" Width="1.5" PointX="10.5" PointY="32.875" />
+        <EntityTypeShape EntityType="TrainersModel.Arrear" Width="1.5" PointX="6" PointY="36.5" />
         <EntityTypeShape EntityType="TrainersModel.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" />
         <EntityTypeShape EntityType="TrainersModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1" />
         <EntityTypeShape EntityType="TrainersModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="3.75" />
         <EntityTypeShape EntityType="TrainersModel.AspNetUser" Width="1.5" PointX="3" PointY="1.375" />
-        <EntityTypeShape EntityType="TrainersModel.Class" Width="1.5" PointX="6" PointY="38" />
-        <EntityTypeShape EntityType="TrainersModel.Configuration" Width="1.5" PointX="3" PointY="63.25" />
-        <EntityTypeShape EntityType="TrainersModel.DailyAttendance" Width="1.5" PointX="3" PointY="35.375" />
-        <EntityTypeShape EntityType="TrainersModel.Designation" Width="1.5" PointX="3" PointY="59" />
-        <EntityTypeShape EntityType="TrainersModel.Enrolment" Width="1.5" PointX="13.25" PointY="32.125" />
-        <EntityTypeShape EntityType="TrainersModel.Fee" Width="1.5" PointX="11.25" PointY="37.875" />
-        <EntityTypeShape EntityType="TrainersModel.Lookup" Width="1.5" PointX="8.25" PointY="37.5" />
-        <EntityTypeShape EntityType="TrainersModel.LookupType" Width="1.5" PointX="3" PointY="31" />
-        <EntityTypeShape EntityType="TrainersModel.PaidFee" Width="1.5" PointX="7.5" PointY="32.75" />
-        <EntityTypeShape EntityType="TrainersModel.Parent" Width="1.5" PointX="3" PointY="24.875" />
-        <EntityTypeShape EntityType="TrainersModel.Salary" Width="1.5" PointX="10.5" PointY="43" />
-        <EntityTypeShape EntityType="TrainersModel.SalaryPayment" Width="1.5" PointX="13.5" PointY="38.375" />
-        <EntityTypeShape EntityType="TrainersModel.Staff" Width="1.5" PointX="5.25" PointY="43.375" />
-        <EntityTypeShape EntityType="TrainersModel.StaffAttendance" Width="1.5" PointX="13.5" PointY="43.125" />
-        <EntityTypeShape EntityType="TrainersModel.Student" Width="1.5" PointX="5.25" PointY="28.75" />
-        <EntityTypeShape EntityType="TrainersModel.Subject" Width="1.5" PointX="3" PointY="55.5" />
-        <EntityTypeShape EntityType="TrainersModel.SubjectAssignment" Width="1.5" PointX="8.25" PointY="42" />
-        <EntityTypeShape EntityType="TrainersModel.TrainerUser" Width="1.5" PointX="0.75" PointY="29.5" />
+        <EntityTypeShape EntityType="TrainersModel.Class" Width="1.5" PointX="8" PointY="31.25" />
+        <EntityTypeShape EntityType="TrainersModel.Configuration" Width="1.5" PointX="3" PointY="60.25" />
+        <EntityTypeShape EntityType="TrainersModel.DailyAttendance" Width="1.5" PointX="3" PointY="32.625" />
+        <EntityTypeShape EntityType="TrainersModel.Designation" Width="1.5" PointX="3" PointY="56" />
+        <EntityTypeShape EntityType="TrainersModel.Enrolment" Width="1.5" PointX="13.25" PointY="33" />
+        <EntityTypeShape EntityType="TrainersModel.Fee" Width="1.5" PointX="10.25" PointY="34.5" />
+        <EntityTypeShape EntityType="TrainersModel.Lookup" Width="1.5" PointX="5.25" PointY="32.5" />
+        <EntityTypeShape EntityType="TrainersModel.LookupType" Width="1.5" PointX="3" PointY="26.125" />
+        <EntityTypeShape EntityType="TrainersModel.PaidFee" Width="1.5" PointX="15.5" PointY="37.125" />
+        <EntityTypeShape EntityType="TrainersModel.Parent" Width="1.5" PointX="3" PointY="49.875" />
+        <EntityTypeShape EntityType="TrainersModel.Salary" Width="1.5" PointX="7.5" PointY="41.625" />
+        <EntityTypeShape EntityType="TrainersModel.SalaryPayment" Width="1.5" PointX="12.5" PointY="44.125" />
+        <EntityTypeShape EntityType="TrainersModel.Staff" Width="1.5" PointX="5.25" PointY="41.5" />
+        <EntityTypeShape EntityType="TrainersModel.StaffAttendance" Width="1.5" PointX="10.5" PointY="29.75" />
+        <EntityTypeShape EntityType="TrainersModel.Student" Width="1.5" PointX="10.25" PointY="38.875" />
+        <EntityTypeShape EntityType="TrainersModel.Subject" Width="1.5" PointX="3" PointY="37.25" />
+        <EntityTypeShape EntityType="TrainersModel.SubjectAssignment" Width="1.5" PointX="13.25" PointY="38.875" />
+        <EntityTypeShape EntityType="TrainersModel.TrainerUser" Width="1.5" PointX="0.75" PointY="30.75" />
         <AssociationConnector Association="TrainersModel.FK__Arrear__CreatedB__190BB0C3" />
         <AssociationConnector Association="TrainersModel.FK__Arrear__StaffId__2354350C" />
-        <AssociationConnector Association="TrainersModel.FK__Arrear__StudentI__7F16D496" />
+        <AssociationConnector Association="TrainersModel.FK__Arrear__StudentI__45A94D10" />
         <AssociationConnector Association="TrainersModel.FK__Arrear__UpdatedB__19FFD4FC" />
         <AssociationConnector Association="TrainersModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="TrainersModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
@@ -39,6 +39,7 @@
         <AssociationConnector Association="TrainersModel.FK__Class__UpdatedBy__04459E07" />
         <AssociationConnector Association="TrainersModel.FK__Enrolment__Class__52442E1F" />
         <AssociationConnector Association="TrainersModel.FK__Fee__Class__00750D23" />
+        <AssociationConnector Association="TrainersModel.FK__Student__ClassAd__4B622666" />
         <AssociationConnector Association="TrainersModel.FK__SubjectAs__Class__0169315C" />
         <AssociationConnector Association="TrainersModel.FK__Configura__Creat__5B438874" />
         <AssociationConnector Association="TrainersModel.FK__Configura__Updat__5C37ACAD" />
@@ -49,7 +50,7 @@
         <AssociationConnector Association="TrainersModel.FK__Designati__Updat__0D99FE17" />
         <AssociationConnector Association="TrainersModel.FK__Staff__Designati__1F83A428" />
         <AssociationConnector Association="TrainersModel.FK__Enrolment__Creat__53385258" />
-        <AssociationConnector Association="TrainersModel.FK__Enrolment__Stude__00FF1D08" />
+        <AssociationConnector Association="TrainersModel.FK__Enrolment__Stude__4D4A6ED8" />
         <AssociationConnector Association="TrainersModel.FK__Enrolment__Updat__542C7691" />
         <AssociationConnector Association="TrainersModel.FK__Fee__CreatedBy__4C0144E4" />
         <AssociationConnector Association="TrainersModel.FK__Fee__UpdatedBy__4CF5691D" />
@@ -59,13 +60,13 @@
         <AssociationConnector Association="TrainersModel.FK__LookupTyp__Creat__5F492382" />
         <AssociationConnector Association="TrainersModel.FK__LookupTyp__Updat__603D47BB" />
         <AssociationConnector Association="TrainersModel.FK__PaidFee__Created__44EA3301" />
-        <AssociationConnector Association="TrainersModel.FK__PaidFee__Student__000AF8CF" />
+        <AssociationConnector Association="TrainersModel.FK__PaidFee__Student__4C564A9F" />
         <AssociationConnector Association="TrainersModel.FK__PaidFee__Updated__45DE573A" />
         <AssociationConnector Association="TrainersModel.FK__Parent__CreatedB__29AC2CE0" />
         <AssociationConnector Association="TrainersModel.FK__Parent__UpdatedB__28B808A7" />
-        <AssociationConnector Association="TrainersModel.FK__Student__Father__7C3A67EB" />
-        <AssociationConnector Association="TrainersModel.FK__Student__Guardia__7E22B05D" />
-        <AssociationConnector Association="TrainersModel.FK__Student__Mother__7D2E8C24" />
+        <AssociationConnector Association="TrainersModel.FK__Student__Father__4885B9BB" />
+        <AssociationConnector Association="TrainersModel.FK__Student__Guardia__4A6E022D" />
+        <AssociationConnector Association="TrainersModel.FK__Student__Mother__4979DDF4" />
         <AssociationConnector Association="TrainersModel.FK__Salary__CreatedB__06ED0088" />
         <AssociationConnector Association="TrainersModel.FK__Salary__StaffId__226010D3" />
         <AssociationConnector Association="TrainersModel.FK__Salary__UpdatedB__07E124C1" />
@@ -78,8 +79,8 @@
         <AssociationConnector Association="TrainersModel.FK__SubjectAs__Teach__2630A1B7" />
         <AssociationConnector Association="TrainersModel.FK__StaffAtte__Creat__031C6FA4" />
         <AssociationConnector Association="TrainersModel.FK__StaffAtte__Updat__041093DD" />
-        <AssociationConnector Association="TrainersModel.FK__Student__Created__7B4643B2" />
-        <AssociationConnector Association="TrainersModel.FK__Student__Updated__7A521F79" />
+        <AssociationConnector Association="TrainersModel.FK__Student__Created__47919582" />
+        <AssociationConnector Association="TrainersModel.FK__Student__Updated__469D7149" />
         <AssociationConnector Association="TrainersModel.FK__Subject__Created__640DD89F" />
         <AssociationConnector Association="TrainersModel.FK__Subject__Updated__6501FCD8" />
         <AssociationConnector Association="TrainersModel.FK__SubjectAs__Subje__6CA31EA0" />

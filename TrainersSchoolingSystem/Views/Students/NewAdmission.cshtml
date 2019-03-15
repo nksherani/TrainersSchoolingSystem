@@ -48,10 +48,10 @@
 
                 <td>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.JoiningDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
-                            @Html.EditorFor(model => model.JoiningDate, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.JoiningDate, "", new { @class = "text-danger" })
+                            @Html.DropDownList("Gender", null, "Select Gender", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
                         </div>
                     </div>
                 </td>
@@ -195,7 +195,15 @@
                         </div>
                     </div>
                 </td>
-                <td></td>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.JoiningDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.JoiningDate, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.JoiningDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
             </tr>
 
         </table>

@@ -322,6 +322,9 @@
     <Compile Include="Models\GeneratePaySlips_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetCurrentStaff_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetCurrentTeachers_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -398,6 +401,7 @@
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\Mapper.cs" />
     <Compile Include="Utils\RegularExpressions.cs" />
+    <Compile Include="Utils\Common.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />

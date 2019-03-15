@@ -19,6 +19,7 @@ namespace TrainersSchoolingSystem.Models
         {
             this.Enrolments = new HashSet<Enrolment>();
             this.Fees = new HashSet<Fee>();
+            this.Students = new HashSet<Student>();
             this.SubjectAssignments = new HashSet<SubjectAssignment>();
         }
     
@@ -39,6 +40,8 @@ namespace TrainersSchoolingSystem.Models
         public virtual ICollection<Enrolment> Enrolments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Fee> Fees { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Student> Students { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubjectAssignment> SubjectAssignments { get; set; }
     }

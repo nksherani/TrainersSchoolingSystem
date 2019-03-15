@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Teachers";
+    ViewBag.Title = "Employees";
 }
 
 <h2>Students</h2>
@@ -37,7 +37,7 @@
             dataSource: {
                 type: "jsonp",
                 transport: {
-                    read: "../Staffs/GetCurrentStaff",
+                    read: "../Staffs/GetCurrentStaffs",
                     update: {
                         url: "../Staffs/MarkAttendance", //specify the URL from which should update the records. This is the Update method of the Products.svc service.
                         contentType: "application/json; charset=utf-8", // tells the web service to serialize JSON
@@ -56,9 +56,9 @@
                 pageSize: 20,
                 schema: {
                     model: {
-                        id: "TeacherId",
+                        id: "StaffId",
                         fields: {
-                            "TeacherId": { type: "number", editable: false },
+                            "StaffId": { type: "number", editable: false },
                             "Name": { type: "string", editable: false },
                             "Gender": { type: "string", editable: false },
                             "Designation": { type: "string", editable: false },
@@ -90,7 +90,7 @@
             columns: [
                 { selectable: true, width: "20px" },
                 {
-                    field: "TeacherId",
+                    field: "StaffId",
                     title: "ID",
                     width: 30
                 }, {
@@ -135,9 +135,9 @@
                     template: "#=GetStatus(Status)#",
                     width: 100
                 }, {
-                    field: "TeacherId",
+                    field: "StaffId",
                     title: "Action",
-                    template: "<a href=/Teachers/UpdateData/#=TeacherId#>Update Data</a>",
+                    template: "<a href=/Staffs/UpdateData/#=StaffId#>Update Data</a>",
                     width: 100
                 }]
         });
@@ -166,9 +166,9 @@
         HideErrors();
 
         $("#btnPerformAction").click(function () {
-            var TeacherIds = grid.selectedKeyNames();
+            var StaffIds = grid.selectedKeyNames();
             var iserror = false;
-            if (TeacherIds.length == 0) {
+            if (StaffIds.length == 0) {
                 $("#error1").show();
                 iserror = true;
             }
@@ -179,7 +179,7 @@
 
             var formData = {
                 "Action": action.value(),
-                "Ids": TeacherIds,
+                "Ids": StaffIds,
             };
             console.log(formData);
             FeeSlipsAjax(formData);
@@ -188,7 +188,7 @@
     });
     function FeeSlipsAjax(formData) {
         $.ajax({
-            url: "../Teachers/Bulk",
+            url: "../Staffs/Bulk",
             type: "POST",
             data: JSON.stringify(formData),
             contentType: "application/json;charset=utf-8",

@@ -630,6 +630,14 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: Students/Create
         public ActionResult Create()
         {
+            List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
+            foreach (var item in db.Classes)
+            {
+                var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
+                classes.Add(pair);
+            }
+            ViewBag.ClassAdmitted = new SelectList(classes, "Key", "Value");
+            ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText");
             ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name");
             ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name");
             ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name");
@@ -652,7 +660,14 @@ namespace TrainersSchoolingSystem.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
+            foreach (var item in db.Classes)
+            {
+                var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
+                classes.Add(pair);
+            }
+            ViewBag.ClassAdmitted = new SelectList(classes, "Key", "Value");
+            ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText", Common.FirstCharToUpper(student.Gender));
             ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name", student.Father);
             ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name", student.Guardian);
             ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name", student.Mother);
@@ -669,6 +684,7 @@ namespace TrainersSchoolingSystem.Controllers
                 classes.Add(pair);
             }
             ViewBag.Class = new SelectList(classes, "Key", "Value");
+            ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText");
             ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name");
             ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name");
             ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name");
@@ -767,6 +783,7 @@ namespace TrainersSchoolingSystem.Controllers
                     classes.Add(pair);
                 }
                 ViewBag.Class = new SelectList(classes, "Key", "Value");
+                ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText", Common.FirstCharToUpper(student.Gender));
                 ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name", student.Father);
                 ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name", student.Guardian);
                 ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name", student.Mother);
@@ -801,6 +818,14 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 return HttpNotFound();
             }
+            List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
+            foreach (var item in db.Classes)
+            {
+                var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
+                classes.Add(pair);
+            }
+            ViewBag.ClassAdmitted = new SelectList(classes, "Key", "Value",student.ClassAdmitted);
+            ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText",Common.FirstCharToUpper( student.Gender));
             ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name", student.Father);
             ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name", student.Guardian);
             ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name", student.Mother);
@@ -837,6 +862,7 @@ namespace TrainersSchoolingSystem.Controllers
                 studentdb.StreetAddress = student.StreetAddress;
                 studentdb.City = student.City;
                 studentdb.JoiningDate = student.JoiningDate;
+                studentdb.ClassAdmitted = student.ClassAdmitted;
                 studentdb.EndDate = student.EndDate;
                 studentdb.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 studentdb.UpdatedDate = DateTime.Now;
@@ -844,6 +870,14 @@ namespace TrainersSchoolingSystem.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
+            foreach (var item in db.Classes)
+            {
+                var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
+                classes.Add(pair);
+            }
+            ViewBag.ClassAdmitted = new SelectList(classes, "Key", "Value",student.ClassAdmitted);
+            ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText", Common.FirstCharToUpper(student.Gender));
             ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name", student.Father);
             ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name", student.Guardian);
             ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name", student.Mother);

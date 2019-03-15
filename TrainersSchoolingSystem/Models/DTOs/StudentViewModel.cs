@@ -14,6 +14,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public string FirstName { get; set; }
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
+        public string Gender { get; set; }
         [Display(Name = "Family Code")]
         public string FamilyCode { get; set; }
         [Required]
@@ -59,6 +60,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
         [Required]
         [Display(Name = "Admission Date")]
         public Nullable<DateTime> JoiningDate { get; set; }
+        public Nullable<int> ClassAdmitted { get; set; }
         public Nullable<DateTime> EndDate { get; set; }
         public Nullable<DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }

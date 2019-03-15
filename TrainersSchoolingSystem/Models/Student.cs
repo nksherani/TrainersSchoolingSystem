@@ -25,6 +25,7 @@ namespace TrainersSchoolingSystem.Models
         public int StudentId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Gender { get; set; }
         public Nullable<System.DateTime> DateOfBirth { get; set; }
         public Nullable<int> FamilyCode { get; set; }
         public Nullable<int> Age { get; set; }
@@ -44,6 +45,7 @@ namespace TrainersSchoolingSystem.Models
         public string StreetAddress { get; set; }
         public string City { get; set; }
         public Nullable<System.DateTime> JoiningDate { get; set; }
+        public Nullable<int> ClassAdmitted { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }
@@ -52,6 +54,7 @@ namespace TrainersSchoolingSystem.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Arrear> Arrears { get; set; }
+        public virtual Class Class { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Enrolment> Enrolments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

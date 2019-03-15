@@ -324,11 +324,17 @@ namespace TrainersSchoolingSystem.Controllers
             return "success";
         }
         [AllowAnonymous]
-        public string ResetDb()
+        public string HardReset()
         {
-            db.Database.ExecuteSqlCommand("exec ResetDb");
+            db.Database.ExecuteSqlCommand("exec HardReset");
             if (User.Identity.IsAuthenticated)
                 new AccountController().LogOff();
+            return "success";
+        }
+        [AllowAnonymous]
+        public string SoftReset()
+        {
+            db.Database.ExecuteSqlCommand("exec SoftReset");
             return "success";
         }
         // GET: Setup/Edit/5
