@@ -101,7 +101,7 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 Directory.CreateDirectory(folderpath);
             }
-            var filePath = Server.MapPath("~/Content/Temp/FeeSlips.html");
+            var filePath = Server.MapPath("~/Content/Temp/"+fname);
             System.IO.File.WriteAllText(filePath, strBody.ToString());
             //return Json("../Content/Temp/FeeSlips.html", JsonRequestBehavior.AllowGet);
             return Json("../Content/Temp/" + fname, JsonRequestBehavior.AllowGet);
