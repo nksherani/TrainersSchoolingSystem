@@ -82,7 +82,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.File, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="file" id="file" name="file" />
+                <input type="file" id="logofile" name="file" />
                 <img src=@GlobalData.configuration.Picture width="100" style="border:#000; z-index:1;position: relative; border-width:2px; float:left" height="100px" id="thumbnail" />
                 @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
             </div>

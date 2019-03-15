@@ -5,7 +5,7 @@ using System.Web;
 
 namespace TrainersSchoolingSystem.Models.DTOs
 {
-    public class BulkStudents
+    public class Bulk
     {
         public string Action { get; set; }
         public string[] Ids { get; set; }

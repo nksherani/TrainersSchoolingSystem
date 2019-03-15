@@ -1,5 +1,5 @@
 ﻿$(function () {
-    $("input:file").change(function () {
+    $("#logofile").change(function () {
         var fileName = $(this).val();
         //alert(fileName);
         var formData = new FormData();

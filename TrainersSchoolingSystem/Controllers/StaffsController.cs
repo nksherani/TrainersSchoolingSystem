@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using TrainersSchoolingSystem.Models;
+using TrainersSchoolingSystem.Models.DTOs;
+using TrainersSchoolingSystem.Utils;
 
 namespace TrainersSchoolingSystem.Controllers
 {
@@ -19,8 +23,7 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: Staffs
         public ActionResult Index()
         {
-            var staffs = db.Staffs.Include(s => s.TrainerUser).Include(s => s.TrainerUser1);
-            return View(staffs.ToList());
+            return View();
         }
 
         // GET: Staffs/Details/5
@@ -36,6 +39,453 @@ namespace TrainersSchoolingSystem.Controllers
                 return HttpNotFound();
             }
             return View(staff);
+        }
+        // GET: Teachers/Create
+        public ActionResult Appoint()
+        {
+            ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName");
+            ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText");
+            return View();
+        }
+
+        // POST: Teachers/Create
+        [HttpPost]
+        public ActionResult Appoint(StaffViewModel staff_)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    staff_.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                    staff_.CreatedDate = DateTime.Now;
+
+                    Staff staff = Mapper<Staff>.GetObject(staff_);
+                    db.Staffs.Add(staff);
+                    db.SaveChanges();
+
+                    Salary salary = Mapper<Salary>.GetObject(staff_.Salary_);
+                    salary = SalariesController.SalaryCalculation(salary);
+                    salary.StaffId = staff.StaffId;
+                    salary.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                    salary.CreatedDate = DateTime.Now;
+                    db.Salaries.Add(salary);
+
+                    StaffAttendance attendance = new StaffAttendance();
+                    attendance.StaffId = staff.StaffId;
+                    attendance.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                    attendance.CreatedDate = DateTime.Now;
+                    db.StaffAttendances.Add(attendance);
+
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName");
+                ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText");
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
+            return View(staff_);
+        }
+        // GET: Teachers/Edit/5
+        public ActionResult UpdateData(int id)
+        {
+            if (id == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Staff staff = db.Staffs.Find(id);
+            StaffViewModel staff_ = Mapper<StaffViewModel>.GetObject(staff);
+            if (staff == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName", staff_.Designation);
+            ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText", staff_.Gender);
+            return View(staff_);
+        }
+
+        // POST: Teachers/Edit/5
+        [HttpPost]
+        public ActionResult UpdateData(StaffViewModel staff_)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var staffdb = db.Staffs.Find(staff_.StaffId);
+                    staffdb.FirstName = staff_.FirstName;
+                    staffdb.LastName = staff_.LastName;
+                    staffdb.CNIC = staff_.CNIC;
+                    staffdb.Designation = staff_.Designation;
+                    staffdb.Qualification = staff_.Qualification;
+                    staffdb.Gender = staff_.Gender;
+                    staffdb.DateOfBirth = staff_.DateOfBirth;
+                    if (staffdb.DateOfBirth.HasValue)
+                        staffdb.Age = DateTime.Now.Year - staffdb.DateOfBirth.Value.Year;
+                    staffdb.FatherName = staff_.FatherName;
+                    staffdb.SpouseName = staff_.SpouseName;
+                    staffdb.Mobile = staff_.Mobile;
+                    staffdb.LandLine = staff_.LandLine;
+                    staffdb.PostalCode = staff_.PostalCode;
+                    staffdb.StreetAddress = staff_.StreetAddress;
+                    staffdb.City = staff_.City;
+                    staffdb.JoiningDate = staff_.JoiningDate;
+                    staffdb.EndDate = staff_.EndDate;
+                    staffdb.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                    staffdb.UpdatedDate = DateTime.Now;
+                    db.Staffs.AddOrUpdate(staffdb);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName", staff_.Designation);
+                ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText", staff_.Gender);
+
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
+            return View();
+
+        }
+        [HttpPost]
+        public ActionResult MarkAttendance(List<StaffSP> models)
+        {
+            try
+            {
+                var Ids = models.Select(x => x.StaffId).ToList();
+                var userId = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                var AttendanceSummary = db.StaffAttendances.Where(x => Ids.Contains(x.StaffId.Value));
+                foreach (var item in models)
+                {
+                    if (item.Status > 0)
+                    {
+                        var existing = db.DailyAttendances
+                            .Where(x => x.StaffId == item.StaffId).OrderByDescending(x => x.CreatedDate)?
+                            .FirstOrDefault();
+                        string prevStatus = "";
+                        if (existing == null || (DateTime.Now - existing.CreatedDate).Value.TotalHours > 24)
+                            existing = new DailyAttendance();
+                        else
+                            prevStatus = existing.Status;
+                        existing.StaffId = item.StaffId;
+                        existing.Status = Enum.GetName(typeof(AttendanceStatus), item.Status);
+                        existing.AttendanceDate = DateTime.Now;
+                        if (existing.CreatedBy.HasValue)
+                        {
+                            existing.UpdatedBy = userId;
+                            existing.UpdatedDate = DateTime.Now;
+                        }
+                        else
+                        {
+                            existing.CreatedBy = userId;
+                            existing.CreatedDate = DateTime.Now;
+                        }
+                        db.DailyAttendances.AddOrUpdate(existing);
+                        var smry = AttendanceSummary.Where(x => x.StaffId == item.StaffId).FirstOrDefault();
+                        if (smry == null)
+                        {
+                            smry = new StaffAttendance();
+                            smry.StaffId = item.StaffId;
+                            smry.CreatedBy = userId;
+                            smry.CreatedDate = DateTime.Now;
+                        }
+                        else
+                        {
+                            smry.UpdatedBy = userId;
+                            smry.UpdatedDate = DateTime.Now;
+                        }
+                        if (prevStatus != existing.Status)
+                        {
+                            if (existing.Status == AttendanceStatus.Absent.ToString())
+                            {
+                                if (smry.Absents.HasValue)
+                                    smry.Absents++;
+                                else
+                                    smry.Absents = 1;
+                            }
+                            else if (existing.Status == AttendanceStatus.Present.ToString())
+                            {
+                                if (smry.WorkingDays.HasValue)
+                                    smry.WorkingDays++;
+                                else
+                                    smry.WorkingDays = 1;
+                            }
+                            else if (existing.Status == AttendanceStatus.LateArrival.ToString())
+                            {
+                                if (smry.LateComings.HasValue)
+                                    smry.LateComings++;
+                                else
+                                    smry.LateComings = 1;
+                            }
+                            else if (existing.Status == AttendanceStatus.ShortLeave.ToString())
+                            {
+                                if (smry.ShortLeaves.HasValue)
+                                    smry.ShortLeaves++;
+                                else
+                                    smry.ShortLeaves = 1;
+                            }
+                            if (prevStatus == AttendanceStatus.Absent.ToString())
+                            {
+                                smry.Absents--;
+                            }
+                            else if (prevStatus == AttendanceStatus.Present.ToString())
+                            {
+                                smry.WorkingDays--;
+                            }
+                            else if (prevStatus == AttendanceStatus.ShortLeave.ToString())
+                            {
+                                smry.ShortLeaves--;
+                            }
+                            else if (prevStatus == AttendanceStatus.LateArrival.ToString())
+                            {
+                                smry.LateComings--;
+                            }
+                        }
+
+                        db.StaffAttendances.AddOrUpdate(smry);
+                    }
+
+                }
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Bulk(Bulk bulk)
+        {
+            if (bulk.Action == "1")
+                return Terminate(bulk);
+            else
+                return GeneratePaySlips(bulk);
+        }
+
+        private ActionResult Terminate(Bulk bulk)
+        {
+            try
+            {
+                var staffids = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+                var staffs = db.Staffs.Where(x => staffids.Contains(x.StaffId)).ToList();
+                foreach (var item in staffs)
+                {
+                    item.EndDate = DateTime.Now;
+                    db.Staffs.AddOrUpdate(item);
+                }
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GeneratePaySlips(Bulk bulk)
+        {
+            try
+            {
+                var staffids = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+
+                string css = "";
+                var csslines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlipHeader.html")).ToList();
+                foreach (var item in csslines)
+                {
+                    css += item;
+                }
+                int i = 0;
+                string feeslipsBody = "";
+                foreach (var id in staffids)
+                {
+                    var html = GetPaySlip(id);
+                    if (i % 5 == 0)
+                        html += "<div style=\"width: 240px; height: 1px; background - color:white\"></div>";
+
+                    feeslipsBody += html;
+                    i++;
+                }
+                StringBuilder strBody = new StringBuilder();
+                strBody.Append("<html>" +
+                "<head><title>Fee Slips</title>");
+
+                strBody.Append(css + "</head>");
+                strBody.Append("<body lang=EN-US style='tab-interval:.5in'>" +
+                                        feeslipsBody +
+                                        "</body></html>");
+
+                var filePath = Server.MapPath("~/Content/Temp/PaySlips.html");
+                System.IO.File.WriteAllText(filePath, strBody.ToString());
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
+            return Json("../Content/Temp/PaySlips.html", JsonRequestBehavior.AllowGet);
+        }
+        private string GetPaySlip(int StaffId)
+        {
+            string data = "";
+
+            try
+            {
+                var lastdate = db.PaidFees.Where(x => x.StudentId == StaffId
+                    && x.Description == "MonthlyFee" && x.ReceivedAmount.HasValue)?.OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
+                if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28 &&
+                    lastdate.Value.Month == DateTime.Now.Month)
+                    return "";
+                SqlParameter staffId = new SqlParameter("@StaffId", StaffId);
+                var PaySlipData = db.Database.SqlQuery<PaySlipModel>("exec GeneratePaySlips @StaffId", staffId).FirstOrDefault();
+                List<string> lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "PaySlip.html")).ToList();
+                foreach (var item in lines)
+                {
+                    data += item;
+                }
+
+                data = data.Replace("__Picture__", "../" + GlobalData.configuration.Picture);
+                data = data.Replace("__SchoolName__", GlobalData.configuration.SchoolName);
+                data = data.Replace("__Campus__", GlobalData.configuration.Campus);
+                data = data.Replace("__Month__", DateTime.Now.ToString("MM-yyyy"));
+                data = data.Replace("__IssueDate__", DateTime.Now.ToString("dd-MM-yyyy"));
+                data = data.Replace("__DueDate__", DateTime.Now.ToString("10-MM-yyyy"));
+                //data = data.Replace("__Challan__", PaySlipData.ChallanNo.ToString());
+                data = data.Replace("__StaffId__", PaySlipData.StaffId.ToString());
+                data = data.Replace("__Name__", PaySlipData.Name);
+                data = data.Replace("__Designation__", PaySlipData.Designation);
+                data = data.Replace("__JoiningDate__", PaySlipData.JoiningDate.Value.ToString("dd-MM-yyyy"));
+                data = data.Replace("__BasicPay__", PaySlipData.BasicPay.ToString());
+                data = data.Replace("__Bonus__", PaySlipData.Bonus.ToString());
+                data = data.Replace("__ProvidentFund__", PaySlipData.PF.ToString());
+                data = data.Replace("__EOBI__", PaySlipData.EOBI.ToString());
+                data = data.Replace("__EOBI__", PaySlipData.LoanDeduction.ToString());
+                data = data.Replace("__GrossPay__", PaySlipData.GrossPay.ToString());
+                data = data.Replace("__NetPay__", PaySlipData.NetPay.ToString());
+                data = data.Replace("__LoanDeduction__", "0");
+                data = data.Replace("__UnpaidLeaves__", PaySlipData.UnpaidLeaves.ToString());
+                data = data.Replace("__AmountDeducted__", PaySlipData.AmountDeducted.ToString());
+
+                var lastPayment = db.SalaryPayments.Where(x => x.StaffId == StaffId).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
+                var userid = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                if (lastPayment != null && lastPayment.CreatedDate.Value.ToString("MM-yyyy") == DateTime.Now.ToString("MM-yyyy"))
+                {
+                    lastPayment.Amount = Convert.ToInt32(PaySlipData.NetPay);
+                    lastPayment.UpdatedDate = DateTime.Now;
+                    lastPayment.UpdatedBy = userid;
+                    data = data.Replace("__Challan__", lastPayment.ChallanNo.ToString());
+                }
+                else
+                {
+                    lastPayment = new SalaryPayment();
+                    lastPayment.ChallanNo = PaySlipData.ChallanNo;
+                    lastPayment.StaffId = PaySlipData.StaffId;
+                    lastPayment.Amount = Convert.ToInt32(PaySlipData.NetPay);
+                    lastPayment.CreatedDate = DateTime.Now;
+                    lastPayment.CreatedBy = userid;
+                    data = data.Replace("__Challan__", PaySlipData.ChallanNo.ToString());
+                }
+                db.SalaryPayments.AddOrUpdate(lastPayment);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
+            return data;
+        }
+
+        public ActionResult GetCurrentStaffs()
+        {
+            try
+            {
+                var staff = db.Database.SqlQuery<StaffSP>("GetCurrentStaff").ToList();
+                return Json(staff, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
+            return Json("");
         }
 
         // GET: Staffs/Create
@@ -103,6 +553,7 @@ namespace TrainersSchoolingSystem.Controllers
                 staffdb.LastName = staff.LastName;
                 staffdb.CNIC = staff.CNIC;
                 staffdb.Designation = staff.Designation;
+                staffdb.Qualification = staff.Qualification;
                 staffdb.Gender = staff.Gender;
                 staffdb.DateOfBirth = staff.DateOfBirth;
                 if (staffdb.DateOfBirth.HasValue)

@@ -22,7 +22,8 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public string CNIC { get; set; }
         [Required]
         public Nullable<int> Designation { get; set; }
-        
+        public string Qualification { get; set; }
+
         [Required]
         public string Gender { get; set; }
         [Required]

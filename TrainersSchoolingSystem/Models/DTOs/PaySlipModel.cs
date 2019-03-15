@@ -10,7 +10,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public int ChallanNo { get; set; }
         public string Month { get; set; }
         public DateTime? IssueDate { get; set; }
-        public int TeacherId { get; set; }
+        public int StaffId { get; set; }
         public string Name { get; set; }
         public string Designation { get; set; }
         public DateTime? JoiningDate { get; set; }

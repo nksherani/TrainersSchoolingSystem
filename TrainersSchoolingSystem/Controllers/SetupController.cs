@@ -266,6 +266,13 @@ namespace TrainersSchoolingSystem.Controllers
 
             lookup = new Lookup();
             lookup.LookupTypeId = lookupType4.LookupTypeId;
+            lookup.LookupText = "Management";
+            lookup.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            lookup.CreatedDate = DateTime.Now;
+            db.Lookups.Add(lookup);
+
+            lookup = new Lookup();
+            lookup.LookupTypeId = lookupType4.LookupTypeId;
             lookup.LookupText = "Teaching";
             lookup.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
             lookup.CreatedDate = DateTime.Now;
@@ -273,10 +280,11 @@ namespace TrainersSchoolingSystem.Controllers
 
             lookup = new Lookup();
             lookup.LookupTypeId = lookupType4.LookupTypeId;
-            lookup.LookupText = "Non-Teaching";
+            lookup.LookupText = "Supporting";
             lookup.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
             lookup.CreatedDate = DateTime.Now;
             db.Lookups.Add(lookup);
+
 
             for (int i = 0; i < 13; i++)
             {
@@ -394,31 +402,50 @@ namespace TrainersSchoolingSystem.Controllers
         [HttpPost]
         public string Temp(HttpPostedFileBase file)
         {
-            string path = "";
-            string pic = "";
-            var path_ = Server.MapPath("~/Content/Temp");
-            if (Directory.Exists(path_))
+            try
             {
-                var files = System.IO.Directory.EnumerateFiles(path_);
-                foreach (var item in files)
+                string path = "";
+                string pic = "";
+                var path_ = Server.MapPath("~/Content/Temp");
+                if (Directory.Exists(path_))
                 {
-                    if (System.IO.File.Exists(item))
+                    var files = System.IO.Directory.EnumerateFiles(path_);
+                    foreach (var item in files)
                     {
-                        System.IO.File.Delete(item);
+                        if (System.IO.File.Exists(item))
+                        {
+                            System.IO.File.Delete(item);
+                        }
                     }
                 }
+
+
+                if (file != null)
+                {
+                    pic = System.IO.Path.GetFileName(file.FileName);
+                    path = System.IO.Path.Combine(
+                                           Server.MapPath("~/Content/Temp"), pic);
+                    // file is uploaded
+                    file.SaveAs(path);
+                }
+                return $"../Content/Temp/{pic}";
             }
-
-
-            if (file != null)
+            catch (Exception ex)
             {
-                pic = System.IO.Path.GetFileName(file.FileName);
-                path = System.IO.Path.Combine(
-                                       Server.MapPath("~/Content/Temp"), pic);
-                // file is uploaded
-                file.SaveAs(path);
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+                return "";
             }
-            return $"../Content/Temp/{pic}";
         }
 
 

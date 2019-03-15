@@ -56,7 +56,7 @@ namespace TrainersSchoolingSystem.Controllers
             }
             return Json(modellist, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult GenerateFeeSlips2(BulkStudents bulk)
+        public ActionResult GenerateFeeSlips2(Bulk bulk)
         {
             var stdIds = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
             
@@ -322,7 +322,7 @@ namespace TrainersSchoolingSystem.Controllers
             return false;
         }
         [HttpPost]
-        public ActionResult Bulk(BulkStudents bulk)
+        public ActionResult Bulk(Bulk bulk)
         {
             string path = "";
             bool flag = false;
@@ -359,7 +359,7 @@ namespace TrainersSchoolingSystem.Controllers
 
             return Json(flag, JsonRequestBehavior.AllowGet);
         }
-        bool PromoteToUpperClass(BulkStudents bulk)
+        bool PromoteToUpperClass(Bulk bulk)
         {
             try
             {
@@ -419,7 +419,7 @@ namespace TrainersSchoolingSystem.Controllers
             }
             return false;
         }
-        bool ChangeClass(BulkStudents bulk)
+        bool ChangeClass(Bulk bulk)
         {
             try
             {
@@ -478,7 +478,7 @@ namespace TrainersSchoolingSystem.Controllers
             }
             return false;
         }
-        bool ChangeSection(BulkStudents bulk)
+        bool ChangeSection(Bulk bulk)
         {
             try
             {
@@ -540,7 +540,7 @@ namespace TrainersSchoolingSystem.Controllers
 
             return false;
         }
-        bool IncreaseFee(BulkStudents bulk)
+        bool IncreaseFee(Bulk bulk)
         {
             try
             {

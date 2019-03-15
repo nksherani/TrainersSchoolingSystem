@@ -174,7 +174,7 @@ namespace TrainersSchoolingSystem.Controllers
             }
             return Json("", JsonRequestBehavior.AllowGet);
         }
-        public ActionResult Bulk(BulkStudents bulk)
+        public ActionResult Bulk(Bulk bulk)
         {
             if(bulk.Action == "1")
                 return Terminate(bulk);
@@ -182,7 +182,7 @@ namespace TrainersSchoolingSystem.Controllers
                 return GeneratePaySlips(bulk);
         }
 
-        private ActionResult Terminate(BulkStudents bulk)
+        private ActionResult Terminate(Bulk bulk)
         {
             try
             {
@@ -213,7 +213,7 @@ namespace TrainersSchoolingSystem.Controllers
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GeneratePaySlips(BulkStudents bulk)
+        public ActionResult GeneratePaySlips(Bulk bulk)
         {
             try
             {
@@ -291,7 +291,7 @@ namespace TrainersSchoolingSystem.Controllers
                 data = data.Replace("__IssueDate__", DateTime.Now.ToString("dd-MM-yyyy"));
                 data = data.Replace("__DueDate__", DateTime.Now.ToString("10-MM-yyyy"));
                 //data = data.Replace("__Challan__", PaySlipData.ChallanNo.ToString());
-                data = data.Replace("__TeacherId__", PaySlipData.TeacherId.ToString());
+                data = data.Replace("__TeacherId__", PaySlipData.StaffId.ToString());
                 data = data.Replace("__Name__", PaySlipData.Name);
                 data = data.Replace("__Designation__", PaySlipData.Designation);
                 data = data.Replace("__JoiningDate__", PaySlipData.JoiningDate.Value.ToString("dd-MM-yyyy"));
@@ -319,7 +319,7 @@ namespace TrainersSchoolingSystem.Controllers
                 {
                     lastPayment = new SalaryPayment();
                     lastPayment.ChallanNo = PaySlipData.ChallanNo;
-                    lastPayment.StaffId = PaySlipData.TeacherId;
+                    lastPayment.StaffId = PaySlipData.StaffId;
                     lastPayment.Amount = Convert.ToInt32(PaySlipData.NetPay);
                     lastPayment.CreatedDate = DateTime.Now;
                     lastPayment.CreatedBy = userid;
@@ -512,6 +512,7 @@ namespace TrainersSchoolingSystem.Controllers
                     staffdb.LastName = teacher.LastName;
                     staffdb.CNIC = teacher.CNIC;
                     staffdb.Designation = teacher.Designation;
+                    staffdb.Qualification = teacher.Qualification;
                     staffdb.Gender = teacher.Gender;
                     staffdb.DateOfBirth = teacher.DateOfBirth;
                     if (staffdb.DateOfBirth.HasValue)

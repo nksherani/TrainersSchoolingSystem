@@ -1,4 +1,4 @@
-﻿@model TrainersSchoolingSystem.Models.DTOs.TeacherViewModel
+﻿@model TrainersSchoolingSystem.Models.DTOs.StaffViewModel
 
 @{
     ViewBag.Title = "Appoint";
@@ -14,14 +14,13 @@
         padding: 35px !important;
     }
 </style>
-<h2>Appoint a Teacher</h2>
+<h2>Appoint a Member</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Teacher's Information</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
