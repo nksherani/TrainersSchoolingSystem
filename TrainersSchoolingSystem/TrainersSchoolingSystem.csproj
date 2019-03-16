@@ -233,6 +233,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ArrearsController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\DesignationsController.cs" />
     <Compile Include="Controllers\EnrolmentsController.cs" />
@@ -1312,6 +1313,11 @@
     <Content Include="Views\Staffs\UpdateData.cshtml" />
     <Content Include="Views\SMS\Send.cshtml" />
     <Content Include="Views\SMS\Index.cshtml" />
+    <Content Include="Views\Arrears\Create.cshtml" />
+    <Content Include="Views\Arrears\Delete.cshtml" />
+    <Content Include="Views\Arrears\Details.cshtml" />
+    <Content Include="Views\Arrears\Edit.cshtml" />
+    <Content Include="Views\Arrears\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -4,12 +4,15 @@ using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
+using TrainersSchoolingSystem.Models;
 using TrainersSchoolingSystem.Models.DTOs;
 
 namespace TrainersSchoolingSystem.Controllers
 {
+    [Authorize]
     public class SMSController : Controller
     {
+        TrainersEntities db = new TrainersEntities();
         // GET: SMS
         public ActionResult Index()
         {
@@ -39,11 +42,50 @@ namespace TrainersSchoolingSystem.Controllers
         }
         public ActionResult SendBulk(Bulk bulk)
         {
-            return Json(true, JsonRequestBehavior.AllowGet);
+            //action = ip
+            //class = msg
+            List<int> StudentIDs = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+            StudentIDs.Sort();
+            List<Student> students = db.Students.Where(x => StudentIDs.Contains(x.StudentId)).ToList();
+            //var mobileNumbers = db.Students.Join(db.Parents, a => a.Father, b => b.ParentId, (a, b) => b).ToList();
+
+            var builder = new UriBuilder($"http://{bulk.Action}/v1/sms/send/");
+            builder.Port = 8080;
+            Dictionary<int, System.Threading.Tasks.Task<HttpResponseMessage>> responses = new Dictionary<int, System.Threading.Tasks.Task<HttpResponseMessage>>();
+            foreach (Student item in students)
+            {
+                var msg = bulk.Class;
+                msg = msg.Replace("_STUDENT_", item.FirstName);
+                var query = HttpUtility.ParseQueryString(builder.Query);
+                if (item.Parent != null)
+                {
+                    query["phone"] = item.Parent.Mobile;
+                    msg = msg.Replace("_PARENT_", item.Parent.Name);
+                }
+                else if (item.Parent1 != null)
+                {
+                    query["phone"] = item.Parent1.Mobile;
+                    msg = msg.Replace("_PARENT_", item.Parent1.Name);
+                }
+                else if (item.Parent2 != null)
+                {
+                    query["phone"] = item.Parent2.Mobile;
+                    msg = msg.Replace("_PARENT_", item.Parent2.Name);
+                }
+                query["message"] = msg;
+
+                builder.Query = query.ToString();
+                string url = builder.ToString();
+                HttpClient client = new HttpClient();
+                var response = client.GetAsync(url);
+                responses.Add(item.StudentId, response);
+            }
+
+            return Json(responses, JsonRequestBehavior.AllowGet);
         }
 
-            // GET: SMS/Create
-            public ActionResult Create()
+        // GET: SMS/Create
+        public ActionResult Create()
         {
             return View();
         }

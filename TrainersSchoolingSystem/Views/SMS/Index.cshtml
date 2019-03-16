@@ -3,22 +3,23 @@
     ViewBag.Title = "Students";
 }
 
-<h2>Students</h2>
-<label>Select a bulk Action to Perform on Selected Students </label>
-<input id="ip" name="ip" />
-<textarea type="text" id="message" name="message" placeholder="100" />
-<input type="button" disabled id="btnPerformAction" value="Send SMS" />
+<h2>Send SMS to Students</h2>
+IP Address of Phone: <br /><input class="input-sm" id="ip" name="ip" value="192.168.0.1" /><br /><br />
+Write message below:<br />
+<textarea type="text" id="message" name="message" class="input-lg" style="height:200px">
+dear _PARENT_, _STUDENT_ is absent today.
+</textarea><br />
+<input type="button" id="btnPerformAction" value="Send SMS" /><br /><br />
 
 <img id="loading" hidden src="~/Content/loading.gif" style="width:60px;height:50px;" />
-<a href="#" class="k-button" id="DownloadFeeSlips">Download Fee Slips</a>
 
-<div id="error2" class="alert alert-danger">
+<div hidden id="error1" class="alert alert-danger">
+    <strong>Message is empty!</strong>
+</div>
+<div hidden id="error2" class="alert alert-danger">
     <strong>No Student is selected!</strong> Please select a student.
 </div>
 
-<div id="error1" class="alert alert-danger">
-    <strong>Message is empty!</strong>
-</div>
 
 <div id="grid"></div>
 
@@ -90,29 +91,34 @@
                 }]
         });
         grid = $('#grid').data('kendoGrid');
-        ip = $('#ip').val();
-        msg = $("#message").text();
         error1 = $("#error1");
         error2 = $("#error2");
+
+        $("#message").on('change keyup paste', function () {
+            if ($("#message").val() != "") {
+                $("#error1").hide();
+            }
+        });
         $("#btnPerformAction").click(function () {
             var studentIds = grid.selectedKeyNames()/*.join(", ")*/;
             var iserror = false;
-            if (msg == "") {
+
+            if ($("#message").val() == "") {
                 $("#error1").show();
                 iserror = true;
             }
-            if (ip == "") {
-                iserror = true;
+            if (studentIds.length == 0) {
                 $("#error2").show();
+                iserror = true;
             }
             if (iserror)
                 return;
             $("#loading").show();
 
             var formData = {
-                "Action": ip,
+                "Action": $('#ip').val(),
                 "Ids": studentIds,
-                "Class": msg
+                "Class": $("#message").val()
             };
             console.log(formData);
             SendSMS(formData);
@@ -131,14 +137,14 @@
             error: function (data_) {
                 $("#loading").hide();
                 console.log(data_);
-                alert(data_.responseText);
+                //alert(data_.responseText);
                 console.log("error");
             }
         });
     }
     function onChange(arg) {
         if (grid.selectedKeyNames().length > 0)
-            error1.hide();
+            error2.hide();
     }
     function onChangeAction(arg) {
     }
