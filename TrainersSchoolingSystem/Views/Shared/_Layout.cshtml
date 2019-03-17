@@ -36,16 +36,9 @@
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("User Management", "Index", "TrainerUsers")</li>
                             <li>@Html.ActionLink("Designations", "Index", "Designations")</li>
-                            <li>@Html.ActionLink("Salaries", "Index", "Salaries")</li>
-                            <li>@Html.ActionLink("Salary Payments", "Index", "SalaryPayments")</li>
-                            <li>@Html.ActionLink("PaidFees", "Index", "PaidFees")</li>
-                            <li>@Html.ActionLink("Staff Attendance", "Index", "StaffAttendances")</li>
-                            <li>@Html.ActionLink("Staff", "Index", "Staffs")</li>
                             <li>@Html.ActionLink("Class", "Index", "Classes")</li>
                             <li>@Html.ActionLink("Subjects", "Index", "Subjects")</li>
-                            <li>@Html.ActionLink("Subjects Assignment", "Index", "SubjectAssignments")</li>
                             <li>@Html.ActionLink("Enrolment Management", "Index", "Enrolments")</li>
-                            <li>@Html.ActionLink("Students Management", "Index", "Students")</li>
                             <li>@Html.ActionLink("LookupTypes Management", "Index", "LookupTypes")</li>
                             <li>@Html.ActionLink("Lookups Management", "Index", "Lookups")</li>
                             <li>@Html.ActionLink("School Presets", "Edit", "Setup")</li>
@@ -61,17 +54,22 @@
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("New Admission", "NewAdmission", "Students")</li>
                             <li>@Html.ActionLink("Bulk Operations", "Students", "Students")</li>
-                            <li>@Html.ActionLink("Unpaid Fees", "UnpaidFees", "Fees")</li>
+                            <li>@Html.ActionLink("Currently Due Fees", "UnpaidFees", "Fees")</li>
+                            <li>@Html.ActionLink("All Fees Payment Details", "Index", "PaidFees")</li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            Teaching Staff
+                            Employees Management
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("Appoint an Employee", "Appoint", "Staffs")</li>
                             <li>@Html.ActionLink("Bulk Operations", "Index", "Staffs")</li>
+                            <li>@Html.ActionLink("Salaries", "Index", "Salaries")</li>
+                            <li>@Html.ActionLink("Salary Payments", "Index", "SalaryPayments")</li>
+                            <li>@Html.ActionLink("Staff Attendance", "Index", "StaffAttendances")</li>
+                            <li>@Html.ActionLink("Subjects Assignment", "Index", "SubjectAssignments")</li>
 
                         </ul>
                     </li>

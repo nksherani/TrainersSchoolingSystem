@@ -112,7 +112,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Father, "Father", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownList("Father", null, htmlAttributes: new { @class = "form-control" })
+            @Html.DropDownList("Father", null,"--select--", htmlAttributes: new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Father, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -120,7 +120,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Mother, "Mother", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownList("Mother", null, htmlAttributes: new { @class = "form-control" })
+            @Html.DropDownList("Mother", null, "--select--", htmlAttributes: new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Mother, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -128,7 +128,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Guardian, "Guardian", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownList("Guardian", null, htmlAttributes: new { @class = "form-control" })
+            @Html.DropDownList("Guardian", null, "--select--", htmlAttributes: new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Guardian, "", new { @class = "text-danger" })
         </div>
     </div>

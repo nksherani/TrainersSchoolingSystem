@@ -4,10 +4,10 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Students Details</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @*@Html.ActionLink("Create New", "Create")*@
 </p>
 <table class="table">
     <tr>
@@ -107,7 +107,7 @@
         <td>
             @Html.ActionLink("Edit", "Edit", new { id = item.StudentId }) |
             @Html.ActionLink("Details", "Details", new { id = item.StudentId }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.StudentId })
+            @*@Html.ActionLink("Delete", "Delete", new { id = item.StudentId })*@
         </td>
     </tr>
 }

@@ -117,6 +117,13 @@
                     field: "Enrolment.Fee",
                     title: "Fee",
                     width: 80
+                }, {
+                    field: "StaffId",
+                    title: "Action",
+                    template: "<a href=/Students/Edit/#=StudentId#>Update Data</a></p>" +
+                        "<a href=/Students/Details/#=StudentId#> Details</a></p>" +
+                        "<a href=/Enrolments/Delete/#=StudentId#> Cancel Admission</a>",
+                    width: 100
                 }]
         });
         //////////

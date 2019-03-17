@@ -11,6 +11,13 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
+            @Html.DisplayNameFor(model => model.ChallanNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ChallanNo)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Student.FirstName)
         </dt>
 
@@ -23,6 +30,13 @@
 
         <dd>
             @Html.DisplayFor(model => model.CalculatedAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReceivedAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReceivedAmount)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Month)

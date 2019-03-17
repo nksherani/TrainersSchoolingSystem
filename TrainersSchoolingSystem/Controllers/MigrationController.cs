@@ -44,7 +44,7 @@ namespace TrainersSchoolingSystem.Controllers
                 ProcessSalariesData(path);
             }
             ViewBag.Message = "Data Uploaded Successfully";
-            return RedirectToAction("Index");
+            return Redirect("../Home/Index");
         }
         private bool ProcessDesignationsData(string path)
         {
@@ -489,9 +489,15 @@ namespace TrainersSchoolingSystem.Controllers
                         fee.CreatedDate = DateTime.Now;
                         fee.CreatedBy = userid;
                     }
+                    fee.ChallanNo = db.PaidFees.Select(x => x.ChallanNo).Max();
+                    if (!fee.ChallanNo.HasValue)
+                        fee.ChallanNo = 1;
+                    else
+                        fee.ChallanNo = fee.ChallanNo + 1;
                     fee.CalculatedAmount = Convert.ToDecimal(workSheet.Cells[i, 3].Text);
                     fee.ReceivedAmount = fee.CalculatedAmount;
                     db.PaidFees.AddOrUpdate(fee);
+                    db.SaveChanges();
                 }
 
             }

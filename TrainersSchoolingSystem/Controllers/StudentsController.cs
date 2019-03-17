@@ -44,13 +44,17 @@ namespace TrainersSchoolingSystem.Controllers
                 StudentViewModel model = new StudentViewModel();
                 model = Mapper<StudentViewModel>.GetObject(student);
                 model.Father_ = Mapper<ParentViewModel>.GetObject(student.Parent);
-                if(student.Parent2 !=null)
-                model.Mother_ = Mapper<ParentViewModel>.GetObject(student.Parent2);
+                if (student.Parent2 != null)
+                    model.Mother_ = Mapper<ParentViewModel>.GetObject(student.Parent2);
                 if (student.Parent1 != null)
                 {
                     model.Guardian_ = Mapper<GuardianViewModel>.GetObject(student.Parent1);
                 }
                 var enrolmentdb = enrolments.Where(x => x.Student == student.StudentId).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
+                if (enrolmentdb == null)
+                    continue;
+                if (!enrolmentdb.IsActive.Value)
+                    continue;
                 model.Enrolment = Mapper<EnrolmentViewModel>.GetObject(enrolmentdb);
                 model.Enrolment.Class_ = Mapper<ClassViewModel>.GetObject(enrolmentdb.Class1);
                 modellist.Add(model);
@@ -60,7 +64,7 @@ namespace TrainersSchoolingSystem.Controllers
         public ActionResult GenerateFeeSlips2(Bulk bulk)
         {
             var stdIds = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
-            
+
             string css = "";
             var csslines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlipHeader.html")).ToList();
             foreach (var item in csslines)
@@ -73,13 +77,15 @@ namespace TrainersSchoolingSystem.Controllers
             stdIds.Sort();
             foreach (var id in stdIds)
             {
-                var html = GetFeeSlip(id,month);
+                var html = GetFeeSlip(id, month);
                 if (i % 5 == 0)
                     html += "<div style=\"width: 240px; height: 1px; background - color:white\"></div>";
 
                 feeslipsBody += html;
                 i++;
             }
+            if (!feeslipsBody.Contains("Due Date"))
+                feeslipsBody = "<h1>No unpaid fees was found for the selected month</h1>";
             StringBuilder strBody = new StringBuilder();
             strBody.Append("<html>" +
             "<head><title>Fee Slips</title>");
@@ -106,7 +112,7 @@ namespace TrainersSchoolingSystem.Controllers
                 //    return "";
                 SqlParameter StudentId = new SqlParameter("@StudentId", studentid);
                 SqlParameter Month = new SqlParameter("@Month", month);
-                var FeeSlipData = db.Database.SqlQuery<FeeSlipModel>("exec GenerateFeeSlips @StudentId, @Month", StudentId,Month).FirstOrDefault();
+                var FeeSlipData = db.Database.SqlQuery<FeeSlipModel>("exec GenerateFeeSlips @StudentId, @Month", StudentId, Month).FirstOrDefault();
 
                 Server.MapPath("~/Content/FeeSlips/");
                 string[] lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlip.html"));
@@ -156,13 +162,13 @@ namespace TrainersSchoolingSystem.Controllers
 
                 bool ispaid = db.PaidFees.Where(x => x.ReceivedAmount.HasValue &&
                 x.StudentId == studentid && x.Month == month &&
-                    x.CreatedDate.Value.Year == DateTime.Today.Year).Count()>0;
+                    x.CreatedDate.Value.Year == DateTime.Today.Year).Count() > 0;
                 if (ispaid)
                     return "";
-                var feeDb = db.PaidFees.Where(x => !x.ReceivedAmount.HasValue && 
+                var feeDb = db.PaidFees.Where(x => !x.ReceivedAmount.HasValue &&
                 x.StudentId == studentid && x.Month == month &&
                     x.CreatedDate.Value.Year == DateTime.Today.Year).ToList();
-                
+
                 if (FeeSlipData.Fee != 0)
                 {
                     PaidFee paidFee;
@@ -198,7 +204,7 @@ namespace TrainersSchoolingSystem.Controllers
                 if (GlobalData.feeSetup.LabCharges > 0)
                 {
                     PaidFee paidFee;
-                    var count = feeDb.Where(x => x.Description == "LabCharges" && x.Month==month &&
+                    var count = feeDb.Where(x => x.Description == "LabCharges" && x.Month == month &&
                     x.CreatedDate.Value.Year == DateTime.Today.Year).Count();
                     if (count > 0)
                         paidFee = feeDb.Where(x => x.Description == "LabCharges" && x.Month == month &&
@@ -224,7 +230,7 @@ namespace TrainersSchoolingSystem.Controllers
                 if (FeeSlipData.AnnualFee > 0)
                 {
                     PaidFee paidFee;
-                    if (feeDb.Where(x => x.Description == "AnnualFee" && x.CreatedDate.Value.Year==DateTime.Today.Year).Count() > 0)
+                    if (feeDb.Where(x => x.Description == "AnnualFee" && x.CreatedDate.Value.Year == DateTime.Today.Year).Count() > 0)
                         paidFee = feeDb.Where(x => x.Description == "AnnualFee" && x.CreatedDate.Value.Year == DateTime.Today.Year).FirstOrDefault();
                     else
                     {
@@ -264,7 +270,7 @@ namespace TrainersSchoolingSystem.Controllers
             return data;
         }
 
-        
+
         [HttpPost]
         public ActionResult Bulk(Bulk bulk)
         {
@@ -646,7 +652,7 @@ namespace TrainersSchoolingSystem.Controllers
                     father.Relation = "Father";
                     mother.Relation = "Mother";
                     var temp = db.Parents.Where(x => x.CNIC == father.CNIC).ToList();
-                    if (temp.Count==0)
+                    if (temp.Count == 0)
                     {
                         db.Parents.Add(father);
                         db.SaveChanges();
@@ -754,11 +760,11 @@ namespace TrainersSchoolingSystem.Controllers
                 var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
                 classes.Add(pair);
             }
-            ViewBag.ClassAdmitted = new SelectList(classes, "Key", "Value",student.ClassAdmitted);
-            ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText",Common.FirstCharToUpper( student.Gender));
+            ViewBag.ClassAdmitted = new SelectList(classes, "Key", "Value", student.ClassAdmitted);
+            ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText", Common.FirstCharToUpper(student.Gender));
             ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name", student.Father);
             ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name", student.Guardian);
-            ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name", student.Mother);
+            ViewBag.Mother = new SelectList(db.Parents.Where(x => x.Relation.ToLower() == "mother"), "ParentId", "Name", student.Mother);
             return View(student);
         }
 
@@ -798,7 +804,7 @@ namespace TrainersSchoolingSystem.Controllers
                 studentdb.UpdatedDate = DateTime.Now;
                 db.Students.AddOrUpdate(studentdb);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Students");
             }
             List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
             foreach (var item in db.Classes)
@@ -806,7 +812,7 @@ namespace TrainersSchoolingSystem.Controllers
                 var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
                 classes.Add(pair);
             }
-            ViewBag.ClassAdmitted = new SelectList(classes, "Key", "Value",student.ClassAdmitted);
+            ViewBag.ClassAdmitted = new SelectList(classes, "Key", "Value", student.ClassAdmitted);
             ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText", Common.FirstCharToUpper(student.Gender));
             ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name", student.Father);
             ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name", student.Guardian);

@@ -144,7 +144,8 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Enrolment enrolment = db.Enrolments.Find(id);
+            Student student = db.Students.Find(id);
+            Enrolment enrolment = student.Enrolments.FirstOrDefault();
             if (enrolment == null)
             {
                 return HttpNotFound();
@@ -157,10 +158,12 @@ namespace TrainersSchoolingSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Enrolment enrolment = db.Enrolments.Find(id);
-            db.Enrolments.Remove(enrolment);
+            Student student = db.Students.Find(id);
+            Enrolment enrolment = student.Enrolments.FirstOrDefault();
+            enrolment.IsActive = false;
+            db.Enrolments.AddOrUpdate(enrolment);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return Redirect("../../Students/Students");
         }
 
         protected override void Dispose(bool disposing)
