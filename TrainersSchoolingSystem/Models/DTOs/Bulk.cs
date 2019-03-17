@@ -12,5 +12,6 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public string Class { get; set; }
         public string Section { get; set; }
         public string Fee { get; set; }
+        public string Month { get; set; }
     }
 }

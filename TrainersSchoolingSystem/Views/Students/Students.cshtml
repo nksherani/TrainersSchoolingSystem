@@ -8,6 +8,7 @@
 <input id="action" @*value="1"*@ />
 <input id="class" />
 <input id="section" />
+<input id="month" />
 <input type="text" id="fee" name="fee" placeholder="100" />
 <input type="button" disabled id="btnPerformAction" value="Perform Action" />
 
@@ -30,7 +31,7 @@
 <div id="grid"></div>
 
 <script>
-    var grid, action, class_, section, fee, error1, error2, error3, error4;
+    var grid, action, class_, section,month, fee, error1, error2, error3, error4;
     $(document).ready(function () {
         /////////////
 
@@ -154,6 +155,36 @@
             }
         });
         /////////
+        var monthsData = [
+            { text: "January", value: "0" },
+            { text: "February", value: "1" },
+            { text: "March", value: "2" },
+            { text: "April", value: "3" },
+            { text: "May", value: "4" },
+            { text: "June", value: "5" },
+            { text: "July", value: "6" },
+            { text: "August", value: "7" },
+            { text: "September", value: "8" },
+            { text: "October", value: "9" },
+            { text: "November", value: "10" },
+            { text: "December", value: "11" }
+        ];
+
+        // Creating a Date Object 
+        var DateObj = new Date();
+        // month from above Date Object is being  
+        // extracted using getMonth() 
+        var currentMonth = DateObj.getMonth();
+        // Printing month. 
+
+        $("#month").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            //height: 400,
+            index: currentMonth,
+            dataSource: monthsData
+        });
+        /////////
         $("#class").kendoDropDownList({
             dataTextField: "Text",
             dataValueField: "Value",
@@ -173,6 +204,7 @@
         action = $('#action').data('kendoDropDownList');
         class_ = $('#class').data('kendoDropDownList');
         section = $('#section').data('kendoDropDownList');
+        month = $('#month').data('kendoDropDownList');
         fee = $("#fee");
         error1 = $("#error1");
         error2 = $("#error2");
@@ -210,7 +242,8 @@
                 "Ids": studentIds,
                 "Class": class_.value(),
                 "Section": section.value(),
-                "Fee": fee.val()
+                "Fee": fee.val(),
+                "Month": month.value()
             };
             console.log(formData);
             if (action.value() == 5)
@@ -315,6 +348,9 @@
         else if (action.value() == 4) {
             fee.show();
         }
+        else if (action.value() == 5) {
+            month.wrapper.show();
+        }
     }
     function HideErrors() {
         error1.hide();
@@ -327,6 +363,7 @@
         section.wrapper.hide();
         fee.hide();
         link.hide();
+        month.wrapper.hide();
     }
     function onChangeClass(arg) {
         if (class_.value() != 0)

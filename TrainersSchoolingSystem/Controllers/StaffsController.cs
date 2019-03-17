@@ -344,9 +344,11 @@ namespace TrainersSchoolingSystem.Controllers
                 }
                 int i = 0;
                 string feeslipsBody = "";
+                int month = Convert.ToInt32(bulk.Month) + 1;
+
                 foreach (var id in staffids)
                 {
-                    var html = GetPaySlip(id);
+                    var html = GetPaySlip(id,month);
                     if (i % 5 == 0)
                         html += "<div style=\"width: 240px; height: 1px; background - color:white\"></div>";
 
@@ -382,19 +384,21 @@ namespace TrainersSchoolingSystem.Controllers
             }
             return Json("../Content/Temp/PaySlips.html", JsonRequestBehavior.AllowGet);
         }
-        private string GetPaySlip(int StaffId)
+        private string GetPaySlip(int StaffId, int month)
         {
             string data = "";
 
             try
             {
-                var lastdate = db.PaidFees.Where(x => x.StudentId == StaffId
-                    && x.Description == "MonthlyFee" && x.ReceivedAmount.HasValue)?.OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
-                if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28 &&
-                    lastdate.Value.Month == DateTime.Now.Month)
-                    return "";
+                //var lastdate = db.SalaryPayments.Where(x => x.StaffId == StaffId)?
+                //    .OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
+                //if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28 &&
+                //    lastdate.Value.Month == DateTime.Now.Month)
+                //    return "";
                 SqlParameter staffId = new SqlParameter("@StaffId", StaffId);
-                var PaySlipData = db.Database.SqlQuery<PaySlipModel>("exec GeneratePaySlips @StaffId", staffId).FirstOrDefault();
+                SqlParameter Month = new SqlParameter("@Month", month);
+
+                var PaySlipData = db.Database.SqlQuery<PaySlipModel>("exec GeneratePaySlips @StaffId, @Month", staffId,month).FirstOrDefault();
                 List<string> lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "PaySlip.html")).ToList();
                 foreach (var item in lines)
                 {
@@ -423,26 +427,28 @@ namespace TrainersSchoolingSystem.Controllers
                 data = data.Replace("__UnpaidLeaves__", PaySlipData.UnpaidLeaves.ToString());
                 data = data.Replace("__AmountDeducted__", PaySlipData.AmountDeducted.ToString());
 
-                var lastPayment = db.SalaryPayments.Where(x => x.StaffId == StaffId).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
+                var mPayment = db.SalaryPayments.Where(x => x.StaffId == StaffId &&
+                                x.Month==month && x.CreatedDate.Value.Year == DateTime.Now.Year).FirstOrDefault();
                 var userid = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                if (lastPayment != null && lastPayment.CreatedDate.Value.ToString("MM-yyyy") == DateTime.Now.ToString("MM-yyyy"))
+                if (mPayment != null)
                 {
-                    lastPayment.Amount = Convert.ToInt32(PaySlipData.NetPay);
-                    lastPayment.UpdatedDate = DateTime.Now;
-                    lastPayment.UpdatedBy = userid;
-                    data = data.Replace("__Challan__", lastPayment.ChallanNo.ToString());
+                    mPayment.Amount = Convert.ToInt32(PaySlipData.NetPay);
+                    mPayment.UpdatedDate = DateTime.Now;
+                    mPayment.UpdatedBy = userid;
+                    data = data.Replace("__Challan__", mPayment.ChallanNo.ToString());
                 }
                 else
                 {
-                    lastPayment = new SalaryPayment();
-                    lastPayment.ChallanNo = PaySlipData.ChallanNo;
-                    lastPayment.StaffId = PaySlipData.StaffId;
-                    lastPayment.Amount = Convert.ToInt32(PaySlipData.NetPay);
-                    lastPayment.CreatedDate = DateTime.Now;
-                    lastPayment.CreatedBy = userid;
+                    mPayment = new SalaryPayment();
+                    mPayment.ChallanNo = PaySlipData.ChallanNo;
+                    mPayment.StaffId = PaySlipData.StaffId;
+                    mPayment.Amount = Convert.ToInt32(PaySlipData.NetPay);
+                    mPayment.CreatedDate = DateTime.Now;
+                    mPayment.CreatedBy = userid;
                     data = data.Replace("__Challan__", PaySlipData.ChallanNo.ToString());
                 }
-                db.SalaryPayments.AddOrUpdate(lastPayment);
+                mPayment.Month = month;
+                db.SalaryPayments.AddOrUpdate(mPayment);
                 db.SaveChanges();
             }
             catch (Exception ex)

@@ -6,6 +6,8 @@
 <h2>Students</h2>
 <label>Select a bulk Action to Perform on Selected Staff Members </label>
 <input id="action" />
+<input id="month" />
+
 <input type="button" id="btnPerformAction" value="Perform Action" />
 
 <img id="loading" hidden src="~/Content/loading.gif" style="width:60px;height:50px;" />
@@ -157,12 +159,36 @@
             optionLabel: "Select an action...",
             change: onChangeAction
         });
+        /////////
+        var monthsData = [
+            { text: "January", value: "0" },
+            { text: "February", value: "1" },
+            { text: "March", value: "2" },
+            { text: "April", value: "3" },
+            { text: "May", value: "4" },
+            { text: "June", value: "5" },
+            { text: "July", value: "6" },
+            { text: "August", value: "7" },
+            { text: "September", value: "8" },
+            { text: "October", value: "9" },
+            { text: "November", value: "10" },
+            { text: "December", value: "11" }
+        ];
 
+        var DateObj = new Date();
+        var currentMonth = DateObj.getMonth();
+        $("#month").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            index: currentMonth,
+            dataSource: monthsData
+        });
         grid = $('#grid').data('kendoGrid');
         action = $('#action').data('kendoDropDownList');
+        month = $('#month').data('kendoDropDownList');
 
         error1 = $("#error1");
-
+        HideControls();
         HideErrors();
 
         $("#btnPerformAction").click(function () {
@@ -180,6 +206,7 @@
             var formData = {
                 "Action": action.value(),
                 "Ids": StaffIds,
+                "Month": month.value()
             };
             console.log(formData);
             FeeSlipsAjax(formData);
@@ -198,8 +225,7 @@
                 $('#grid').data('kendoGrid').refresh();
                 console.log(action.value());
 
-                if (action.value() == 2)
-                {
+                if (action.value() == 2) {
                     var win = window.open('../Content/Temp/PaySlips.html', '_blank');
                     if (win) {
                         //Browser has allowed it to be opened
@@ -211,6 +237,7 @@
                     }
                 }
                 action.value(0);
+                HideControls
             },
             error: function (data_) {
                 $("#loading").hide();
@@ -228,11 +255,26 @@
 
     }
     function onChangeAction(arg) {
-
+        if (action.value() != 0) {
+            $("#btnPerformAction").prop('disabled', false);
+            $("#btnPerformAction").removeClass('k-state-disabled');
+        }
+        else {
+            $("#btnPerformAction").prop('disabled', true);
+        }
+        HideControls();
+        HideErrors();
+        if (action.value() == 2) {
+            month.wrapper.show();
+        }
     }
 
     function HideErrors() {
         error1.hide();
+    }
+    function HideControls() {
+
+        month.wrapper.hide();
     }
     function statusDropDownEditor(container, options) {
 

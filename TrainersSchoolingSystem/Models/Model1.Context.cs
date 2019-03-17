@@ -56,13 +56,17 @@ namespace TrainersSchoolingSystem.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ResetDb");
         }
     
-        public virtual ObjectResult<GenerateFeeSlips_Result> GenerateFeeSlips(Nullable<int> studentId)
+        public virtual ObjectResult<GenerateFeeSlips_Result> GenerateFeeSlips(Nullable<int> studentId, Nullable<int> month)
         {
             var studentIdParameter = studentId.HasValue ?
                 new ObjectParameter("StudentId", studentId) :
                 new ObjectParameter("StudentId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GenerateFeeSlips_Result>("GenerateFeeSlips", studentIdParameter);
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GenerateFeeSlips_Result>("GenerateFeeSlips", studentIdParameter, monthParameter);
         }
     
         public virtual ObjectResult<GetUnpaidStudents_Result> GetUnpaidStudents()
@@ -70,13 +74,17 @@ namespace TrainersSchoolingSystem.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetUnpaidStudents_Result>("GetUnpaidStudents");
         }
     
-        public virtual ObjectResult<GeneratePaySlips_Result> GeneratePaySlips(Nullable<int> staffId)
+        public virtual ObjectResult<GeneratePaySlips_Result> GeneratePaySlips(Nullable<int> staffId, Nullable<int> month)
         {
             var staffIdParameter = staffId.HasValue ?
                 new ObjectParameter("StaffId", staffId) :
                 new ObjectParameter("StaffId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GeneratePaySlips_Result>("GeneratePaySlips", staffIdParameter);
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GeneratePaySlips_Result>("GeneratePaySlips", staffIdParameter, monthParameter);
         }
     
         public virtual ObjectResult<GetCurrentTeachers_Result> GetCurrentTeachers()

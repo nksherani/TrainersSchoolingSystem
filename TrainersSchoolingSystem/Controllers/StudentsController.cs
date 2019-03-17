@@ -44,6 +44,7 @@ namespace TrainersSchoolingSystem.Controllers
                 StudentViewModel model = new StudentViewModel();
                 model = Mapper<StudentViewModel>.GetObject(student);
                 model.Father_ = Mapper<ParentViewModel>.GetObject(student.Parent);
+                if(student.Parent2 !=null)
                 model.Mother_ = Mapper<ParentViewModel>.GetObject(student.Parent2);
                 if (student.Parent1 != null)
                 {
@@ -68,9 +69,10 @@ namespace TrainersSchoolingSystem.Controllers
             }
             int i = 0;
             string feeslipsBody = "";
+            int month = Convert.ToInt32(bulk.Month) + 1;
             foreach (var id in stdIds)
             {
-                var html = GetFeeSlip(id);
+                var html = GetFeeSlip(id,month);
                 if (i % 5 == 0)
                     html += "<div style=\"width: 240px; height: 1px; background - color:white\"></div>";
 
@@ -90,19 +92,20 @@ namespace TrainersSchoolingSystem.Controllers
             System.IO.File.WriteAllText(filePath, strBody.ToString());
             return Json("../Content/Temp/FeeSlips.html", JsonRequestBehavior.AllowGet);
         }
-        private string GetFeeSlip(int studentid)
+        private string GetFeeSlip(int studentid, int month)
         {
             string data = "";
 
             try
             {
-                var lastdate = db.PaidFees.Where(x => x.StudentId == studentid
-                    && x.Description == "MonthlyFee" && x.ReceivedAmount.HasValue)?.OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
-                if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28 &&
-                    lastdate.Value.Month == DateTime.Now.Month)
-                    return "";
+                //var lastdate = db.PaidFees.Where(x => x.StudentId == studentid
+                //    && x.Description == "MonthlyFee" && x.ReceivedAmount.HasValue)?.OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
+                //if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28 &&
+                //    lastdate.Value.Month == DateTime.Now.Month)
+                //    return "";
                 SqlParameter StudentId = new SqlParameter("@StudentId", studentid);
-                var FeeSlipData = db.Database.SqlQuery<FeeSlipModel>("exec GenerateFeeSlips @StudentId", StudentId).FirstOrDefault();
+                SqlParameter Month = new SqlParameter("@Month", month);
+                var FeeSlipData = db.Database.SqlQuery<FeeSlipModel>("exec GenerateFeeSlips @StudentId, @Month", StudentId,Month).FirstOrDefault();
 
                 Server.MapPath("~/Content/FeeSlips/");
                 string[] lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlip.html"));
@@ -150,21 +153,24 @@ namespace TrainersSchoolingSystem.Controllers
                 data = data.Replace("__Till__", totalFee.ToString());
                 data = data.Replace("__After__", (totalFee + GlobalData.feeSetup.LatePaymentSurcharge).ToString());
 
-                var feeDb = db.PaidFees.Where(x => !x.ReceivedAmount.HasValue && x.StudentId == studentid).ToList();
-                List<PaidFee> temp = new List<PaidFee>();
-                foreach (var item in feeDb)
-                {
-                    if ((DateTime.Now - item.CreatedDate).Value.TotalDays < 28)
-                        temp.Add(item);
-                }
-                feeDb = temp;
+                bool ispaid = db.PaidFees.Where(x => x.ReceivedAmount.HasValue &&
+                x.StudentId == studentid && x.Month == month &&
+                    x.CreatedDate.Value.Year == DateTime.Today.Year).Count()>0;
+                if (ispaid)
+                    return "";
+                var feeDb = db.PaidFees.Where(x => !x.ReceivedAmount.HasValue && 
+                x.StudentId == studentid && x.Month == month &&
+                    x.CreatedDate.Value.Year == DateTime.Today.Year).ToList();
+                
                 if (FeeSlipData.Fee != 0)
                 {
                     PaidFee paidFee;
-                    var count = feeDb.Where(x => x.Description == "MonthlyFee").ToList();
+                    var count = feeDb.Where(x => x.Description == "MonthlyFee" && x.Month == month &&
+                    x.CreatedDate.Value.Year == DateTime.Today.Year).ToList();
                     if (count.Count > 0)
                     {
-                        paidFee = feeDb.Where(x => x.Description == "MonthlyFee").FirstOrDefault();
+                        paidFee = feeDb.Where(x => x.Description == "MonthlyFee" && x.Month == month &&
+                    x.CreatedDate.Value.Year == DateTime.Today.Year).FirstOrDefault();
                         data = data.Replace("__Challan__", paidFee.ChallanNo.ToString());
 
                     }
@@ -174,7 +180,7 @@ namespace TrainersSchoolingSystem.Controllers
                         paidFee.ChallanNo = FeeSlipData.ChallanNo;
                         data = data.Replace("__Challan__", FeeSlipData.ChallanNo.ToString());
                     }
-
+                    paidFee.Month = month;
                     paidFee.StudentId = studentid;
                     paidFee.CalculatedAmount = Convert.ToInt32(FeeSlipData.Fee);
                     paidFee.Description = "MonthlyFee";
@@ -191,9 +197,11 @@ namespace TrainersSchoolingSystem.Controllers
                 if (GlobalData.feeSetup.LabCharges > 0)
                 {
                     PaidFee paidFee;
-                    var count = feeDb.Where(x => x.Description == "LabCharges").Count();
+                    var count = feeDb.Where(x => x.Description == "LabCharges" && x.Month==month &&
+                    x.CreatedDate.Value.Year == DateTime.Today.Year).Count();
                     if (count > 0)
-                        paidFee = feeDb.Where(x => x.Description == "LabCharges").FirstOrDefault();
+                        paidFee = feeDb.Where(x => x.Description == "LabCharges" && x.Month == month &&
+                        x.CreatedDate.Value.Year == DateTime.Today.Year).FirstOrDefault();
                     else
                     {
                         paidFee = new PaidFee();
@@ -215,8 +223,8 @@ namespace TrainersSchoolingSystem.Controllers
                 if (FeeSlipData.AnnualFee > 0)
                 {
                     PaidFee paidFee;
-                    if (feeDb.Where(x => x.Description == "AnnualFee").Count() > 0)
-                        paidFee = feeDb.Where(x => x.Description == "AnnualFee").FirstOrDefault();
+                    if (feeDb.Where(x => x.Description == "AnnualFee" && x.CreatedDate.Value.Year==DateTime.Today.Year).Count() > 0)
+                        paidFee = feeDb.Where(x => x.Description == "AnnualFee" && x.CreatedDate.Value.Year == DateTime.Today.Year).FirstOrDefault();
                     else
                     {
                         paidFee = new PaidFee();
@@ -255,72 +263,7 @@ namespace TrainersSchoolingSystem.Controllers
             return data;
         }
 
-        bool SavePdf(string filename, string path, string html)
-        {
-            try
-            {
-                HtmlToPdf htmlToPdfConverter = new HtmlToPdf();
-
-
-                //htmlToPdfConverter.Document.PageSize = new PdfPageSize(400, 400);
-                //htmlToPdfConverter.Document.PageOrientation = PdfPageOrientation.Portrait;
-                htmlToPdfConverter.Document.Margins = new PdfMargins(0);
-                byte[] pdfBuffer = null;
-                pdfBuffer = htmlToPdfConverter.ConvertHtmlToMemory(html, "http://localhost:50496");
-                System.IO.File.WriteAllBytes(path + filename, pdfBuffer);
-                return true;
-            }
-            catch (Exception ex)
-            {
-
-                Logger.Fatal(ex.Message);
-                Logger.Fatal(ex.Source);
-                Logger.Fatal(ex.TargetSite.Name);
-                Logger.Fatal(ex.StackTrace);
-                if (ex.InnerException != null)
-                {
-                    Logger.Fatal(ex.InnerException.Message);
-                    Logger.Fatal(ex.InnerException.Source);
-                    Logger.Fatal(ex.InnerException.TargetSite.Name);
-                    Logger.Fatal(ex.InnerException.StackTrace);
-                }
-            }
-            return false;
-        }
-        bool SavePdf2(string filename, string path, string html)
-        {
-            try
-            {
-                var word = new Microsoft.Office.Interop.Word.Application();
-                word.Visible = false;
-
-                //html = html.Replace("Content")
-                var filePath = Server.MapPath("~/Content/Temp/Html2PdfTest.html");
-                System.IO.File.WriteAllText(filePath, html);
-                var savePathPdf = path + filename;
-                var wordDoc = word.Documents.Open(FileName: filePath, ReadOnly: false);
-                wordDoc.PageSetup.PaperSize = WdPaperSize.wdPaperA4;
-                wordDoc.SaveAs2(FileName: savePathPdf, FileFormat: WdSaveFormat.wdFormatPDF);
-                wordDoc.Close();
-                return true;
-            }
-            catch (Exception ex)
-            {
-
-                Logger.Fatal(ex.Message);
-                Logger.Fatal(ex.Source);
-                Logger.Fatal(ex.TargetSite.Name);
-                Logger.Fatal(ex.StackTrace);
-                if (ex.InnerException != null)
-                {
-                    Logger.Fatal(ex.InnerException.Message);
-                    Logger.Fatal(ex.InnerException.Source);
-                    Logger.Fatal(ex.InnerException.TargetSite.Name);
-                    Logger.Fatal(ex.InnerException.StackTrace);
-                }
-            }
-            return false;
-        }
+        
         [HttpPost]
         public ActionResult Bulk(Bulk bulk)
         {
@@ -597,20 +540,6 @@ namespace TrainersSchoolingSystem.Controllers
             }
 
             return false;
-        }
-        [HttpPost]
-        public ActionResult Excel_Export_Save(string contentType, string base64, string fileName)
-        {
-            var fileContents = Convert.FromBase64String(base64);
-
-            return File(fileContents, contentType, fileName);
-        }
-        [HttpPost]
-        public ActionResult Pdf_Export_Save(string contentType, string base64, string fileName)
-        {
-            var fileContents = Convert.FromBase64String(base64);
-
-            return File(fileContents, contentType, fileName);
         }
         // GET: Students/Details/5
         public ActionResult Details(int? id)
@@ -918,5 +847,89 @@ namespace TrainersSchoolingSystem.Controllers
             }
             base.Dispose(disposing);
         }
+
+
+        ///unused code
+        bool SavePdf(string filename, string path, string html)
+        {
+            try
+            {
+                HtmlToPdf htmlToPdfConverter = new HtmlToPdf();
+
+
+                //htmlToPdfConverter.Document.PageSize = new PdfPageSize(400, 400);
+                //htmlToPdfConverter.Document.PageOrientation = PdfPageOrientation.Portrait;
+                htmlToPdfConverter.Document.Margins = new PdfMargins(0);
+                byte[] pdfBuffer = null;
+                pdfBuffer = htmlToPdfConverter.ConvertHtmlToMemory(html, "http://localhost:50496");
+                System.IO.File.WriteAllBytes(path + filename, pdfBuffer);
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
+            return false;
+        }
+        bool SavePdf2(string filename, string path, string html)
+        {
+            try
+            {
+                var word = new Microsoft.Office.Interop.Word.Application();
+                word.Visible = false;
+
+                //html = html.Replace("Content")
+                var filePath = Server.MapPath("~/Content/Temp/Html2PdfTest.html");
+                System.IO.File.WriteAllText(filePath, html);
+                var savePathPdf = path + filename;
+                var wordDoc = word.Documents.Open(FileName: filePath, ReadOnly: false);
+                wordDoc.PageSetup.PaperSize = WdPaperSize.wdPaperA4;
+                wordDoc.SaveAs2(FileName: savePathPdf, FileFormat: WdSaveFormat.wdFormatPDF);
+                wordDoc.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
+            return false;
+        }
+        [HttpPost]
+        public ActionResult Excel_Export_Save(string contentType, string base64, string fileName)
+        {
+            var fileContents = Convert.FromBase64String(base64);
+
+            return File(fileContents, contentType, fileName);
+        }
+        [HttpPost]
+        public ActionResult Pdf_Export_Save(string contentType, string base64, string fileName)
+        {
+            var fileContents = Convert.FromBase64String(base64);
+
+            return File(fileContents, contentType, fileName);
+        }
+
     }
 }
