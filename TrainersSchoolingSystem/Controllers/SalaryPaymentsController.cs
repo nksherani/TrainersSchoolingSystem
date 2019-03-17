@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using TrainersSchoolingSystem.Models;
+using TrainersSchoolingSystem.Utils;
 
 namespace TrainersSchoolingSystem.Controllers
 {
@@ -42,6 +43,7 @@ namespace TrainersSchoolingSystem.Controllers
         public ActionResult Create()
         {
             ViewBag.StaffId = new SelectList(db.Staffs, "StaffId", "FirstName");
+            ViewBag.Month = new SelectList(Constants.months, "Key", "Value");
             return View();
         }
 
@@ -62,7 +64,7 @@ namespace TrainersSchoolingSystem.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.Month = new SelectList(Constants.months, "Key", "Value");
             ViewBag.StaffId = new SelectList(db.Staffs, "StaffId", "FirstName", salaryPayment.StaffId);
             return View(salaryPayment);
         }
@@ -80,6 +82,7 @@ namespace TrainersSchoolingSystem.Controllers
                 return HttpNotFound();
             }
             ViewBag.StaffId = new SelectList(db.Staffs, "StaffId", "FirstName", salaryPayment.StaffId);
+            ViewBag.Month = new SelectList(Constants.months, "Key", "Value", salaryPayment.Month);
             return View(salaryPayment);
         }
 
@@ -104,9 +107,8 @@ namespace TrainersSchoolingSystem.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CreatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", salaryPayment.CreatedBy);
             ViewBag.StaffId = new SelectList(db.Staffs, "StaffId", "FirstName", salaryPayment.StaffId);
-            ViewBag.UpdatedBy = new SelectList(db.TrainerUsers, "TrainerUserId", "Username", salaryPayment.UpdatedBy);
+            ViewBag.Month = new SelectList(Constants.months, "Key", "Value", salaryPayment.Month);
             return View(salaryPayment);
         }
 

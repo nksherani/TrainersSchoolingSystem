@@ -19,7 +19,7 @@ namespace TrainersSchoolingSystem.Controllers
     public class StaffsController : Controller
     {
         private TrainersEntities db = new TrainersEntities();
-        
+
         // GET: Staffs
         public ActionResult Index()
         {
@@ -58,7 +58,8 @@ namespace TrainersSchoolingSystem.Controllers
                 {
                     staff_.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                     staff_.CreatedDate = DateTime.Now;
-
+                    if (staff_.DateOfBirth.HasValue)
+                        staff_.Age = Convert.ToInt32((DateTime.Now - staff_.DateOfBirth.Value).TotalDays / 365);
                     Staff staff = Mapper<Staff>.GetObject(staff_);
                     db.Staffs.Add(staff);
                     db.SaveChanges();
@@ -108,7 +109,9 @@ namespace TrainersSchoolingSystem.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Staff staff = db.Staffs.Find(id);
+            Salary salary = db.Salaries.Where(x => x.StaffId == staff.StaffId).FirstOrDefault();
             StaffViewModel staff_ = Mapper<StaffViewModel>.GetObject(staff);
+            staff_.Salary_ = Mapper<SalaryViewModel>.GetObject(salary);
             if (staff == null)
             {
                 return HttpNotFound();
@@ -345,10 +348,10 @@ namespace TrainersSchoolingSystem.Controllers
                 int i = 0;
                 string feeslipsBody = "";
                 int month = Convert.ToInt32(bulk.Month) + 1;
-
+                staffids.Sort();
                 foreach (var id in staffids)
                 {
-                    var html = GetPaySlip(id,month);
+                    var html = GetPaySlip(id, month);
                     if (i % 5 == 0)
                         html += "<div style=\"width: 240px; height: 1px; background - color:white\"></div>";
 
@@ -390,15 +393,11 @@ namespace TrainersSchoolingSystem.Controllers
 
             try
             {
-                //var lastdate = db.SalaryPayments.Where(x => x.StaffId == StaffId)?
-                //    .OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
-                //if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28 &&
-                //    lastdate.Value.Month == DateTime.Now.Month)
-                //    return "";
+
                 SqlParameter staffId = new SqlParameter("@StaffId", StaffId);
                 SqlParameter Month = new SqlParameter("@Month", month);
 
-                var PaySlipData = db.Database.SqlQuery<PaySlipModel>("exec GeneratePaySlips @StaffId, @Month", staffId,month).FirstOrDefault();
+                var PaySlipData = db.Database.SqlQuery<PaySlipModel>("exec GeneratePaySlips @StaffId, @Month", staffId, Month).FirstOrDefault();
                 List<string> lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "PaySlip.html")).ToList();
                 foreach (var item in lines)
                 {
@@ -428,7 +427,7 @@ namespace TrainersSchoolingSystem.Controllers
                 data = data.Replace("__AmountDeducted__", PaySlipData.AmountDeducted.ToString());
 
                 var mPayment = db.SalaryPayments.Where(x => x.StaffId == StaffId &&
-                                x.Month==month && x.CreatedDate.Value.Year == DateTime.Now.Year).FirstOrDefault();
+                                x.Month == month && x.CreatedDate.Value.Year == DateTime.Now.Year).FirstOrDefault();
                 var userid = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
                 if (mPayment != null)
                 {
@@ -510,7 +509,7 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create( Staff staff)
+        public ActionResult Create(Staff staff)
         {
             if (ModelState.IsValid)
             {
@@ -539,7 +538,7 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName",staff.Designation);
+            ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName", staff.Designation);
             ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText", staff.Gender);
 
             return View(staff);
@@ -550,7 +549,7 @@ namespace TrainersSchoolingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit( Staff staff)
+        public ActionResult Edit(Staff staff)
         {
             if (ModelState.IsValid)
             {
@@ -579,8 +578,8 @@ namespace TrainersSchoolingSystem.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName",staff.Designation);
-            ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText",staff.Gender);
+            ViewBag.Designation = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName", staff.Designation);
+            ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText", staff.Gender);
 
             return View(staff);
         }

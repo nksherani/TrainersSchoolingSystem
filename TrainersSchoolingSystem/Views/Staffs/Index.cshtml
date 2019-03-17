@@ -8,7 +8,7 @@
 <input id="action" />
 <input id="month" />
 
-<input type="button" id="btnPerformAction" value="Perform Action" />
+<input type="button" disabled id="btnPerformAction" value="Perform Action" />
 
 <img id="loading" hidden src="~/Content/loading.gif" style="width:60px;height:50px;" />
 
@@ -94,11 +94,11 @@
                 {
                     field: "StaffId",
                     title: "ID",
-                    width: 30
+                    width: 40
                 }, {
                     field: "Name",
                     title: "Name",
-                    width: 80
+                    width: 100
                 }, {
                     field: "Gender",
                     title: "Gender",
@@ -192,6 +192,8 @@
         HideErrors();
 
         $("#btnPerformAction").click(function () {
+            if (action.value() == 0)
+                return;
             var StaffIds = grid.selectedKeyNames();
             var iserror = false;
             if (StaffIds.length == 0) {
@@ -237,7 +239,8 @@
                     }
                 }
                 action.value(0);
-                HideControls
+                HideControls();
+                $("#btnPerformAction").prop('disabled', true);
             },
             error: function (data_) {
                 $("#loading").hide();

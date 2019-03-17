@@ -38,6 +38,10 @@ namespace TrainersSchoolingSystem.Controllers
                 ProcessClassesData(path);
                 ProcessSubjectsData(path);
                 ProcessStudentsData(path);
+                ProcessDefaultersData(path);
+                ProcessClassTeachersData(path);
+                ProcessFeesData(path);
+                ProcessSalariesData(path);
             }
             ViewBag.Message = "Data Uploaded Successfully";
             return RedirectToAction("Index");
@@ -104,7 +108,7 @@ namespace TrainersSchoolingSystem.Controllers
                     Staff staff = new Staff();
                     List<string> name = workSheet.Cells[i, 5].Text.Split(' ').ToList();
                     staff.FirstName = name.FirstOrDefault();
-                    staff.LastName = name.Skip(1).Aggregate<string, string>("", (a, b) => a + " " + b);
+                    staff.LastName = name.Skip(1).Aggregate<string, string>("", (a, b) => a + " " + b).Trim();
                     if (staffdb.Where(x => x.FirstName == staff.FirstName && x.LastName == staff.LastName).Count() > 0)
                     {
                         staff = staffdb.Where(x => x.FirstName == staff.FirstName && x.LastName == staff.LastName).FirstOrDefault();
@@ -116,17 +120,21 @@ namespace TrainersSchoolingSystem.Controllers
                         staff.CreatedDate = DateTime.Now;
                         staff.CreatedBy = userid;
                     }
-                    var ndes = workSheet.Cells[i, 10].Text;
-                    var des = designations.Where(x => x.DesignationName.ToLower().Contains(ndes.ToLower()) ||
-                    ndes.ToLower().Contains(x.DesignationName.ToLower())
+                    var ndes = workSheet.Cells[i, 10].Text.ToLower().Replace("i", "").Replace("rr", "").Replace("r", "").Replace("ss", "").Replace("y", "");
+                    var des = designations.Where(x => x.DesignationName.ToLower().Replace("i", "").Replace("rr", "").Replace("r", "").Replace("ss", "").Replace("y", "").Contains(ndes.ToLower()) ||
+                    ndes.ToLower().Contains(x.DesignationName.ToLower().Replace("i", "").Replace("rr", "").Replace("r", "").Replace("ss", "").Replace("y", ""))
                     ).FirstOrDefault();
                     if (des != null)
                         staff.Designation = des.DesignationId;
+                    else
+                    {
+
+                    }
                     staff.Qualification = workSheet.Cells[i, 11].Text;
                     DateTime date;
                     if (DateTime.TryParse(workSheet.Cells[i, 12].Text, out date))
                         staff.JoiningDate = date;
-
+                    staff.CNIC = workSheet.Cells[i, 17].Text;
                     db.Staffs.AddOrUpdate(staff);
                     db.SaveChanges();
                     Salary salary = new Salary();
@@ -270,12 +278,11 @@ namespace TrainersSchoolingSystem.Controllers
                     Parent parent = new Parent();
                     parent.CNIC = workSheet.Cells[i, 13].Text;
                     enrolment.GRNo = workSheet.Cells[i, 2].Text;
-                    List<string> name = workSheet.Cells[i, 3].Text
-                        .Replace(" e ", "-e-").Replace(" E ", "-e-").Split(' ').ToList();
+                    List<string> name = workSheet.Cells[i, 3].Text.Split(' ').ToList();
                     student.FirstName = name.FirstOrDefault();
-                    student.LastName = name.Skip(1).Aggregate<string, string>("", (a, b) => a + " " + b);
+                    student.LastName = name.Skip(1).Aggregate<string, string>("", (a, b) => a + " " + b).Trim();
                     if (studentdb.Where(x => x.FirstName == student.FirstName &&
-                    x.LastName == student.LastName &&x.Parent.CNIC==parent.CNIC).Count() > 0)
+                    x.LastName == student.LastName && x.Parent.CNIC == parent.CNIC).Count() > 0)
                     {
                         student = studentdb.Where(x => x.FirstName == student.FirstName &&
                     x.LastName == student.LastName && x.Parent.CNIC == parent.CNIC).FirstOrDefault();
@@ -297,7 +304,7 @@ namespace TrainersSchoolingSystem.Controllers
                         student.CreatedBy = userid;
                         enrolment.CreatedDate = DateTime.Now;
                         enrolment.CreatedBy = userid;
-                        if(parents.Where(x=>x.CNIC.Replace("-", "").Replace(" ", "") == parent.CNIC.Replace("-", "").Replace(" ", "")).Count()>0)
+                        if (parents.Where(x => x.CNIC.Replace("-", "").Replace(" ", "") == parent.CNIC.Replace("-", "").Replace(" ", "")).Count() > 0)
                         {
                             parent = parents.Where(x => x.CNIC.Replace("-", "").Replace(" ", "") == parent.CNIC.Replace("-", "").Replace(" ", "")).FirstOrDefault();
                             parent.UpdatedBy = userid;
@@ -308,7 +315,7 @@ namespace TrainersSchoolingSystem.Controllers
                             parent.CreatedDate = DateTime.Now;
                             parent.CreatedBy = userid;
                         }
-                        
+
                     }
                     parent.Name = workSheet.Cells[i, 4].Text;
                     parent.Relation = "Father";
@@ -323,7 +330,7 @@ namespace TrainersSchoolingSystem.Controllers
                     }
                     if (DateTime.TryParse(workSheet.Cells[i, 8].Text, out dt))
                         student.JoiningDate = dt;
-                    student.Mobile = "+92"+workSheet.Cells[i, 9].Text;
+                    student.Mobile = "+92" + workSheet.Cells[i, 9].Text;
                     parent.Profession = workSheet.Cells[i, 10].Text;
                     parent.OfficeAddress = workSheet.Cells[i, 11].Text;
                     parent.Education = workSheet.Cells[i, 12].Text;
@@ -360,7 +367,177 @@ namespace TrainersSchoolingSystem.Controllers
                     db.SaveChanges();
                     enrolment.Student = student.StudentId;
                     db.Enrolments.AddOrUpdate(enrolment);
+
+                }
+
+            }
+            db.SaveChanges();
+            return true;
+        }
+        private bool ProcessDefaultersData(string path)
+        {
+            var package = new ExcelPackage(new FileInfo(path));
+            //List<ExcelRange> list = new List<ExcelRange>();
+            ExcelWorksheet workSheet = package.Workbook.Worksheets[6];
+            var arrearsdb = db.Arrears.ToList();
+            var userid = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            for (int i = workSheet.Dimension.Start.Row;
+                     i <= workSheet.Dimension.End.Row;
+                     i++)
+            {
+                string cellValue = workSheet.Cells[i, 1].Text;
+                int temp = 0;
+
+                if (int.TryParse(cellValue, out temp))
+                {
+                    //list.Add(workSheet.Cells[i, 1, i, workSheet.Dimension.End.Column]);
+                    Arrear arr = new Arrear();
+                    string grno = workSheet.Cells[i, 2].Text;
+                    int studentId = db.Enrolments.Where(x => x.GRNo == grno && x.IsActive.Value).FirstOrDefault().Student.Value;
+                    arr.StudentId = studentId;
+                    if (arrearsdb.Where(x => x.StudentId == arr.StudentId).Count() > 0)
+                    {
+                        arr = arrearsdb.Where(x => x.StudentId == arr.StudentId).FirstOrDefault();
+                        arr.UpdatedBy = userid;
+                        arr.UpdatedDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        arr.CreatedDate = DateTime.Now;
+                        arr.CreatedBy = userid;
+                    }
+                    arr.Amount = Convert.ToDecimal(workSheet.Cells[i, 3].Text);
+                    arr.ArrearType = "Receivable";
+                    db.Arrears.AddOrUpdate(arr);
+                }
+            }
+            db.SaveChanges();
+            return true;
+        }
+        private bool ProcessClassTeachersData(string path)
+        {
+            var package = new ExcelPackage(new FileInfo(path));
+            //List<ExcelRange> list = new List<ExcelRange>();
+            ExcelWorksheet workSheet = package.Workbook.Worksheets[7];
+            var classesdb = db.Classes.ToList();
+            var staffdb = db.Staffs.ToList();
+            var userid = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            for (int i = workSheet.Dimension.Start.Row;
+                     i <= workSheet.Dimension.End.Row;
+                     i++)
+            {
+                string cellValue = workSheet.Cells[i, 1].Text;
+                int temp = 0;
+
+                if (int.TryParse(cellValue, out temp))
+                {
+                    string className = workSheet.Cells[i, 2].Text;
+                    string section = workSheet.Cells[i, 3].Text;
+                    string teacherName = workSheet.Cells[i, 4].Text;
+                    var _class = classesdb.Where(x => x.ClassName.ToLower() == className.ToLower() &&
+                    x.Section.ToLower() == section.ToLower()).FirstOrDefault();
+                    var teacher = staffdb.Where(x => x.FirstName.ToLower() + " " + x.LastName.ToLower() == teacherName.ToLower()).FirstOrDefault();
+
+                    if (_class != null && teacher != null)
+                    {
+                        _class.ClassAdvisor = teacher.StaffId;
+                        _class.UpdatedBy = userid;
+                        _class.UpdatedDate = DateTime.Now;
+                        db.Classes.AddOrUpdate(_class);
+                    }
+                }
+            }
+            db.SaveChanges();
+            return true;
+        }
+        private bool ProcessFeesData(string path)
+        {
+            var package = new ExcelPackage(new FileInfo(path));
+            //List<ExcelRange> list = new List<ExcelRange>();
+            ExcelWorksheet workSheet = package.Workbook.Worksheets[8];
+            var feedb = db.PaidFees.ToList();
+            var enrolmentsdb = db.Enrolments.ToList();
+            var userid = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            for (int i = workSheet.Dimension.Start.Row;
+                     i <= workSheet.Dimension.End.Row;
+                     i++)
+            {
+                string cellValue = workSheet.Cells[i, 1].Text;
+                int temp = 0;
+                if (int.TryParse(cellValue, out temp))
+                {
+                    //list.Add(workSheet.Cells[i, 1, i, workSheet.Dimension.End.Column]);
+                    PaidFee fee = new PaidFee();
+                    string grno = workSheet.Cells[i, 2].Text;
+                    var stdid = enrolmentsdb.Where(x => x.GRNo == grno && x.IsActive.Value).FirstOrDefault().Student.Value;
+                    fee.StudentId = stdid;
                     
+                    fee.Month = Constants.months2[workSheet.Cells[i, 4].Text];
+                    var year = Convert.ToInt32( workSheet.Cells[i, 5].Text);
+                    var date = Convert.ToInt32(workSheet.Cells[i, 6].Text);
+                    fee.PaymentDate = new DateTime(year, fee.Month.Value, date);
+                    var listtemp = feedb.Where(x => x.StudentId == fee.StudentId && x.Month == fee.Month &&
+                        x.PaymentDate.Value.Year == fee.PaymentDate.Value.Year);
+                    if (listtemp.Count() > 0)
+                    {
+                        fee = listtemp.FirstOrDefault();
+                        fee.UpdatedBy = userid;
+                        fee.UpdatedDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        fee.CreatedDate = DateTime.Now;
+                        fee.CreatedBy = userid;
+                    }
+                    fee.CalculatedAmount = Convert.ToDecimal(workSheet.Cells[i, 3].Text);
+                    fee.ReceivedAmount = fee.CalculatedAmount;
+                    db.PaidFees.AddOrUpdate(fee);
+                }
+
+            }
+            db.SaveChanges();
+            return true;
+        }
+        private bool ProcessSalariesData(string path)
+        {
+            var package = new ExcelPackage(new FileInfo(path));
+            //List<ExcelRange> list = new List<ExcelRange>();
+            ExcelWorksheet workSheet = package.Workbook.Worksheets[9];
+            var salarydb = db.SalaryPayments.ToList();
+            var staffdb = db.Staffs.ToList();
+            var userid = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+            for (int i = workSheet.Dimension.Start.Row;
+                     i <= workSheet.Dimension.End.Row;
+                     i++)
+            {
+                string cellValue = workSheet.Cells[i, 1].Text;
+                int temp = 0;
+                if (int.TryParse(cellValue, out temp))
+                {
+                    //list.Add(workSheet.Cells[i, 1, i, workSheet.Dimension.End.Column]);
+                    SalaryPayment salary = new SalaryPayment();
+                    string cnic = workSheet.Cells[i, 3].Text;
+                    var staffid = staffdb.Where(x => x.CNIC == cnic).FirstOrDefault().StaffId;
+                    salary.StaffId = staffid;
+
+                    salary.Month = Constants.months2[workSheet.Cells[i, 5].Text];
+                    var year = Convert.ToInt32(workSheet.Cells[i, 6].Text);
+                    salary.PaymentDate = new DateTime(year, salary.Month.Value, 1);
+                    var listtemp = salarydb.Where(x => x.StaffId == salary.StaffId && x.Month == salary.Month &&
+                        x.PaymentDate.Value.Year == salary.PaymentDate.Value.Year);
+                    if (listtemp.Count() > 0)
+                    {
+                        salary = listtemp.FirstOrDefault();
+                        salary.UpdatedBy = userid;
+                        salary.UpdatedDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        salary.CreatedDate = DateTime.Now;
+                        salary.CreatedBy = userid;
+                    }
+                    salary.Amount = Convert.ToDecimal(workSheet.Cells[i, 4].Text);
+                    db.SalaryPayments.AddOrUpdate(salary);
                 }
 
             }

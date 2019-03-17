@@ -70,6 +70,7 @@ namespace TrainersSchoolingSystem.Controllers
             int i = 0;
             string feeslipsBody = "";
             int month = Convert.ToInt32(bulk.Month) + 1;
+            stdIds.Sort();
             foreach (var id in stdIds)
             {
                 var html = GetFeeSlip(id,month);

@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Details";
 }
-
+@using TrainersSchoolingSystem.Utils;
 <h2>Details</h2>
 
 <div>
@@ -24,7 +24,13 @@
         <dd>
             @Html.DisplayFor(model => model.CalculatedAmount)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Month)
+        </dt>
 
+        <dd>
+            @Html.DisplayFor(model => Constants.months[model.Month.HasValue ? model.Month.Value : 1])
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.PaymentDate)
         </dt>

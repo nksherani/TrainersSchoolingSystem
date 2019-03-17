@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using TrainersSchoolingSystem.Models;
+using TrainersSchoolingSystem.Utils;
 
 namespace TrainersSchoolingSystem.Controllers
 {
@@ -47,7 +48,7 @@ namespace TrainersSchoolingSystem.Controllers
                 .Join(db.Students, a => a.StudentId, b => b.StudentId, (a, b) => b.StudentId);
             ViewBag.StudentId = new SelectList(db.Students.Where(x => !tempStudents.Contains(x.StudentId)), "StudentId", "FirstName");
 
-            //ViewBag.StudentId = new SelectList(db.Students, "StudentId", "FirstName");
+            ViewBag.Month = new SelectList(Constants.months, "Key", "Value");
             return View();
         }
 
@@ -74,6 +75,7 @@ namespace TrainersSchoolingSystem.Controllers
                             x.PaymentDate.Value.Year == DateTime.Today.Year)
                             .Join(db.Students, a => a.StudentId, b => b.StudentId, (a, b) => b.StudentId);
             ViewBag.StudentId = new SelectList(db.Students.Where(x => !tempStudents.Contains(x.StudentId)), "StudentId", "FirstName");
+            ViewBag.Month = new SelectList(Constants.months, "Key", "Value");
             return View(paidFee);
         }
 
@@ -90,6 +92,7 @@ namespace TrainersSchoolingSystem.Controllers
                 return HttpNotFound();
             }
             ViewBag.StudentId = new SelectList(db.Students, "StudentId", "FirstName", paidFee.StudentId);
+            ViewBag.Month = new SelectList(Constants.months, "Key", "Value",paidFee.Month);
             return View(paidFee);
         }
 
@@ -114,6 +117,7 @@ namespace TrainersSchoolingSystem.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.StudentId = new SelectList(db.Students, "StudentId", "FirstName", paidFee.StudentId);
+            ViewBag.Month = new SelectList(Constants.months, "Key", "Value", paidFee.Month);
             return View(paidFee);
         }
 

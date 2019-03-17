@@ -378,11 +378,13 @@ namespace TrainersSchoolingSystem.Controllers
                     int i = 1;
                     foreach (var property in properties)
                     {
-                        if (property.Name == "File")
+                        if (property.Name == "File" )
                             continue;
                         Configuration config = configdb.Where(x => x.Key == property.Name).FirstOrDefault();
                         //config.ConfigurationId = i++;
                         config.Key = property.Name;
+                        if (property.Name == "Picture" && file == null)
+                            continue;
                         config.Value = (string)property.GetValue(configuration);
                         config.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                         config.UpdatedDate = DateTime.Now;

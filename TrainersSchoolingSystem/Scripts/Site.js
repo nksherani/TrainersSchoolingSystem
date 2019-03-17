@@ -3,7 +3,7 @@
         var fileName = $(this).val();
         //alert(fileName);
         var formData = new FormData();
-        formData.append('file', $('#file')[0].files[0]);
+        formData.append('file', $('#logofile')[0].files[0]);
         $.ajax({
             url: "/setup/temp",
             type: "POST",
@@ -14,7 +14,6 @@
                 $("#thumbnail").attr("src", data);
             }
         });
-        //$("#fileform1").submit();
     });
 });
 

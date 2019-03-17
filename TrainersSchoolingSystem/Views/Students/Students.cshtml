@@ -215,6 +215,8 @@
         HideErrors();
         ////////
         $("#btnPerformAction").click(function () {
+            if (action.value() == 0)
+                return;
             var studentIds = grid.selectedKeyNames()/*.join(", ")*/;
             var iserror = false;
             if (studentIds.length == 0) {
@@ -269,6 +271,7 @@
                 grid.refresh();
                 action.value(0);
                 HideControls();
+                $("#btnPerformAction").prop('disabled', true);
                 if (formData["Action"] == "5") {
                     link.prop("href", data_);
                     link.show();
@@ -297,10 +300,7 @@
                 console.log(data_);
                 action.value(0);
                 HideControls();
-                //if (formData["Action"] == "5") {
-                //    link.prop("href", data_);
-                //    link.show();
-                //}
+                $("#btnPerformAction").prop('disabled', true);
                 var win = window.open('../Content/Temp/FeeSlips.html', '_blank');
                 if (win) {
                     //Browser has allowed it to be opened
