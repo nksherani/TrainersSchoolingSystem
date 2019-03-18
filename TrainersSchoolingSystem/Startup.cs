@@ -12,7 +12,8 @@ namespace TrainersSchoolingSystem
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-            Hangfire.GlobalConfiguration.Configuration.UseSqlServerStorage(ConfigurationManager.ConnectionStrings[1].ConnectionString);
+            Hangfire.GlobalConfiguration.
+                Configuration.UseSqlServerStorage(ConfigurationManager.ConnectionStrings[1].ConnectionString);
             app.UseHangfireDashboard();
             app.UseHangfireServer();
         }
