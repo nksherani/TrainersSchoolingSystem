@@ -14,13 +14,15 @@ namespace TrainersSchoolingSystem.Controllers
 
         public ActionResult Index()
         {
-            
-            BackupService bkp = new BackupService();
-            //RecurringJob.AddOrUpdate(() => Logger.Debug("Recurring!"), Cron.Minutely);
-            bkp.BackupDatabase("Trainers");
+            RecurringJob.AddOrUpdate(() => scheduleBackup(), Cron.Monthly);
             return View();
         }
-
+        public void scheduleBackup()
+        {
+            Logger.Debug("Starts Backup!");
+            BackupService bkp = new BackupService();
+            bkp.BackupDatabase("Trainers");
+        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
