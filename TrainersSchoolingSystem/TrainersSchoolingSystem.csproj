@@ -248,6 +248,7 @@
     <Compile Include="Controllers\SalariesController.cs" />
     <Compile Include="Controllers\SalaryPaymentsController.cs" />
     <Compile Include="Controllers\SetupController.cs" />
+    <Compile Include="Controllers\SMSController.cs" />
     <Compile Include="Controllers\StaffAttendancesController.cs" />
     <Compile Include="Controllers\StaffsController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
@@ -306,6 +307,7 @@
     <Compile Include="Models\DTOs\ReportModel.cs" />
     <Compile Include="Models\DTOs\SalaryPaymentViewModel.cs" />
     <Compile Include="Models\DTOs\SalaryViewModel.cs" />
+    <Compile Include="Models\DTOs\SMS.cs" />
     <Compile Include="Models\DTOs\StaffAttendanceViewModel.cs" />
     <Compile Include="Models\DTOs\StaffPaySlipModel.cs" />
     <Compile Include="Models\DTOs\StaffSP.cs" />
@@ -1308,6 +1310,7 @@
     <Content Include="Views\Migration\Index.cshtml" />
     <Content Include="Views\Staffs\Appoint.cshtml" />
     <Content Include="Views\Staffs\UpdateData.cshtml" />
+    <Content Include="Views\SMS\Send.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
