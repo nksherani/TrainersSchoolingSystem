@@ -1,0 +1,13 @@
+﻿@model List<KeyValuePair<string, int>>
+
+
+@{
+    for (int i = 0; i < 20; i++)
+    {
+        <h3>Response # @(i+1)</h3>
+        <p> @Model[i].Key.Substring(1) </p>
+        <p>Owned by @Model[i].Value</p>
+       
+    }
+
+}
