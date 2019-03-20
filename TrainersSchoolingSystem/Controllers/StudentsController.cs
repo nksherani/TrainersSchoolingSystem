@@ -707,7 +707,7 @@ namespace TrainersSchoolingSystem.Controllers
                     admissionFee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                     admissionFee.CreatedDate = DateTime.Now;
 
-
+                    db.PaidFees.Add(admissionFee);
                     db.SaveChanges();
 
                     return RedirectToAction("Students");
