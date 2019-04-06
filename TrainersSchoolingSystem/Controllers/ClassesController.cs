@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using TrainersSchoolingSystem.Models;
+using TrainersSchoolingSystem.Utils;
 
 namespace TrainersSchoolingSystem.Controllers
 {
@@ -24,13 +25,31 @@ namespace TrainersSchoolingSystem.Controllers
         public ActionResult GetClasses()
         {
             List<SelectListItem> list = new List<SelectListItem>();
-            var classes = db.Classes.ToList();
-            foreach (var class_ in classes)
+            try
             {
-                SelectListItem item = new SelectListItem();
-                item.Value = class_.ClassId.ToString();
-                item.Text = class_.ClassName+class_.Section;
-                list.Add(item);
+                var classes = db.Classes.ToList();
+                foreach (var class_ in classes)
+                {
+                    SelectListItem item = new SelectListItem();
+                    item.Value = class_.ClassId.ToString();
+                    item.Text = class_.ClassName + class_.Section;
+                    list.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
             }
             return Json(list, JsonRequestBehavior.AllowGet);
         }
@@ -52,10 +71,28 @@ namespace TrainersSchoolingSystem.Controllers
         // GET: Classes/Create
         public ActionResult Create()
         {
-            ViewBag.ClassAdvisor = new SelectList(db.Staffs, "StaffId", "FirstName");
-            ViewBag.Section = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Section"), "LookupText", "LookupText");
-            ViewBag.Level = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Level"), "LookupText", "LookupText");
+            try
+            {
+                ViewBag.ClassAdvisor = new SelectList(db.Staffs, "StaffId", "FirstName");
+                ViewBag.Section = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Section"), "LookupText", "LookupText");
+                ViewBag.Level = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Level"), "LookupText", "LookupText");
 
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
             return View();
         }
 
@@ -66,18 +103,36 @@ namespace TrainersSchoolingSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Class @class)
         {
-            if (ModelState.IsValid)
+            try
             {
-                @class.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
-                @class.CreatedDate = DateTime.Now;
-                db.Classes.Add(@class);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.ClassAdvisor = new SelectList(db.Staffs, "StaffId", "FirstName");
-            ViewBag.Section = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Section"), "LookupText", "LookupText");
-            ViewBag.Level = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Level"), "LookupText", "LookupText");
+                if (ModelState.IsValid)
+                {
+                    @class.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                    @class.CreatedDate = DateTime.Now;
+                    db.Classes.Add(@class);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                ViewBag.ClassAdvisor = new SelectList(db.Staffs, "StaffId", "FirstName");
+                ViewBag.Section = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Section"), "LookupText", "LookupText");
+                ViewBag.Level = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Level"), "LookupText", "LookupText");
 
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
             return View(@class);
         }
 
@@ -107,22 +162,41 @@ namespace TrainersSchoolingSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Class @class)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var dbClass = db.Classes.Where(x => x.ClassId == @class.ClassId).FirstOrDefault();
-                dbClass.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
-                dbClass.UpdatedDate = DateTime.Now;
-                dbClass.ClassName = @class.ClassName;
-                dbClass.Section = @class.Section;
-                dbClass.ClassAdvisor = @class.ClassAdvisor;
-                dbClass.Level = @class.Level;
-                db.Classes.AddOrUpdate(dbClass);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    var dbClass = db.Classes.Where(x => x.ClassId == @class.ClassId).FirstOrDefault();
+                    dbClass.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                    dbClass.UpdatedDate = DateTime.Now;
+                    dbClass.ClassName = @class.ClassName;
+                    dbClass.Section = @class.Section;
+                    dbClass.ClassAdvisor = @class.ClassAdvisor;
+                    dbClass.Level = @class.Level;
+                    db.Classes.AddOrUpdate(dbClass);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                ViewBag.ClassAdvisor = new SelectList(db.Staffs, "StaffId", "FirstName", @class.ClassAdvisor);
+                ViewBag.Section = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Section"), "LookupText", "LookupText", @class.Section);
+                ViewBag.Level = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Level"), "LookupText", "LookupText", @class.Level);
+
             }
-            ViewBag.ClassAdvisor = new SelectList(db.Staffs, "StaffId", "FirstName", @class.ClassAdvisor);
-            ViewBag.Section = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Section"), "LookupText", "LookupText", @class.Section);
-            ViewBag.Level = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Level"), "LookupText", "LookupText", @class.Level);
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
             return View(@class);
         }
 

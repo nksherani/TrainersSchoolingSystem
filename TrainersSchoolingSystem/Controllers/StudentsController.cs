@@ -92,357 +92,511 @@ namespace TrainersSchoolingSystem.Controllers
         }
         private string GetFeeSlip(int studentid)
         {
-            var lastdate = db.PaidFees.Where(x => x.StudentId == studentid
-            && x.Description == "MonthlyFee" && x.ReceivedAmount.HasValue)?.OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
-            if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28 &&
-                lastdate.Value.Month == DateTime.Now.Month)
-                return "";
-            SqlParameter StudentId = new SqlParameter("@StudentId", studentid);
-            var FeeSlipData = db.Database.SqlQuery<FeeSlipModel>("exec GenerateFeeSlips @StudentId", StudentId).FirstOrDefault();
-
             string data = "";
-            Server.MapPath("~/Content/FeeSlips/");
-            string[] lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlip.html"));
 
-            foreach (var item in lines)
+            try
             {
-                data += item;
-            }
-            if (FeeSlipData.ArrearType == "Receivable")
-            {
-                FeeSlipData.ArrearAmount += FeeSlipData.UnpaidAmount;
-            }
+                var lastdate = db.PaidFees.Where(x => x.StudentId == studentid
+                    && x.Description == "MonthlyFee" && x.ReceivedAmount.HasValue)?.OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
+                if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28 &&
+                    lastdate.Value.Month == DateTime.Now.Month)
+                    return "";
+                SqlParameter StudentId = new SqlParameter("@StudentId", studentid);
+                var FeeSlipData = db.Database.SqlQuery<FeeSlipModel>("exec GenerateFeeSlips @StudentId", StudentId).FirstOrDefault();
 
-            else
-            {
-                FeeSlipData.ArrearAmount -= FeeSlipData.UnpaidAmount;
-                if (FeeSlipData.ArrearAmount < 0)
+                Server.MapPath("~/Content/FeeSlips/");
+                string[] lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlip.html"));
+
+                foreach (var item in lines)
                 {
-                    FeeSlipData.ArrearType = "Receivable";
+                    data += item;
                 }
-                FeeSlipData.ArrearAmount *= -1;
-            }
-
-            var totalFee = FeeSlipData.ArrearAmount +
-                Convert.ToInt32(FeeSlipData.Fee) + FeeSlipData.AdmissionFee +
-                FeeSlipData.AnnualFee + GlobalData.feeSetup.LabCharges;
-            data = data.Replace("__Picture__", "../" + GlobalData.configuration.Picture);
-            data = data.Replace("__SchoolName__", GlobalData.configuration.SchoolName);
-            data = data.Replace("__Campus__", GlobalData.configuration.Campus);
-            data = data.Replace("__Month__", DateTime.Now.ToString("MM-yyyy"));
-            data = data.Replace("__IssueDate__", DateTime.Now.ToString("dd-MM-yyyy"));
-            data = data.Replace("__DueDate__", DateTime.Now.ToString("10-MM-yyyy"));
-            //data = data.Replace("__Challan__", FeeSlipData.ChallanNo.ToString());
-            data = data.Replace("__GRNo__", FeeSlipData.GRNo);
-            data = data.Replace("__StudentName__", FeeSlipData.FirstName + " " + FeeSlipData.LastName);
-            data = data.Replace("__Class__", FeeSlipData.Class);
-            data = data.Replace("__FatherName__", FeeSlipData.FatherName);
-            data = data.Replace("__Arrears__", FeeSlipData.ArrearAmount.ToString());
-            data = data.Replace("__TuitionFee__", FeeSlipData.Fee.ToString());
-            data = data.Replace("__AdmissionFee__", FeeSlipData.AdmissionFee.ToString());
-            data = data.Replace("__AnnualFee__", FeeSlipData.AnnualFee.ToString());
-            data = data.Replace("__OtherFee__", "0");
-            data = data.Replace("__LateFee__", GlobalData.feeSetup.LatePaymentSurcharge.ToString());
-            data = data.Replace("__LabCharges__", GlobalData.feeSetup.LabCharges.ToString());
-            data = data.Replace("__Till__", totalFee.ToString());
-            data = data.Replace("__After__", (totalFee + GlobalData.feeSetup.LatePaymentSurcharge).ToString());
-
-            var feeDb = db.PaidFees.Where(x => !x.ReceivedAmount.HasValue && x.StudentId == studentid).ToList();
-            List<PaidFee> temp = new List<PaidFee>();
-            foreach (var item in feeDb)
-            {
-                if ((DateTime.Now - item.CreatedDate).Value.TotalDays < 28)
-                    temp.Add(item);
-            }
-            feeDb = temp;
-            if ( FeeSlipData.Fee != 0)
-            {
-                PaidFee paidFee;
-                var count = feeDb.Where(x => x.Description == "MonthlyFee").ToList();
-                if (count.Count > 0)
+                if (FeeSlipData.ArrearType == "Receivable")
                 {
-                    paidFee = feeDb.Where(x => x.Description == "MonthlyFee").FirstOrDefault();
-                    data = data.Replace("__Challan__", paidFee.ChallanNo.ToString());
-
-                }
-                else
-                {
-                    paidFee = new PaidFee();
-                    paidFee.ChallanNo = FeeSlipData.ChallanNo;
-                    data = data.Replace("__Challan__", FeeSlipData.ChallanNo.ToString());
+                    FeeSlipData.ArrearAmount += FeeSlipData.UnpaidAmount;
                 }
 
-                paidFee.StudentId = studentid;
-                paidFee.CalculatedAmount = Convert.ToInt32(FeeSlipData.Fee);
-                paidFee.Description = "MonthlyFee";
-                if (paidFee.CreatedDate.HasValue)
-                    paidFee.UpdatedDate = DateTime.Now;
-                else
-                    paidFee.CreatedDate = DateTime.Now;
-                if (paidFee.CreatedBy.HasValue)
-                    paidFee.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                else
-                    paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                db.PaidFees.AddOrUpdate(paidFee);
-            }
-            if (GlobalData.feeSetup.LabCharges > 0)
-            {
-                PaidFee paidFee;
-                var count = feeDb.Where(x => x.Description == "LabCharges").Count();
-                if (count > 0)
-                    paidFee = feeDb.Where(x => x.Description == "LabCharges").FirstOrDefault();
                 else
                 {
-                    paidFee = new PaidFee();
-                    paidFee.ChallanNo = FeeSlipData.ChallanNo;
+                    FeeSlipData.ArrearAmount -= FeeSlipData.UnpaidAmount;
+                    if (FeeSlipData.ArrearAmount < 0)
+                    {
+                        FeeSlipData.ArrearType = "Receivable";
+                    }
+                    FeeSlipData.ArrearAmount *= -1;
                 }
-                paidFee.StudentId = studentid;
-                paidFee.CalculatedAmount = GlobalData.feeSetup.LabCharges;
-                paidFee.Description = "LabCharges";
-                if (paidFee.CreatedDate.HasValue)
-                    paidFee.UpdatedDate = DateTime.Now;
-                else
-                    paidFee.CreatedDate = DateTime.Now;
-                if (paidFee.CreatedBy.HasValue)
-                    paidFee.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                else
-                    paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                db.PaidFees.AddOrUpdate(paidFee);
-            }
-            if (FeeSlipData.AnnualFee > 0)
-            {
-                PaidFee paidFee;
-                if (feeDb.Where(x => x.Description == "AnnualFee").Count() > 0)
-                    paidFee = feeDb.Where(x => x.Description == "AnnualFee").FirstOrDefault();
-                else
+
+                var totalFee = FeeSlipData.ArrearAmount +
+                    Convert.ToInt32(FeeSlipData.Fee) + FeeSlipData.AdmissionFee +
+                    FeeSlipData.AnnualFee + GlobalData.feeSetup.LabCharges;
+                data = data.Replace("__Picture__", "../" + GlobalData.configuration.Picture);
+                data = data.Replace("__SchoolName__", GlobalData.configuration.SchoolName);
+                data = data.Replace("__Campus__", GlobalData.configuration.Campus);
+                data = data.Replace("__Month__", DateTime.Now.ToString("MM-yyyy"));
+                data = data.Replace("__IssueDate__", DateTime.Now.ToString("dd-MM-yyyy"));
+                data = data.Replace("__DueDate__", DateTime.Now.ToString("10-MM-yyyy"));
+                //data = data.Replace("__Challan__", FeeSlipData.ChallanNo.ToString());
+                data = data.Replace("__GRNo__", FeeSlipData.GRNo);
+                data = data.Replace("__StudentName__", FeeSlipData.FirstName + " " + FeeSlipData.LastName);
+                data = data.Replace("__Class__", FeeSlipData.Class);
+                data = data.Replace("__FatherName__", FeeSlipData.FatherName);
+                data = data.Replace("__Arrears__", FeeSlipData.ArrearAmount.ToString());
+                data = data.Replace("__TuitionFee__", FeeSlipData.Fee.ToString());
+                data = data.Replace("__AdmissionFee__", FeeSlipData.AdmissionFee.ToString());
+                data = data.Replace("__AnnualFee__", FeeSlipData.AnnualFee.ToString());
+                data = data.Replace("__OtherFee__", "0");
+                data = data.Replace("__LateFee__", GlobalData.feeSetup.LatePaymentSurcharge.ToString());
+                data = data.Replace("__LabCharges__", GlobalData.feeSetup.LabCharges.ToString());
+                data = data.Replace("__Till__", totalFee.ToString());
+                data = data.Replace("__After__", (totalFee + GlobalData.feeSetup.LatePaymentSurcharge).ToString());
+
+                var feeDb = db.PaidFees.Where(x => !x.ReceivedAmount.HasValue && x.StudentId == studentid).ToList();
+                List<PaidFee> temp = new List<PaidFee>();
+                foreach (var item in feeDb)
                 {
-                    paidFee = new PaidFee();
-                    paidFee.ChallanNo = FeeSlipData.ChallanNo;
+                    if ((DateTime.Now - item.CreatedDate).Value.TotalDays < 28)
+                        temp.Add(item);
                 }
-                paidFee.StudentId = studentid;
-                paidFee.CalculatedAmount = FeeSlipData.AnnualFee;
-                paidFee.Description = "AnnualFee";
-                if (paidFee.CreatedDate.HasValue)
-                    paidFee.UpdatedDate = DateTime.Now;
-                else
-                    paidFee.CreatedDate = DateTime.Now;
-                if (paidFee.CreatedBy.HasValue)
-                    paidFee.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                else
-                    paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                db.PaidFees.AddOrUpdate(paidFee);
+                feeDb = temp;
+                if (FeeSlipData.Fee != 0)
+                {
+                    PaidFee paidFee;
+                    var count = feeDb.Where(x => x.Description == "MonthlyFee").ToList();
+                    if (count.Count > 0)
+                    {
+                        paidFee = feeDb.Where(x => x.Description == "MonthlyFee").FirstOrDefault();
+                        data = data.Replace("__Challan__", paidFee.ChallanNo.ToString());
+
+                    }
+                    else
+                    {
+                        paidFee = new PaidFee();
+                        paidFee.ChallanNo = FeeSlipData.ChallanNo;
+                        data = data.Replace("__Challan__", FeeSlipData.ChallanNo.ToString());
+                    }
+
+                    paidFee.StudentId = studentid;
+                    paidFee.CalculatedAmount = Convert.ToInt32(FeeSlipData.Fee);
+                    paidFee.Description = "MonthlyFee";
+                    if (paidFee.CreatedDate.HasValue)
+                        paidFee.UpdatedDate = DateTime.Now;
+                    else
+                        paidFee.CreatedDate = DateTime.Now;
+                    if (paidFee.CreatedBy.HasValue)
+                        paidFee.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    else
+                        paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    db.PaidFees.AddOrUpdate(paidFee);
+                }
+                if (GlobalData.feeSetup.LabCharges > 0)
+                {
+                    PaidFee paidFee;
+                    var count = feeDb.Where(x => x.Description == "LabCharges").Count();
+                    if (count > 0)
+                        paidFee = feeDb.Where(x => x.Description == "LabCharges").FirstOrDefault();
+                    else
+                    {
+                        paidFee = new PaidFee();
+                        paidFee.ChallanNo = FeeSlipData.ChallanNo;
+                    }
+                    paidFee.StudentId = studentid;
+                    paidFee.CalculatedAmount = GlobalData.feeSetup.LabCharges;
+                    paidFee.Description = "LabCharges";
+                    if (paidFee.CreatedDate.HasValue)
+                        paidFee.UpdatedDate = DateTime.Now;
+                    else
+                        paidFee.CreatedDate = DateTime.Now;
+                    if (paidFee.CreatedBy.HasValue)
+                        paidFee.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    else
+                        paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    db.PaidFees.AddOrUpdate(paidFee);
+                }
+                if (FeeSlipData.AnnualFee > 0)
+                {
+                    PaidFee paidFee;
+                    if (feeDb.Where(x => x.Description == "AnnualFee").Count() > 0)
+                        paidFee = feeDb.Where(x => x.Description == "AnnualFee").FirstOrDefault();
+                    else
+                    {
+                        paidFee = new PaidFee();
+                        paidFee.ChallanNo = FeeSlipData.ChallanNo;
+                    }
+                    paidFee.StudentId = studentid;
+                    paidFee.CalculatedAmount = FeeSlipData.AnnualFee;
+                    paidFee.Description = "AnnualFee";
+                    if (paidFee.CreatedDate.HasValue)
+                        paidFee.UpdatedDate = DateTime.Now;
+                    else
+                        paidFee.CreatedDate = DateTime.Now;
+                    if (paidFee.CreatedBy.HasValue)
+                        paidFee.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    else
+                        paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    db.PaidFees.AddOrUpdate(paidFee);
+                }
+                db.SaveChanges();
             }
-            db.SaveChanges();
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
             return data;
         }
 
         bool SavePdf(string filename, string path, string html)
         {
-            HtmlToPdf htmlToPdfConverter = new HtmlToPdf();
+            try
+            {
+                HtmlToPdf htmlToPdfConverter = new HtmlToPdf();
 
 
-            //htmlToPdfConverter.Document.PageSize = new PdfPageSize(400, 400);
-            //htmlToPdfConverter.Document.PageOrientation = PdfPageOrientation.Portrait;
-            htmlToPdfConverter.Document.Margins = new PdfMargins(0);
-            byte[] pdfBuffer = null;
-            pdfBuffer = htmlToPdfConverter.ConvertHtmlToMemory(html, "http://localhost:50496");
-            System.IO.File.WriteAllBytes(path + filename, pdfBuffer);
-            return true;
+                //htmlToPdfConverter.Document.PageSize = new PdfPageSize(400, 400);
+                //htmlToPdfConverter.Document.PageOrientation = PdfPageOrientation.Portrait;
+                htmlToPdfConverter.Document.Margins = new PdfMargins(0);
+                byte[] pdfBuffer = null;
+                pdfBuffer = htmlToPdfConverter.ConvertHtmlToMemory(html, "http://localhost:50496");
+                System.IO.File.WriteAllBytes(path + filename, pdfBuffer);
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
+            return false;
         }
         bool SavePdf2(string filename, string path, string html)
         {
-            var word = new Microsoft.Office.Interop.Word.Application();
-            word.Visible = false;
+            try
+            {
+                var word = new Microsoft.Office.Interop.Word.Application();
+                word.Visible = false;
 
-            //html = html.Replace("Content")
-            var filePath = Server.MapPath("~/Content/Temp/Html2PdfTest.html");
-            System.IO.File.WriteAllText(filePath, html);
-            var savePathPdf = path + filename;
-            var wordDoc = word.Documents.Open(FileName: filePath, ReadOnly: false);
-            wordDoc.PageSetup.PaperSize = WdPaperSize.wdPaperA4;
-            wordDoc.SaveAs2(FileName: savePathPdf, FileFormat: WdSaveFormat.wdFormatPDF);
-            wordDoc.Close();
-            return true;
+                //html = html.Replace("Content")
+                var filePath = Server.MapPath("~/Content/Temp/Html2PdfTest.html");
+                System.IO.File.WriteAllText(filePath, html);
+                var savePathPdf = path + filename;
+                var wordDoc = word.Documents.Open(FileName: filePath, ReadOnly: false);
+                wordDoc.PageSetup.PaperSize = WdPaperSize.wdPaperA4;
+                wordDoc.SaveAs2(FileName: savePathPdf, FileFormat: WdSaveFormat.wdFormatPDF);
+                wordDoc.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
+            return false;
         }
         [HttpPost]
         public ActionResult Bulk(BulkStudents bulk)
         {
             string path = "";
             bool flag = false;
-            if (bulk.Action == "1")
-                flag = PromoteToUpperClass(bulk);
-            else if (bulk.Action == "2")
-                flag = ChangeClass(bulk);
-            else if (bulk.Action == "3")
-                flag = ChangeSection(bulk);
-            else if (bulk.Action == "4")
-                flag = IncreaseFee(bulk);
-            //else if (bulk.Action == "5")
-            //    path = GenerateFeeSlips(bulk);
-            if (path != "")
-                return Json(path, JsonRequestBehavior.AllowGet);
+            try
+            {
+                if (bulk.Action == "1")
+                    flag = PromoteToUpperClass(bulk);
+                else if (bulk.Action == "2")
+                    flag = ChangeClass(bulk);
+                else if (bulk.Action == "3")
+                    flag = ChangeSection(bulk);
+                else if (bulk.Action == "4")
+                    flag = IncreaseFee(bulk);
+                //else if (bulk.Action == "5")
+                //    path = GenerateFeeSlips(bulk);
+                if (path != "")
+                    return Json(path, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
 
             return Json(flag, JsonRequestBehavior.AllowGet);
         }
         bool PromoteToUpperClass(BulkStudents bulk)
         {
-            var IDs = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
-            var enrolments = db.Enrolments.Where(x => x.IsActive.Value).Where(x => IDs.Contains(x.Student.Value));
-            var classes = db.Classes.ToList();
-            List<Enrolment> newList = new List<Enrolment>();
-            foreach (var enrolment in enrolments)
+            try
             {
-                var oldClass = enrolment.Class1;
-                var newClass = classes.Where(x => x.Level == oldClass.Level + 1)
-                    .Where(x => x.Section == oldClass.Section).FirstOrDefault();
-                if ((DateTime.Now - enrolment.CreatedDate).Value.TotalDays > 180)
+                var IDs = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+                var enrolments = db.Enrolments.Where(x => x.IsActive.Value).Where(x => IDs.Contains(x.Student.Value));
+                var classes = db.Classes.ToList();
+                List<Enrolment> newList = new List<Enrolment>();
+                foreach (var enrolment in enrolments)
                 {
-                    enrolment.IsActive = false;
-                    Enrolment newEnr = new Enrolment();
-                    newEnr.Fee = enrolment.Fee;
-                    newEnr.IsActive = true;
-                    newEnr.Student = enrolment.Student;
-                    newEnr.GRNo = enrolment.GRNo;
-                    newEnr.RollNo = enrolment.RollNo;
-                    newEnr.Class = newClass.ClassId;
-                    newEnr.PaymentMode = enrolment.PaymentMode;
-                    newEnr.LastClass = enrolment.LastClass;
-                    newEnr.LastInstitude = enrolment.LastInstitude;
-                    newEnr.CreatedDate = DateTime.Now;
-                    newEnr.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                    newList.Add(newEnr);
+                    var oldClass = enrolment.Class1;
+                    var newClass = classes.Where(x => x.Level == oldClass.Level + 1)
+                        .Where(x => x.Section == oldClass.Section).FirstOrDefault();
+                    if ((DateTime.Now - enrolment.CreatedDate).Value.TotalDays > 180)
+                    {
+                        enrolment.IsActive = false;
+                        Enrolment newEnr = new Enrolment();
+                        newEnr.Fee = enrolment.Fee;
+                        newEnr.IsActive = true;
+                        newEnr.Student = enrolment.Student;
+                        newEnr.GRNo = enrolment.GRNo;
+                        newEnr.RollNo = enrolment.RollNo;
+                        newEnr.Class = newClass.ClassId;
+                        newEnr.PaymentMode = enrolment.PaymentMode;
+                        newEnr.LastClass = enrolment.LastClass;
+                        newEnr.LastInstitude = enrolment.LastInstitude;
+                        newEnr.CreatedDate = DateTime.Now;
+                        newEnr.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                        newList.Add(newEnr);
+                    }
+                    else
+                    {
+                        enrolment.Class = newClass.ClassId;
+                        enrolment.UpdatedDate = DateTime.Now;
+                        enrolment.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    }
+                    db.Enrolments.AddOrUpdate(enrolment);
                 }
-                else
-                {
-                    enrolment.Class = newClass.ClassId;
-                    enrolment.UpdatedDate = DateTime.Now;
-                    enrolment.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                }
-                db.Enrolments.AddOrUpdate(enrolment);
-            }
 
-            db.Enrolments.AddRange(newList);
-            db.SaveChanges();
-            return true;
+                db.Enrolments.AddRange(newList);
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
+            return false;
         }
         bool ChangeClass(BulkStudents bulk)
         {
-            var IDs = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
-            var enrolments = db.Enrolments.Where(x => x.IsActive.Value).Where(x => IDs.Contains(x.Student.Value));
-            var classes = db.Classes.ToList();
-            List<Enrolment> newList = new List<Enrolment>();
-            foreach (var enrolment in enrolments)
+            try
             {
-                var newClass = classes.Where(x => x.ClassId == Convert.ToInt32(bulk.Class)).FirstOrDefault();
-                if ((DateTime.Now - enrolment.CreatedDate).Value.TotalDays > 180)
+                var IDs = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+                var enrolments = db.Enrolments.Where(x => x.IsActive.Value).Where(x => IDs.Contains(x.Student.Value));
+                var classes = db.Classes.ToList();
+                List<Enrolment> newList = new List<Enrolment>();
+                foreach (var enrolment in enrolments)
                 {
-                    enrolment.IsActive = false;
-                    Enrolment newEnr = new Enrolment();
-                    newEnr.Fee = enrolment.Fee;
-                    newEnr.IsActive = true;
-                    newEnr.Student = enrolment.Student;
-                    newEnr.GRNo = enrolment.GRNo;
-                    newEnr.RollNo = enrolment.RollNo;
-                    newEnr.Class = newClass.ClassId;
-                    newEnr.PaymentMode = enrolment.PaymentMode;
-                    newEnr.LastClass = enrolment.LastClass;
-                    newEnr.LastInstitude = enrolment.LastInstitude;
-                    newEnr.CreatedDate = DateTime.Now;
-                    newEnr.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                    newList.Add(newEnr);
+                    var newClass = classes.Where(x => x.ClassId == Convert.ToInt32(bulk.Class)).FirstOrDefault();
+                    if ((DateTime.Now - enrolment.CreatedDate).Value.TotalDays > 180)
+                    {
+                        enrolment.IsActive = false;
+                        Enrolment newEnr = new Enrolment();
+                        newEnr.Fee = enrolment.Fee;
+                        newEnr.IsActive = true;
+                        newEnr.Student = enrolment.Student;
+                        newEnr.GRNo = enrolment.GRNo;
+                        newEnr.RollNo = enrolment.RollNo;
+                        newEnr.Class = newClass.ClassId;
+                        newEnr.PaymentMode = enrolment.PaymentMode;
+                        newEnr.LastClass = enrolment.LastClass;
+                        newEnr.LastInstitude = enrolment.LastInstitude;
+                        newEnr.CreatedDate = DateTime.Now;
+                        newEnr.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                        newList.Add(newEnr);
+                    }
+                    else
+                    {
+                        enrolment.Class = newClass.ClassId;
+                        enrolment.UpdatedDate = DateTime.Now;
+                        enrolment.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    }
+                    db.Enrolments.AddOrUpdate(enrolment);
                 }
-                else
-                {
-                    enrolment.Class = newClass.ClassId;
-                    enrolment.UpdatedDate = DateTime.Now;
-                    enrolment.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                }
-                db.Enrolments.AddOrUpdate(enrolment);
-            }
 
-            db.Enrolments.AddRange(newList);
-            db.SaveChanges();
-            return true;
+                db.Enrolments.AddRange(newList);
+                db.SaveChanges();
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
+            return false;
         }
         bool ChangeSection(BulkStudents bulk)
         {
-            var IDs = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
-            var enrolments = db.Enrolments.Where(x => x.IsActive.Value).Where(x => IDs.Contains(x.Student.Value));
-            var classes = db.Classes.ToList();
-            var sectionId = Convert.ToInt32(bulk.Section);
-            var newsection = db.Lookups.Where(x => x.LookupId == sectionId).FirstOrDefault().LookupText;
-            List<Enrolment> newList = new List<Enrolment>();
-            foreach (var enrolment in enrolments)
+            try
             {
-                var oldClass = enrolment.Class1;
-                var newClass = classes.Where(x => x.ClassName == oldClass.ClassName && x.Section == newsection).FirstOrDefault();
-                if ((DateTime.Now - enrolment.CreatedDate).Value.TotalDays > 180)
+                var IDs = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+                var enrolments = db.Enrolments.Where(x => x.IsActive.Value).Where(x => IDs.Contains(x.Student.Value));
+                var classes = db.Classes.ToList();
+                var sectionId = Convert.ToInt32(bulk.Section);
+                var newsection = db.Lookups.Where(x => x.LookupId == sectionId).FirstOrDefault().LookupText;
+                List<Enrolment> newList = new List<Enrolment>();
+                foreach (var enrolment in enrolments)
                 {
-                    enrolment.IsActive = false;
-                    Enrolment newEnr = new Enrolment();
-                    newEnr.Fee = enrolment.Fee;
-                    newEnr.IsActive = true;
-                    newEnr.Student = enrolment.Student;
-                    newEnr.GRNo = enrolment.GRNo;
-                    newEnr.RollNo = enrolment.RollNo;
-                    newEnr.Class = newClass.ClassId;
-                    newEnr.PaymentMode = enrolment.PaymentMode;
-                    newEnr.LastClass = enrolment.LastClass;
-                    newEnr.LastInstitude = enrolment.LastInstitude;
-                    newEnr.CreatedDate = DateTime.Now;
-                    newEnr.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                    newList.Add(newEnr);
+                    var oldClass = enrolment.Class1;
+                    var newClass = classes.Where(x => x.ClassName == oldClass.ClassName && x.Section == newsection).FirstOrDefault();
+                    if ((DateTime.Now - enrolment.CreatedDate).Value.TotalDays > 180)
+                    {
+                        enrolment.IsActive = false;
+                        Enrolment newEnr = new Enrolment();
+                        newEnr.Fee = enrolment.Fee;
+                        newEnr.IsActive = true;
+                        newEnr.Student = enrolment.Student;
+                        newEnr.GRNo = enrolment.GRNo;
+                        newEnr.RollNo = enrolment.RollNo;
+                        newEnr.Class = newClass.ClassId;
+                        newEnr.PaymentMode = enrolment.PaymentMode;
+                        newEnr.LastClass = enrolment.LastClass;
+                        newEnr.LastInstitude = enrolment.LastInstitude;
+                        newEnr.CreatedDate = DateTime.Now;
+                        newEnr.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                        newList.Add(newEnr);
+                    }
+                    else
+                    {
+                        enrolment.Class = newClass.ClassId;
+                        enrolment.UpdatedDate = DateTime.Now;
+                        enrolment.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    }
+                    db.Enrolments.AddOrUpdate(enrolment);
                 }
-                else
+
+                db.Enrolments.AddRange(newList);
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
                 {
-                    enrolment.Class = newClass.ClassId;
-                    enrolment.UpdatedDate = DateTime.Now;
-                    enrolment.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
                 }
-                db.Enrolments.AddOrUpdate(enrolment);
             }
 
-            db.Enrolments.AddRange(newList);
-            db.SaveChanges();
-            return true;
+            return false;
         }
         bool IncreaseFee(BulkStudents bulk)
         {
-            var IDs = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
-            var enrolments = db.Enrolments.Where(x => x.IsActive.Value)
-                .Where(x => IDs.Contains(x.Student.Value)).ToList();
-            List<Enrolment> newList = new List<Enrolment>();
-            foreach (var enrolment in enrolments)
+            try
             {
-                if ((DateTime.Now - enrolment.CreatedDate).Value.TotalDays > 180)
+                var IDs = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+                var enrolments = db.Enrolments.Where(x => x.IsActive.Value)
+                    .Where(x => IDs.Contains(x.Student.Value)).ToList();
+                List<Enrolment> newList = new List<Enrolment>();
+                foreach (var enrolment in enrolments)
                 {
-                    enrolment.IsActive = false;
-                    Enrolment newEnr = new Enrolment();
-                    newEnr.Fee = enrolment.Fee + Convert.ToDecimal( bulk.Fee);
-                    newEnr.IsActive = true;
-                    newEnr.Student = enrolment.Student;
-                    newEnr.GRNo = enrolment.GRNo;
-                    newEnr.RollNo = enrolment.RollNo;
-                    newEnr.Class = enrolment.Class;
-                    newEnr.PaymentMode = enrolment.PaymentMode;
-                    newEnr.LastClass = enrolment.LastClass;
-                    newEnr.LastInstitude = enrolment.LastInstitude;
-                    newEnr.CreatedDate = DateTime.Now;
-                    newEnr.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
-                    newList.Add(newEnr);
+                    if ((DateTime.Now - enrolment.CreatedDate).Value.TotalDays > 180)
+                    {
+                        enrolment.IsActive = false;
+                        Enrolment newEnr = new Enrolment();
+                        newEnr.Fee = enrolment.Fee + Convert.ToDecimal(bulk.Fee);
+                        newEnr.IsActive = true;
+                        newEnr.Student = enrolment.Student;
+                        newEnr.GRNo = enrolment.GRNo;
+                        newEnr.RollNo = enrolment.RollNo;
+                        newEnr.Class = enrolment.Class;
+                        newEnr.PaymentMode = enrolment.PaymentMode;
+                        newEnr.LastClass = enrolment.LastClass;
+                        newEnr.LastInstitude = enrolment.LastInstitude;
+                        newEnr.CreatedDate = DateTime.Now;
+                        newEnr.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                        newList.Add(newEnr);
+                    }
+                    else
+                    {
+                        enrolment.Fee = enrolment.Fee + Convert.ToDecimal(bulk.Fee);
+                        enrolment.UpdatedDate = DateTime.Now;
+                        enrolment.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    }
+                    db.Enrolments.AddOrUpdate(enrolment);
                 }
-                else
+
+                db.Enrolments.AddRange(newList);
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
                 {
-                    enrolment.Fee = enrolment.Fee + Convert.ToDecimal(bulk.Fee);
-                    enrolment.UpdatedDate = DateTime.Now;
-                    enrolment.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
                 }
-                db.Enrolments.AddOrUpdate(enrolment);
             }
 
-            db.Enrolments.AddRange(newList);
-            db.SaveChanges();
-            return true;
+            return false;
         }
         [HttpPost]
         public ActionResult Excel_Export_Save(string contentType, string base64, string fileName)
@@ -524,69 +678,88 @@ namespace TrainersSchoolingSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult NewAdmission(StudentViewModel student)
         {
-            if (ModelState.IsValid)
+            try
             {
-                student.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
-                student.CreatedDate = DateTime.Now;
-                student.Father_.CreatedBy = student.CreatedBy;
-                student.Father_.CreatedDate = student.CreatedDate;
-                student.Mother_.CreatedBy = student.CreatedBy;
-                student.Mother_.CreatedDate = student.CreatedDate;
-                student.Enrolment.CreatedBy = student.CreatedBy;
-                student.Enrolment.CreatedDate = student.CreatedDate;
-                var std = Mapper<Student>.GetObject(student);
-                if (std.DateOfBirth.HasValue)
-                    std.Age = DateTime.Now.Year - std.DateOfBirth.Value.Year;
-                db.Students.Add(std);
-                db.SaveChanges();
-                var father = Mapper<Parent>.GetObject(student.Father_);
-                var mother = Mapper<Parent>.GetObject(student.Mother_);
-                father.Relation = "Father";
-                mother.Relation = "Mother";
-                db.Parents.Add(father);
-                db.SaveChanges();
-                std.Father = father.ParentId;
-                db.Parents.Add(mother);
-                db.SaveChanges();
-                std.Mother = mother.ParentId;
-
-                if (student.Guardian_.Name != null)
+                if (ModelState.IsValid)
                 {
-                    student.Guardian_.CreatedBy = student.CreatedBy;
-                    student.Guardian_.CreatedDate = student.CreatedDate;
-                    var guardian = Mapper<Parent>.GetObject(student.Guardian_);
-                    db.Parents.Add(guardian);
+                    student.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                    student.CreatedDate = DateTime.Now;
+                    student.Father_.CreatedBy = student.CreatedBy;
+                    student.Father_.CreatedDate = student.CreatedDate;
+                    student.Mother_.CreatedBy = student.CreatedBy;
+                    student.Mother_.CreatedDate = student.CreatedDate;
+                    student.Enrolment.CreatedBy = student.CreatedBy;
+                    student.Enrolment.CreatedDate = student.CreatedDate;
+                    var std = Mapper<Student>.GetObject(student);
+                    if (std.DateOfBirth.HasValue)
+                        std.Age = DateTime.Now.Year - std.DateOfBirth.Value.Year;
+                    db.Students.Add(std);
                     db.SaveChanges();
-                    std.Guardian = guardian.ParentId;
+                    var father = Mapper<Parent>.GetObject(student.Father_);
+                    var mother = Mapper<Parent>.GetObject(student.Mother_);
+                    father.Relation = "Father";
+                    mother.Relation = "Mother";
+                    db.Parents.Add(father);
+                    db.SaveChanges();
+                    std.Father = father.ParentId;
+                    db.Parents.Add(mother);
+                    db.SaveChanges();
+                    std.Mother = mother.ParentId;
+
+                    if (student.Guardian_.Name != null)
+                    {
+                        student.Guardian_.CreatedBy = student.CreatedBy;
+                        student.Guardian_.CreatedDate = student.CreatedDate;
+                        var guardian = Mapper<Parent>.GetObject(student.Guardian_);
+                        db.Parents.Add(guardian);
+                        db.SaveChanges();
+                        std.Guardian = guardian.ParentId;
+                    }
+                    var enrolment = Mapper<Enrolment>.GetObject(student.Enrolment);
+                    enrolment.Student = std.StudentId;
+                    enrolment.IsActive = true;
+                    db.Enrolments.Add(enrolment);
+                    db.Students.AddOrUpdate(std);
+
+                    PaidFee admissionFee = new PaidFee();
+                    admissionFee.StudentId = std.StudentId;
+                    admissionFee.Description = "AdmissionFee";
+                    admissionFee.CalculatedAmount = GlobalData.feeSetup.AdmissionFee;
+                    admissionFee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                    admissionFee.CreatedDate = DateTime.Now;
+
+
+                    db.SaveChanges();
+
+                    return RedirectToAction("Students");
                 }
-                var enrolment = Mapper<Enrolment>.GetObject(student.Enrolment);
-                enrolment.Student = std.StudentId;
-                enrolment.IsActive = true;
-                db.Enrolments.Add(enrolment);
-                db.Students.AddOrUpdate(std);
+                List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
+                foreach (var item in db.Classes)
+                {
+                    var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
+                    classes.Add(pair);
+                }
+                ViewBag.Class = new SelectList(classes, "Key", "Value");
+                ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name", student.Father);
+                ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name", student.Guardian);
+                ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name", student.Mother);
 
-                PaidFee admissionFee = new PaidFee();
-                admissionFee.StudentId = std.StudentId;
-                admissionFee.Description = "AdmissionFee";
-                admissionFee.CalculatedAmount = GlobalData.feeSetup.AdmissionFee;
-                admissionFee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
-                admissionFee.CreatedDate = DateTime.Now;
-
-
-                db.SaveChanges();
-
-                return RedirectToAction("Students");
             }
-            List<KeyValuePair<int, string>> classes = new List<KeyValuePair<int, string>>();
-            foreach (var item in db.Classes)
+            catch (Exception ex)
             {
-                var pair = new KeyValuePair<int, string>(item.ClassId, item.ClassName + item.Section);
-                classes.Add(pair);
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
             }
-            ViewBag.Class = new SelectList(classes, "Key", "Value");
-            ViewBag.Father = new SelectList(db.Parents, "ParentId", "Name", student.Father);
-            ViewBag.Guardian = new SelectList(db.Parents, "ParentId", "Name", student.Guardian);
-            ViewBag.Mother = new SelectList(db.Parents, "ParentId", "Name", student.Mother);
             return View(student);
         }
         // GET: Students/Edit/5

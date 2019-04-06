@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using TrainersSchoolingSystem.Models;
+using TrainersSchoolingSystem.Utils;
 
 namespace TrainersSchoolingSystem.Controllers
 {
@@ -51,13 +52,31 @@ namespace TrainersSchoolingSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "SubjectId,SubjectName,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Subject subject)
         {
-            if (ModelState.IsValid)
+            try
             {
-                subject.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
-                subject.CreatedDate = DateTime.Now;
-                db.Subjects.Add(subject);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    subject.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                    subject.CreatedDate = DateTime.Now;
+                    db.Subjects.Add(subject);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
             }
             return View(subject);
         }
@@ -84,15 +103,33 @@ namespace TrainersSchoolingSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "SubjectId,SubjectName,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Subject subject)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var subjectDb = db.Subjects.Find(subject.SubjectId);
-                subjectDb.SubjectName = subject.SubjectName;
-                subjectDb.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
-                subjectDb.UpdatedDate = DateTime.Now;
-                db.Subjects.AddOrUpdate(subjectDb);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    var subjectDb = db.Subjects.Find(subject.SubjectId);
+                    subjectDb.SubjectName = subject.SubjectName;
+                    subjectDb.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                    subjectDb.UpdatedDate = DateTime.Now;
+                    db.Subjects.AddOrUpdate(subjectDb);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
             }
             return View(subject);
         }
