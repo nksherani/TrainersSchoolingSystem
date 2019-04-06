@@ -94,7 +94,8 @@ namespace TrainersSchoolingSystem.Controllers
         {
             var lastdate = db.PaidFees.Where(x => x.StudentId == studentid
             && x.Description == "MonthlyFee" && x.ReceivedAmount.HasValue)?.OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
-            if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28)
+            if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28 &&
+                lastdate.Value.Month == DateTime.Now.Month)
                 return "";
             SqlParameter StudentId = new SqlParameter("@StudentId", studentid);
             var FeeSlipData = db.Database.SqlQuery<FeeSlipModel>("exec GenerateFeeSlips @StudentId", StudentId).FirstOrDefault();
@@ -131,13 +132,13 @@ namespace TrainersSchoolingSystem.Controllers
             data = data.Replace("__Month__", DateTime.Now.ToString("MM-yyyy"));
             data = data.Replace("__IssueDate__", DateTime.Now.ToString("dd-MM-yyyy"));
             data = data.Replace("__DueDate__", DateTime.Now.ToString("10-MM-yyyy"));
-            data = data.Replace("__Challan__", DateTime.Now.ToString() + studentid);
+            //data = data.Replace("__Challan__", FeeSlipData.ChallanNo.ToString());
             data = data.Replace("__GRNo__", FeeSlipData.GRNo);
             data = data.Replace("__StudentName__", FeeSlipData.FirstName + " " + FeeSlipData.LastName);
             data = data.Replace("__Class__", FeeSlipData.Class);
             data = data.Replace("__FatherName__", FeeSlipData.FatherName);
             data = data.Replace("__Arrears__", FeeSlipData.ArrearAmount.ToString());
-            data = data.Replace("__TuitionFee__", FeeSlipData.Fee);
+            data = data.Replace("__TuitionFee__", FeeSlipData.Fee.ToString());
             data = data.Replace("__AdmissionFee__", FeeSlipData.AdmissionFee.ToString());
             data = data.Replace("__AnnualFee__", FeeSlipData.AnnualFee.ToString());
             data = data.Replace("__OtherFee__", "0");
@@ -154,12 +155,23 @@ namespace TrainersSchoolingSystem.Controllers
                     temp.Add(item);
             }
             feeDb = temp;
-            if (FeeSlipData.Fee != null && FeeSlipData.Fee != "")
+            if ( FeeSlipData.Fee != 0)
             {
-                PaidFee paidFee = new PaidFee();
+                PaidFee paidFee;
                 var count = feeDb.Where(x => x.Description == "MonthlyFee").ToList();
                 if (count.Count > 0)
+                {
                     paidFee = feeDb.Where(x => x.Description == "MonthlyFee").FirstOrDefault();
+                    data = data.Replace("__Challan__", paidFee.ChallanNo.ToString());
+
+                }
+                else
+                {
+                    paidFee = new PaidFee();
+                    paidFee.ChallanNo = FeeSlipData.ChallanNo;
+                    data = data.Replace("__Challan__", FeeSlipData.ChallanNo.ToString());
+                }
+
                 paidFee.StudentId = studentid;
                 paidFee.CalculatedAmount = Convert.ToInt32(FeeSlipData.Fee);
                 paidFee.Description = "MonthlyFee";
@@ -175,10 +187,15 @@ namespace TrainersSchoolingSystem.Controllers
             }
             if (GlobalData.feeSetup.LabCharges > 0)
             {
-                PaidFee paidFee = new PaidFee();
+                PaidFee paidFee;
                 var count = feeDb.Where(x => x.Description == "LabCharges").Count();
                 if (count > 0)
                     paidFee = feeDb.Where(x => x.Description == "LabCharges").FirstOrDefault();
+                else
+                {
+                    paidFee = new PaidFee();
+                    paidFee.ChallanNo = FeeSlipData.ChallanNo;
+                }
                 paidFee.StudentId = studentid;
                 paidFee.CalculatedAmount = GlobalData.feeSetup.LabCharges;
                 paidFee.Description = "LabCharges";
@@ -194,9 +211,14 @@ namespace TrainersSchoolingSystem.Controllers
             }
             if (FeeSlipData.AnnualFee > 0)
             {
-                PaidFee paidFee = new PaidFee();
+                PaidFee paidFee;
                 if (feeDb.Where(x => x.Description == "AnnualFee").Count() > 0)
                     paidFee = feeDb.Where(x => x.Description == "AnnualFee").FirstOrDefault();
+                else
+                {
+                    paidFee = new PaidFee();
+                    paidFee.ChallanNo = FeeSlipData.ChallanNo;
+                }
                 paidFee.StudentId = studentid;
                 paidFee.CalculatedAmount = FeeSlipData.AnnualFee;
                 paidFee.Description = "AnnualFee";
@@ -396,7 +418,7 @@ namespace TrainersSchoolingSystem.Controllers
                 {
                     enrolment.IsActive = false;
                     Enrolment newEnr = new Enrolment();
-                    newEnr.Fee = (Convert.ToSingle(enrolment.Fee) + Convert.ToSingle(bulk.Fee)).ToString();
+                    newEnr.Fee = enrolment.Fee + Convert.ToDecimal( bulk.Fee);
                     newEnr.IsActive = true;
                     newEnr.Student = enrolment.Student;
                     newEnr.GRNo = enrolment.GRNo;
@@ -411,7 +433,7 @@ namespace TrainersSchoolingSystem.Controllers
                 }
                 else
                 {
-                    enrolment.Fee = (Convert.ToSingle(enrolment.Fee) + Convert.ToSingle(bulk.Fee)).ToString();
+                    enrolment.Fee = enrolment.Fee + Convert.ToDecimal(bulk.Fee);
                     enrolment.UpdatedDate = DateTime.Now;
                     enrolment.UpdatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
                 }

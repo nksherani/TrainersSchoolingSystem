@@ -12,7 +12,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public int FeeId { get; set; }
         public Nullable<int> Class { get; set; }
         public string FeeType { get; set; }
-        public Nullable<int> Amount { get; set; }
+        public Nullable<decimal> Amount { get; set; }
         public string Description { get; set; }
         public Nullable<int> Year { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }

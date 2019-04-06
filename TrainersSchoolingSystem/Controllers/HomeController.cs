@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace TrainersSchoolingSystem.Controllers
 {
-    [Authorize(Roles = "Admin,Moderator")]
+    [Authorize]
     public class HomeController : Controller
     {
         

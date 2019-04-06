@@ -17,7 +17,7 @@ namespace TrainersSchoolingSystem.Models
         public int ArrearId { get; set; }
         public Nullable<int> StudentId { get; set; }
         public Nullable<int> StaffId { get; set; }
-        public Nullable<int> Amount { get; set; }
+        public Nullable<decimal> Amount { get; set; }
         public string ArrearType { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }

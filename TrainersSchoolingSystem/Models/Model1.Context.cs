@@ -83,5 +83,10 @@ namespace TrainersSchoolingSystem.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCurrentTeachers_Result>("GetCurrentTeachers");
         }
+    
+        public virtual ObjectResult<temp_Result> temp()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<temp_Result>("temp");
+        }
     }
 }

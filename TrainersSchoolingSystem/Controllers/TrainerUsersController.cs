@@ -15,7 +15,7 @@ using TrainersSchoolingSystem.Utils;
 
 namespace TrainersSchoolingSystem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class TrainerUsersController : Controller
     {
         private TrainersEntities db = new TrainersEntities();

@@ -15,8 +15,9 @@ namespace TrainersSchoolingSystem.Models
     public partial class SalaryPayment
     {
         public int SalaryPaymentId { get; set; }
+        public Nullable<int> ChallanNo { get; set; }
         public Nullable<int> StaffId { get; set; }
-        public Nullable<int> Amount { get; set; }
+        public Nullable<decimal> Amount { get; set; }
         public Nullable<System.DateTime> PaymentDate { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }

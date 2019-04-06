@@ -22,6 +22,7 @@ namespace TrainersSchoolingSystem.Controllers
         ShortLeave,
         LateArrival
     }
+    [Authorize]
     public class TeachersController : Controller
     {
         private TrainersEntities db = new TrainersEntities();
@@ -174,13 +175,17 @@ namespace TrainersSchoolingSystem.Controllers
         {
             var lastdate = db.PaidFees.Where(x => x.StudentId == TeacherId
             && x.Description == "MonthlyFee" && x.ReceivedAmount.HasValue)?.OrderByDescending(x => x.CreatedDate)?.FirstOrDefault()?.CreatedDate;
-            if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28)
+            if (lastdate.HasValue && (DateTime.Now - lastdate).Value.TotalDays < 28 &&
+                lastdate.Value.Month == DateTime.Now.Month)
                 return "";
             SqlParameter teacherId = new SqlParameter("@TeacherId", TeacherId);
             var PaySlipData = db.Database.SqlQuery<PaySlipModel>("exec GeneratePaySlips @TeacherId", teacherId).FirstOrDefault();
             string data = "";
-            string[] lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "PaySlip.html"));
-
+            List<string> lines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "PaySlip.html")).ToList();
+            foreach (var item in lines)
+            {
+                data += item;
+            }
 
             data = data.Replace("__Picture__", "../" + GlobalData.configuration.Picture);
             data = data.Replace("__SchoolName__", GlobalData.configuration.SchoolName);
@@ -188,11 +193,11 @@ namespace TrainersSchoolingSystem.Controllers
             data = data.Replace("__Month__", DateTime.Now.ToString("MM-yyyy"));
             data = data.Replace("__IssueDate__", DateTime.Now.ToString("dd-MM-yyyy"));
             data = data.Replace("__DueDate__", DateTime.Now.ToString("10-MM-yyyy"));
-            data = data.Replace("__Challan__", DateTime.Now.ToString() + TeacherId);
+            //data = data.Replace("__Challan__", PaySlipData.ChallanNo.ToString());
             data = data.Replace("__TeacherId__", PaySlipData.TeacherId.ToString());
             data = data.Replace("__Name__", PaySlipData.Name);
             data = data.Replace("__Designation__", PaySlipData.Designation);
-            data = data.Replace("__JoiningDate__", PaySlipData.JoiningDate.ToString("dd-MM-yyyy"));
+            data = data.Replace("__JoiningDate__", PaySlipData.JoiningDate.Value.ToString("dd-MM-yyyy"));
             data = data.Replace("__BasicPay__", PaySlipData.BasicPay.ToString());
             data = data.Replace("__Bonus__", PaySlipData.Bonus.ToString());
             data = data.Replace("__ProvidentFund__", PaySlipData.PF.ToString());
@@ -200,22 +205,28 @@ namespace TrainersSchoolingSystem.Controllers
             data = data.Replace("__EOBI__", PaySlipData.LoanDeduction.ToString());
             data = data.Replace("__GrossPay__", PaySlipData.GrossPay.ToString());
             data = data.Replace("__NetPay__", PaySlipData.NetPay.ToString());
+            data = data.Replace("__LoanDeduction__", "0");
+            data = data.Replace("__UnpaidLeaves__", PaySlipData.UnpaidLeaves.ToString());
+            data = data.Replace("__AmountDeducted__", PaySlipData.AmountDeducted.ToString());
 
             var lastPayment = db.SalaryPayments.Where(x => x.StaffId == TeacherId).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
             var userid = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
             if (lastPayment != null && lastPayment.CreatedDate.Value.ToString("MM-yyyy") == DateTime.Now.ToString("MM-yyyy"))
             {
-                lastPayment.Amount = PaySlipData.NetPay;
+                lastPayment.Amount = Convert.ToInt32( PaySlipData.NetPay);
                 lastPayment.UpdatedDate = DateTime.Now;
                 lastPayment.UpdatedBy = userid;
+                data = data.Replace("__Challan__", lastPayment.ChallanNo.ToString());
             }
             else
             {
                 lastPayment = new SalaryPayment();
+                lastPayment.ChallanNo = PaySlipData.ChallanNo;
                 lastPayment.StaffId = PaySlipData.TeacherId;
-                lastPayment.Amount = PaySlipData.NetPay;
+                lastPayment.Amount = Convert.ToInt32( PaySlipData.NetPay);
                 lastPayment.CreatedDate = DateTime.Now;
                 lastPayment.CreatedBy = userid;
+                data = data.Replace("__Challan__", PaySlipData.ChallanNo.ToString());
             }
             db.SalaryPayments.AddOrUpdate(lastPayment);
             db.SaveChanges();

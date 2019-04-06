@@ -9,12 +9,12 @@ namespace TrainersSchoolingSystem.Models.DTOs
     public class FeeSetup
     {
         [Display(Name = "Admission Fee")]
-        public int AdmissionFee { get; set; }
+        public decimal AdmissionFee { get; set; }
         [Display(Name = "Annual Fee")]
-        public int AnnualFee { get; set; }
+        public decimal AnnualFee { get; set; }
         [Display(Name = "Lab Fee")]
-        public int LabCharges { get; set; }
+        public decimal LabCharges { get; set; }
         [Display(Name = "Late Payment Surcharge")]
-        public int LatePaymentSurcharge { get; set; }
+        public decimal LatePaymentSurcharge { get; set; }
     }
 }

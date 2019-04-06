@@ -12,7 +12,7 @@ using TrainersSchoolingSystem.Models.DTOs;
 
 namespace TrainersSchoolingSystem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class FeesController : Controller
     {
         private TrainersEntities db = new TrainersEntities();
@@ -36,7 +36,7 @@ namespace TrainersSchoolingSystem.Controllers
                             FirstOrDefault().TrainerUserId;
             foreach (var fee in models)
             {
-                int ReceivedAmount = fee.ReceivedAmount;
+                decimal ReceivedAmount = fee.ReceivedAmount;
                 if (fee.ReceivedAmount == fee.UnpaidAmount)
                 {
                     var temp1 = paidfees.Where(x => x.StudentId == fee.StudentId).ToList();

@@ -11,6 +11,7 @@ using TrainersSchoolingSystem.Models;
 
 namespace TrainersSchoolingSystem.Controllers
 {
+    [Authorize]
     public class SalariesController : Controller
     {
         private TrainersEntities db = new TrainersEntities();

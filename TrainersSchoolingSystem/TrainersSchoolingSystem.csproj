@@ -365,6 +365,9 @@
     <Compile Include="Models\SubjectAssignment.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\temp_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TrainerUser.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -373,6 +376,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\GlobalData.cs" />
+    <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\Mapper.cs" />
     <Compile Include="Utils\RegularExpressions.cs" />
   </ItemGroup>

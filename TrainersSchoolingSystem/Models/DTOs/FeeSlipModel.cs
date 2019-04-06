@@ -9,6 +9,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
     public class FeeSlipModel
     {
         [Key]
+        public int ChallanNo { get; set; }
         public int StudentId { get; set; }
         [Required]
         [Display(Name = "G.R No.")]
@@ -24,12 +25,12 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public string LastName { get; set; }
         public string FatherName { get; set; }
         public string Class { get; set; }
-        public string Fee { get; set; }
+        public decimal Fee { get; set; }
         public int AnnualFee { get; set; }
-        public int ArrearAmount { get; set; }
+        public decimal ArrearAmount { get; set; }
         public string ArrearType { get; set; }
-        public int UnpaidAmount { get; set; }
-        public int AdmissionFee { get; set; }
-        public int ReceivedAmount { get; set; }
+        public decimal UnpaidAmount { get; set; }
+        public decimal AdmissionFee { get; set; }
+        public decimal ReceivedAmount { get; set; }
     }
 }

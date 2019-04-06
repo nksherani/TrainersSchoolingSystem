@@ -20,7 +20,7 @@ namespace TrainersSchoolingSystem.Models
         public string GRNo { get; set; }
         public Nullable<int> RollNo { get; set; }
         public Nullable<int> Class { get; set; }
-        public string Fee { get; set; }
+        public Nullable<decimal> Fee { get; set; }
         public string PaymentMode { get; set; }
         public string LastClass { get; set; }
         public string LastInstitude { get; set; }

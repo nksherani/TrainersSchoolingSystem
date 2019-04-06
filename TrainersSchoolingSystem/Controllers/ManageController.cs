@@ -10,7 +10,7 @@ using TrainersSchoolingSystem.Models;
 
 namespace TrainersSchoolingSystem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;

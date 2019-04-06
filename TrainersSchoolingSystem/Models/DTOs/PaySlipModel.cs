@@ -7,18 +7,21 @@ namespace TrainersSchoolingSystem.Models.DTOs
 {
     public class PaySlipModel
     {
+        public int ChallanNo { get; set; }
         public string Month { get; set; }
-        public DateTime IssueDate { get; set; }
+        public DateTime? IssueDate { get; set; }
         public int TeacherId { get; set; }
         public string Name { get; set; }
         public string Designation { get; set; }
-        public DateTime JoiningDate { get; set; }
-        public int BasicPay { get; set; }
-        public int Bonus { get; set; }
-        public int PF { get; set; }
-        public int EOBI { get; set; }
-        public int LoanDeduction { get; set; }
-        public int GrossPay { get; set; }
-        public int NetPay { get; set; }
+        public DateTime? JoiningDate { get; set; }
+        public decimal BasicPay { get; set; }
+        public decimal Bonus { get; set; }
+        public decimal PF { get; set; }
+        public decimal EOBI { get; set; }
+        public decimal LoanDeduction { get; set; }
+        public decimal GrossPay { get; set; }
+        public int UnpaidLeaves { get; set; }
+        public decimal AmountDeducted { get; set; }
+        public decimal NetPay { get; set; }
     }
 }

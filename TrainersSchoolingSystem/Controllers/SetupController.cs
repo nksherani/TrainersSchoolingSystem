@@ -12,7 +12,7 @@ using TrainersSchoolingSystem.Utils;
 
 namespace TrainersSchoolingSystem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class SetupController : Controller
     {
         TrainersEntities db = new TrainersEntities();
@@ -288,19 +288,19 @@ namespace TrainersSchoolingSystem.Controllers
 
             db.SaveChanges();
 
-            Staff staff = new Staff();
-            staff.Age = 20;
-            staff.City = "Karachi";
-            staff.DateOfBirth = DateTime.Now.AddYears(-20);
-            staff.Designation = designation.DesignationId;
-            staff.FatherName = "ffdgdg";
-            staff.FirstName = "fname";
-            staff.LastName = "lname";
-            staff.Mobile = "+923314567896";
-            staff.PostalCode = "745";
-            staff.StreetAddress = "ffdgdg";
+            //Staff staff = new Staff();
+            //staff.Age = 20;
+            //staff.City = "Karachi";
+            //staff.DateOfBirth = DateTime.Now.AddYears(-20);
+            //staff.Designation = designation.DesignationId;
+            //staff.FatherName = "ffdgdg";
+            //staff.FirstName = "fname";
+            //staff.LastName = "lname";
+            //staff.Mobile = "+923314567896";
+            //staff.PostalCode = "745";
+            //staff.StreetAddress = "ffdgdg";
 
-            db.Staffs.Add(staff);
+            //db.Staffs.Add(staff);
             db.SaveChanges();
             return "success";
         }

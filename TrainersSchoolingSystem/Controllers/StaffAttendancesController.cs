@@ -12,6 +12,7 @@ using TrainersSchoolingSystem.Utils;
 
 namespace TrainersSchoolingSystem.Controllers
 {
+    [Authorize]
     public class StaffAttendancesController : Controller
     {
         private TrainersEntities db = new TrainersEntities();

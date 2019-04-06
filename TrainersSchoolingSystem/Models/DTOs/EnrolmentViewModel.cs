@@ -28,7 +28,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public string PaymentMode { get; set; }
         [Required]
         [RegularExpression("^\\d+$",ErrorMessage ="Fee must be a number")]
-        public string Fee { get; set; }
+        public decimal? Fee { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> UpdatedDate { get; set; }

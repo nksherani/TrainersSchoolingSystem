@@ -9,7 +9,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
     {
         public int SalaryPaymentId { get; set; }
         public Nullable<int> StaffId { get; set; }
-        public Nullable<int> Amount { get; set; }
+        public Nullable<decimal> Amount { get; set; }
         public Nullable<System.DateTime> PaymentDate { get; set; }
     }
 }
