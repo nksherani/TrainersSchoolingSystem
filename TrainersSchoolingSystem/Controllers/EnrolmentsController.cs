@@ -118,7 +118,9 @@ namespace TrainersSchoolingSystem.Controllers
                 enrolmentdb.LastClass = enrolment.LastClass;
                 enrolmentdb.LastInstitude = enrolment.LastInstitude;
                 enrolmentdb.PaymentMode = enrolment.PaymentMode;
-                enrolmentdb.Fee = enrolment.Fee;
+                enrolmentdb.MonthlyFee = enrolment.MonthlyFee;
+                enrolmentdb.AdmissionFee = enrolment.AdmissionFee;
+                enrolmentdb.AnnualFee = enrolment.AnnualFee;
                 enrolmentdb.Student = enrolment.Student;
                 enrolmentdb.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                 enrolmentdb.UpdatedDate = DateTime.Now;

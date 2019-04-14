@@ -356,7 +356,7 @@ namespace TrainersSchoolingSystem.Controllers
                     if (currentclass != null)
                         enrolment.Class = currentclass.ClassId;
                     if (workSheet.Cells[i, 25].Text != "")
-                        enrolment.Fee = Convert.ToDecimal(workSheet.Cells[i, 25].Text);
+                        enrolment.MonthlyFee = Convert.ToDecimal(workSheet.Cells[i, 25].Text);
                     if (workSheet.Cells[i, 26].Text.ToLower() == "present".ToLower())
                     {
                         enrolment.IsActive = true;
@@ -377,13 +377,57 @@ namespace TrainersSchoolingSystem.Controllers
                         PaidFee admissionFee = new PaidFee();
                         admissionFee.StudentId = student.StudentId;
                         admissionFee.Description = "AdmissionFee";
-                        admissionFee.CalculatedAmount = GlobalData.feeSetup.AdmissionFee;
+                        admissionFee.Month = DateTime.Today.AddDays((-1) * (DateTime.Today.Day-1));
+                        if (workSheet.Cells[i, 28].Text != "")
+                        {
+                            enrolment.AdmissionFee = Convert.ToDecimal(workSheet.Cells[i, 28].Text);
+                            admissionFee.CalculatedAmount = Convert.ToDecimal(workSheet.Cells[i, 28].Text);
+                        }
+                        else
+                        {
+                            enrolment.AdmissionFee = GlobalData.feeSetup.AdmissionFee;
+                            admissionFee.CalculatedAmount = GlobalData.feeSetup.AdmissionFee;
+                        }
                         admissionFee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                         admissionFee.CreatedDate = DateTime.Now;
-
                         db.PaidFees.Add(admissionFee);
+
+                        PaidFee annualFee = new PaidFee();
+                        annualFee.StudentId = student.StudentId;
+                        annualFee.Description = "AnnualFee";
+                        annualFee.Month = DateTime.Today.AddDays((-1) * (DateTime.Today.Day - 1));
+                        if (workSheet.Cells[i, 29].Text != "")
+                        {
+                            enrolment.AnnualFee = Convert.ToDecimal(workSheet.Cells[i, 29].Text);
+                            annualFee.CalculatedAmount = Convert.ToDecimal(workSheet.Cells[i, 29].Text);
+                        }
+                        else
+                        {
+                            enrolment.AnnualFee = GlobalData.feeSetup.AnnualFee;
+                            annualFee.CalculatedAmount = GlobalData.feeSetup.AnnualFee;
+                        }
+                        annualFee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                        annualFee.CreatedDate = DateTime.Now;
+
+                        db.PaidFees.Add(annualFee);
                         db.SaveChanges();
 
+                    }
+                    if (workSheet.Cells[i, 28].Text != "")
+                    {
+                        enrolment.AdmissionFee = Convert.ToDecimal(workSheet.Cells[i, 28].Text);
+                    }
+                    else
+                    {
+                        enrolment.AdmissionFee = GlobalData.feeSetup.AdmissionFee;
+                    }
+                    if (workSheet.Cells[i, 29].Text != "")
+                    {
+                        enrolment.AnnualFee = Convert.ToDecimal(workSheet.Cells[i, 29].Text);
+                    }
+                    else
+                    {
+                        enrolment.AnnualFee = GlobalData.feeSetup.AnnualFee;
                     }
                     enrolment.Student = student.StudentId;
                     db.Enrolments.AddOrUpdate(enrolment);
@@ -492,10 +536,11 @@ namespace TrainersSchoolingSystem.Controllers
                     var stdid = enrolmentsdb.Where(x => x.GRNo == grno && x.IsActive.Value).FirstOrDefault().Student.Value;
                     fee.StudentId = stdid;
                     
-                    fee.Month = Constants.months2[workSheet.Cells[i, 4].Text];
+                    var Month = Constants.months2[workSheet.Cells[i, 4].Text];
                     var year = Convert.ToInt32( workSheet.Cells[i, 5].Text);
+                    fee.Month = new DateTime(year, Month, 1);
                     var date = Convert.ToInt32(workSheet.Cells[i, 6].Text);
-                    fee.PaymentDate = new DateTime(year, fee.Month.Value, date);
+                    fee.PaymentDate = new DateTime(year, Month, date);
                     var listtemp = feedb.Where(x => x.StudentId == fee.StudentId && x.Month == fee.Month &&
                         x.PaymentDate.Value.Year == fee.PaymentDate.Value.Year);
                     if (listtemp.Count() > 0)

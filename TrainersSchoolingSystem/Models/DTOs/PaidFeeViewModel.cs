@@ -14,7 +14,7 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public Nullable<decimal> CalculatedAmount { get; set; }
         public Nullable<decimal> ReceivedAmount { get; set; }
         public Nullable<System.DateTime> PaymentDate { get; set; }
-        public Nullable<int> Month { get; set; }
+        public Nullable<DateTime> Month { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> UpdatedDate { get; set; }

@@ -25,8 +25,8 @@ namespace TrainersSchoolingSystem.Models.DTOs
         public string LastName { get; set; }
         public string FatherName { get; set; }
         public string Class { get; set; }
-        public decimal Fee { get; set; }
-        public int AnnualFee { get; set; }
+        public decimal MonthlyFee { get; set; }
+        public decimal AnnualFee { get; set; }
         public decimal ArrearAmount { get; set; }
         public string ArrearType { get; set; }
         public decimal UnpaidAmount { get; set; }
