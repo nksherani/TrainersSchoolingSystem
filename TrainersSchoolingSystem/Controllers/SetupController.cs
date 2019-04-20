@@ -116,7 +116,7 @@ namespace TrainersSchoolingSystem.Controllers
                         Fee fee = feedb.Where(x => x.FeeType == property.Name).FirstOrDefault();
                         //config.ConfigurationId = i++;
                         fee.FeeType = property.Name;
-                        fee.Amount = (int)property.GetValue(feesetup);
+                        fee.Amount = (decimal)property.GetValue(feesetup);
                         fee.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                         fee.UpdatedDate = DateTime.Now;
                         db.Fees.AddOrUpdate(fee);
@@ -131,8 +131,20 @@ namespace TrainersSchoolingSystem.Controllers
                     return View();
                 }
             }
-            catch
+            catch (Exception ex)
             {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
                 ViewBag.FirstMonth = new SelectList(Constants.months, "Key", "Value");
                 return View();
             }

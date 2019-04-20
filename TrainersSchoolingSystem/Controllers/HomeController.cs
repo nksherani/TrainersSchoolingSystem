@@ -14,7 +14,7 @@ namespace TrainersSchoolingSystem.Controllers
 
         public ActionResult Index()
         {
-            RecurringJob.AddOrUpdate(() => scheduleBackup(), Cron.Monthly);
+            RecurringJob.AddOrUpdate(() => scheduleBackup(), Cron.Daily);
             return View();
         }
         public void scheduleBackup()

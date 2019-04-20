@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.UI;
 
 namespace TrainersSchoolingSystem.Utils
 {
     public static class Constants
     {
+        public static string BackupPath;
         public static List<KeyValuePair<int, string>> months = new List<KeyValuePair<int, string>>();
         public static Dictionary<string, int> months2 = new  Dictionary<string, int>();
         static Constants()
         {
+            var cdrive = Path.GetFullPath("C:/");
+            BackupPath = Path.Combine(cdrive,"SchoolData");
             months.Add(new KeyValuePair<int, string>(1, "January"));
             months.Add(new KeyValuePair<int, string>(2, "February"));
             months.Add(new KeyValuePair<int, string>(3, "March"));

@@ -18,7 +18,11 @@ namespace TrainersSchoolingSystem.Utils
         public BackupService()
         {
             _connectionString = ConfigurationManager.ConnectionStrings[1].ConnectionString;
-             _backupFolderFullPath = HttpContext.Current.Server.MapPath("~/Content");
+            _backupFolderFullPath = Constants.BackupPath;//HttpContext.Current.Server.MapPath("~/Content");
+            if(!Directory.Exists(_backupFolderFullPath))
+            {
+                Directory.CreateDirectory(_backupFolderFullPath);
+            }
             //_backupFolderFullPath =Path.Combine( Path.GetTempPath(),"SchoolLogs");
         }
 

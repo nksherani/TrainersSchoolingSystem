@@ -150,9 +150,10 @@ namespace TrainersSchoolingSystem.Controllers
                 data = data.Replace("__Picture__", "../" + GlobalData.configuration.Picture);
                 data = data.Replace("__SchoolName__", GlobalData.configuration.SchoolName);
                 data = data.Replace("__Campus__", GlobalData.configuration.Campus);
-                data = data.Replace("__Month__", DateTime.Now.ToString("MM-yyyy"));
+                var tempmonth = Constants.months[month-1].Value + DateTime.Now.ToString("-yyyy");
+                data = data.Replace("__Month__",tempmonth);
                 data = data.Replace("__IssueDate__", DateTime.Now.ToString("dd-MM-yyyy"));
-                data = data.Replace("__DueDate__", DateTime.Now.ToString("10-MM-yyyy"));
+                data = data.Replace("__DueDate__", DateTime.Now.ToString($"10-{month}-yyyy"));
                 //data = data.Replace("__Challan__", FeeSlipData.ChallanNo.ToString());
                 data = data.Replace("__GRNo__", FeeSlipData.GRNo);
                 data = data.Replace("__StudentName__", FeeSlipData.FirstName + " " + FeeSlipData.LastName);
