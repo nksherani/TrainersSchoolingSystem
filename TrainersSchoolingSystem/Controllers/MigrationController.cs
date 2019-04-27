@@ -365,11 +365,26 @@ namespace TrainersSchoolingSystem.Controllers
                     {
                         student.EndDate = DateTime.Today;
                     }
+                    
+                    
                     db.Parents.AddOrUpdate(parent);
                     db.SaveChanges();
                     student.Father = parent.ParentId;
                     db.Students.AddOrUpdate(student);
                     db.SaveChanges();
+                    if (workSheet.Cells[i, 27].Text.ToLower() == "y".ToLower())
+                    {
+                        PaidFee admissionFee = new PaidFee();
+                        admissionFee.StudentId = student.StudentId;
+                        admissionFee.Description = "AdmissionFee";
+                        admissionFee.CalculatedAmount = GlobalData.feeSetup.AdmissionFee;
+                        admissionFee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                        admissionFee.CreatedDate = DateTime.Now;
+
+                        db.PaidFees.Add(admissionFee);
+                        db.SaveChanges();
+
+                    }
                     enrolment.Student = student.StudentId;
                     db.Enrolments.AddOrUpdate(enrolment);
 
