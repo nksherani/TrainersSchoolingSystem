@@ -794,6 +794,7 @@
     <Content Include="Content\kendo\2017.2.621\Uniform\sprite_kpi_2x.png" />
     <Content Include="Content\loading.gif" />
     <Content Include="Content\PaySlip.html" />
+    <Content Include="Content\Temp\dummy.html" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -1355,7 +1356,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\FeeSlips\" />
-    <Folder Include="Content\Temp\" />
     <Folder Include="Views\GeneralStaff\" />
   </ItemGroup>
   <ItemGroup>

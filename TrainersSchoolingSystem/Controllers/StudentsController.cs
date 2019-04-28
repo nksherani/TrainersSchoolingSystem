@@ -109,10 +109,26 @@ namespace TrainersSchoolingSystem.Controllers
         }
         private string GetFeeSlip(int studentid, int month)
         {
+            
             string data = "";
 
             try
             {
+                int date = DateTime.Today.Day;
+                if(date>10 && month == DateTime.Today.Month)
+                    return "";
+                DateTime start, end, currentMonth;
+                if (date > 10)
+                {
+                    currentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 11);
+                }
+                else
+                {
+                    currentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, 11);
+                }
+                start = new DateTime(DateTime.Today.Year, month-1, 11);
+                end = new DateTime(DateTime.Today.Year, month, 10);
+
                 bool ispaid = db.PaidFees.Where(x => x.ReceivedAmount.HasValue &&
                 x.StudentId == studentid && x.Month.Value.Month == month &&
                     x.Month.Value.Year == DateTime.Today.Year).Count() > 0;
@@ -154,19 +170,17 @@ namespace TrainersSchoolingSystem.Controllers
                         db.SaveChanges();
                     }
                 }
+                else { 
+                    //naveed
+                    var annualdb = db.PaidFees.Where(x => x.StudentId == studentid && x.Description == "AnnualFee" && x.Month.Value > start && x.Month.Value<end).FirstOrDefault();
+                    if (annualdb != null)
+                        FeeSlipData.AnnualFee = annualdb.CalculatedAmount.Value;
+                    var admissiondb = db.PaidFees.Where(x => x.StudentId == studentid && x.Description == "AdmissionFee" && x.Month.Value > start && x.Month.Value < end).FirstOrDefault();
+                    if (admissiondb != null)
+                        FeeSlipData.AdmissionFee = admissiondb.CalculatedAmount.Value;
+                }
                 var unpaid = db.PaidFees.Where(x => !x.ReceivedAmount.HasValue && x.StudentId == studentid);
-                int date = DateTime.Today.Day;
-                DateTime start, end;
-                if(date>10)
-                {
-                    start = new DateTime( DateTime.Today.Year, DateTime.Today.Month,11);
-                    end = start.AddMonths(1);
-                }
-                else
-                {
-                    start = new DateTime(DateTime.Today.Year, DateTime.Today.Month-1, 11);
-                    end = start.AddMonths(1);
-                }
+                
                 //bool isInsideCurrentDateRangel
                 //decimal unpaidamount = 0;
                 var monthlyunpaid = unpaid.Where(x => x.Description == "MonthlyFee").ToList();
@@ -181,7 +195,7 @@ namespace TrainersSchoolingSystem.Controllers
                     }
                     else
                     {
-                        if (month != item.Month.Value.Month && item.Month.Value.Month!= end.Month && item.Month.Value<start)
+                        if (month != item.Month.Value.Month && item.Month.Value.Month!= end.Month && item.Month.Value<currentMonth)
                             FeeSlipData. UnpaidAmount += item.CalculatedAmount.Value;
                     }
                 }
@@ -193,7 +207,7 @@ namespace TrainersSchoolingSystem.Controllers
                 }
                 else if (admissionunpaid != null)
                 {
-                    if (month != admissionunpaid.Month.Value.Month && admissionunpaid.Month.Value.Month != end.Month && admissionunpaid.Month.Value < start)
+                    if (month != admissionunpaid.Month.Value.Month && admissionunpaid.Month.Value.Month != end.Month && admissionunpaid.Month.Value < currentMonth)
                         FeeSlipData.UnpaidAmount += admissionunpaid.CalculatedAmount.Value;
                 }
                 foreach (var item in annualunpaid)
@@ -206,7 +220,7 @@ namespace TrainersSchoolingSystem.Controllers
                     }
                     else
                     {
-                        if (month != item.Month.Value.Month && item.Month.Value.Month != end.Month && item.Month.Value < start)
+                        if (month != item.Month.Value.Month && item.Month.Value.Month != end.Month && item.Month.Value < currentMonth)
                             FeeSlipData.UnpaidAmount += item.CalculatedAmount.Value;
                     }
                 }
@@ -308,7 +322,7 @@ namespace TrainersSchoolingSystem.Controllers
                         paidFee.CreatedBy = db.TrainerUsers.Where(x => x.Username == User.Identity.Name).FirstOrDefault().TrainerUserId;
                     db.PaidFees.AddOrUpdate(paidFee);
                 }
-                if (FeeSlipData.AnnualFee > 0)
+                if (month.ToString()==GlobalData.configuration.FirstMonth)
                 {
                     PaidFee paidFee;
                     var annual = feeDb.Where(x => x.Description == "AnnualFee").FirstOrDefault();
@@ -319,6 +333,9 @@ namespace TrainersSchoolingSystem.Controllers
                         paidFee = new PaidFee();
                         paidFee.ChallanNo = FeeSlipData.ChallanNo;
                         paidFee.Month = new DateTime(DateTime.Today.Year, month, 1);
+                        //naveed
+                        //if (data > 10)
+                        //    paidFee.Month = paidFee.Month.Value.AddMonths(1);
                     }
                     paidFee.StudentId = studentid;
                     paidFee.CalculatedAmount = FeeSlipData.AnnualFee;
