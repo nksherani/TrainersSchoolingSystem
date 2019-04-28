@@ -156,7 +156,17 @@ namespace TrainersSchoolingSystem.Controllers
                 }
                 var unpaid = db.PaidFees.Where(x => !x.ReceivedAmount.HasValue && x.StudentId == studentid);
                 int date = DateTime.Today.Day;
-                //DateTime start = 
+                DateTime start, end;
+                if(date>10)
+                {
+                    start = new DateTime( DateTime.Today.Year, DateTime.Today.Month,11);
+                    end = start.AddMonths(1);
+                }
+                else
+                {
+                    start = new DateTime(DateTime.Today.Year, DateTime.Today.Month-1, 11);
+                    end = start.AddMonths(1);
+                }
                 //bool isInsideCurrentDateRangel
                 //decimal unpaidamount = 0;
                 var monthlyunpaid = unpaid.Where(x => x.Description == "MonthlyFee").ToList();
@@ -171,7 +181,7 @@ namespace TrainersSchoolingSystem.Controllers
                     }
                     else
                     {
-                        if (month != item.Month.Value.Month)
+                        if (month != item.Month.Value.Month && item.Month.Value.Month!= end.Month && item.Month.Value<start)
                             FeeSlipData. UnpaidAmount += item.CalculatedAmount.Value;
                     }
                 }
@@ -183,7 +193,8 @@ namespace TrainersSchoolingSystem.Controllers
                 }
                 else if (admissionunpaid != null)
                 {
-                    FeeSlipData.UnpaidAmount += admissionunpaid.CalculatedAmount.Value;
+                    if (month != admissionunpaid.Month.Value.Month && admissionunpaid.Month.Value.Month != end.Month && admissionunpaid.Month.Value < start)
+                        FeeSlipData.UnpaidAmount += admissionunpaid.CalculatedAmount.Value;
                 }
                 foreach (var item in annualunpaid)
                 {
@@ -195,7 +206,8 @@ namespace TrainersSchoolingSystem.Controllers
                     }
                     else
                     {
-                        FeeSlipData.UnpaidAmount += item.CalculatedAmount.Value;
+                        if (month != item.Month.Value.Month && item.Month.Value.Month != end.Month && item.Month.Value < start)
+                            FeeSlipData.UnpaidAmount += item.CalculatedAmount.Value;
                     }
                 }
                 var arrearsdb = db.Arrears.Where(x => x.StudentId == studentid).ToList();

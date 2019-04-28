@@ -375,6 +375,18 @@ namespace TrainersSchoolingSystem.Controllers
                     if (workSheet.Cells[i, 27].Text.ToLower() == "y".ToLower())
                     {
                         PaidFee admissionFee = new PaidFee();
+                        var Adfee = db.PaidFees.Where(x => x.Description == "AdmissionFee" && x.StudentId == student.StudentId).FirstOrDefault();
+                        if(Adfee!=null)
+                        {
+                            admissionFee = Adfee;
+                            admissionFee.UpdatedDate = DateTime.Now;
+                            admissionFee.UpdatedBy = userid;
+                        }
+                        else
+                        {
+                            admissionFee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                            admissionFee.CreatedDate = DateTime.Now;
+                        }
                         admissionFee.StudentId = student.StudentId;
                         admissionFee.Description = "AdmissionFee";
                         admissionFee.Month = DateTime.Today.AddDays((-1) * (DateTime.Today.Day-1));
@@ -388,11 +400,22 @@ namespace TrainersSchoolingSystem.Controllers
                             enrolment.AdmissionFee = GlobalData.feeSetup.AdmissionFee;
                             admissionFee.CalculatedAmount = GlobalData.feeSetup.AdmissionFee;
                         }
-                        admissionFee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
-                        admissionFee.CreatedDate = DateTime.Now;
-                        db.PaidFees.Add(admissionFee);
+                        
+                        db.PaidFees.AddOrUpdate(admissionFee);
 
                         PaidFee annualFee = new PaidFee();
+                        var Anfee = db.PaidFees.Where(x => x.Description == "AnnualFee" && x.StudentId == student.StudentId).FirstOrDefault();
+                        if (Anfee != null)
+                        {
+                            annualFee = Anfee;
+                            annualFee.UpdatedDate = DateTime.Now;
+                            annualFee.UpdatedBy = userid;
+                        }
+                        else
+                        {
+                            annualFee.CreatedBy = userid;
+                            annualFee.CreatedDate = DateTime.Now;
+                        }
                         annualFee.StudentId = student.StudentId;
                         annualFee.Description = "AnnualFee";
                         annualFee.Month = DateTime.Today.AddDays((-1) * (DateTime.Today.Day - 1));
@@ -406,10 +429,8 @@ namespace TrainersSchoolingSystem.Controllers
                             enrolment.AnnualFee = GlobalData.feeSetup.AnnualFee;
                             annualFee.CalculatedAmount = GlobalData.feeSetup.AnnualFee;
                         }
-                        annualFee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
-                        annualFee.CreatedDate = DateTime.Now;
-
-                        db.PaidFees.Add(annualFee);
+                        
+                        db.PaidFees.AddOrUpdate(annualFee);
                         db.SaveChanges();
 
                     }
@@ -421,6 +442,7 @@ namespace TrainersSchoolingSystem.Controllers
                     {
                         enrolment.AdmissionFee = GlobalData.feeSetup.AdmissionFee;
                     }
+                    Logger.Debug("custom annual fee"+workSheet.Cells[i, 29].Text);
                     if (workSheet.Cells[i, 29].Text != "")
                     {
                         enrolment.AnnualFee = Convert.ToDecimal(workSheet.Cells[i, 29].Text);
@@ -431,7 +453,7 @@ namespace TrainersSchoolingSystem.Controllers
                     }
                     enrolment.Student = student.StudentId;
                     db.Enrolments.AddOrUpdate(enrolment);
-
+                    db.SaveChanges();
                 }
 
             }
