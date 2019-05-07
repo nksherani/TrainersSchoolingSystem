@@ -29,10 +29,10 @@
     }
     var grid, action, error1;
     $(document).ready(function () {
-        console.log("status"+GetStatus(0));
-        console.log("status"+GetStatus(0));
+        console.log("status" + GetStatus(0));
+        console.log("status" + GetStatus(0));
         $("#btnPerformAction").kendoButton();
-        
+
         $("#grid").kendoGrid({
             dataSource: {
                 type: "jsonp",
@@ -134,6 +134,11 @@
                     //template: "#=Status#",
                     template: "#=GetStatus(Status)#",
                     width: 100
+                }, {
+                    field: "TeacherId",
+                    title: "Action",
+                    template: "<a href=/Teachers/UpdateData/#=TeacherId#>Update Data</a>",
+                    width: 100
                 }]
         });
 
@@ -152,12 +157,12 @@
             optionLabel: "Select an action...",
             change: onChangeAction
         });
-        
+
         grid = $('#grid').data('kendoGrid');
         action = $('#action').data('kendoDropDownList');
-       
+
         error1 = $("#error1");
-        
+
         HideErrors();
 
         $("#btnPerformAction").click(function () {
@@ -167,7 +172,7 @@
                 $("#error1").show();
                 iserror = true;
             }
-            
+
             if (iserror)
                 return;
             $("#loading").show();
@@ -178,28 +183,34 @@
             };
             console.log(formData);
             FeeSlipsAjax(formData);
-            
+
         });
     });
     function FeeSlipsAjax(formData) {
         $.ajax({
-            url: "../Teachers/GeneratePaySlips",
+            url: "../Teachers/Bulk",
             type: "POST",
             data: JSON.stringify(formData),
             contentType: "application/json;charset=utf-8",
             success: function (data_) {
                 $("#loading").hide();
-                console.log(data_);
-                action.value(0);
-                var win = window.open('../Content/Temp/PaySlips.html', '_blank');
-                if (win) {
-                    //Browser has allowed it to be opened
-                    win.focus();
-                    win.print();
-                } else {
-                    //Browser has blocked it
-                    alert('Please allow popups for this website');
+                $('#grid').data('kendoGrid').dataSource.read();
+                $('#grid').data('kendoGrid').refresh();
+                console.log(action.value());
+                
+                if (action.value() == 2)
+                {
+                    var win = window.open('../Content/Temp/PaySlips.html', '_blank');
+                    if (win) {
+                        //Browser has allowed it to be opened
+                        win.focus();
+                        win.print();
+                    } else {
+                        //Browser has blocked it
+                        alert('Please allow popups for this website');
+                    }
                 }
+                action.value(0);
             },
             error: function (data_) {
                 $("#loading").hide();
@@ -217,14 +228,14 @@
 
     }
     function onChangeAction(arg) {
-       
+
     }
-    
+
     function HideErrors() {
         error1.hide();
     }
     function statusDropDownEditor(container, options) {
-       
+
         console.log(options);
         var temp = [
             //{ Status: "Not Selected", value: 0 },

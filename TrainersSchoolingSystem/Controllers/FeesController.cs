@@ -79,7 +79,7 @@ namespace TrainersSchoolingSystem.Controllers
                     var temp2 = arrears.Where(x => x.StudentId == fee.StudentId).ToList();
                     if (temp2.Count > 0)
                     {
-                        temp2.FirstOrDefault().Amount = fee.UnpaidAmount-fee.ReceivedAmount;
+                        temp2.FirstOrDefault().Amount = fee.UnpaidAmount-ReceivedAmount;
                         temp2.FirstOrDefault().UpdatedDate = DateTime.Now;
                         temp2.FirstOrDefault().UpdatedBy = userId;
                         temp2.FirstOrDefault().ArrearType = "Receivable";

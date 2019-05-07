@@ -174,11 +174,50 @@ namespace TrainersSchoolingSystem.Controllers
             }
             return Json("", JsonRequestBehavior.AllowGet);
         }
+        public ActionResult Bulk(BulkStudents bulk)
+        {
+            if(bulk.Action == "1")
+                return Terminate(bulk);
+            else
+                return GeneratePaySlips(bulk);
+        }
+
+        private ActionResult Terminate(BulkStudents bulk)
+        {
+            try
+            {
+                var teacherIds = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+                var teachers = db.Staffs.Where(x => teacherIds.Contains(x.StaffId)).ToList();
+                foreach (var item in teachers)
+                {
+                    item.EndDate = DateTime.Now;
+                    db.Staffs.AddOrUpdate(item);
+                }
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Fatal(ex.Message);
+                Logger.Fatal(ex.Source);
+                Logger.Fatal(ex.TargetSite.Name);
+                Logger.Fatal(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Logger.Fatal(ex.InnerException.Message);
+                    Logger.Fatal(ex.InnerException.Source);
+                    Logger.Fatal(ex.InnerException.TargetSite.Name);
+                    Logger.Fatal(ex.InnerException.StackTrace);
+                }
+            }
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GeneratePaySlips(BulkStudents bulk)
         {
             try
             {
-                var stdIds = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
+                var teacherIds = bulk.Ids.Select(x => Convert.ToInt32(x)).ToList();
 
                 string css = "";
                 var csslines = System.IO.File.ReadAllLines(Server.MapPath("~/Content/" + "FeeSlipHeader.html")).ToList();
@@ -188,7 +227,7 @@ namespace TrainersSchoolingSystem.Controllers
                 }
                 int i = 0;
                 string feeslipsBody = "";
-                foreach (var id in stdIds)
+                foreach (var id in teacherIds)
                 {
                     var html = GetPaySlip(id);
                     if (i % 5 == 0)
@@ -311,7 +350,7 @@ namespace TrainersSchoolingSystem.Controllers
         {
             try
             {
-                var teachers = db.Staffs.Join(db.Designations.Where(x => x.Category == "Teaching"), a => a.Designation, b => b.DesignationId, (a, b) => a);
+                var teachers = db.Staffs.Where(x=>!x.EndDate.HasValue).Join(db.Designations.Where(x => x.Category == "Teaching"), a => a.Designation, b => b.DesignationId, (a, b) => a);
                 var enrolments = db.Enrolments.Where(x => x.IsActive.Value).ToList();
                 List<TeacherViewModel> modellist = new List<TeacherViewModel>();
                 foreach (var teacher in teachers)
@@ -457,7 +496,7 @@ namespace TrainersSchoolingSystem.Controllers
             }
             ViewBag.Designation = new SelectList(db.Designations.Where(x => x.Category == "Teaching").ToList(), "DesignationId", "DesignationName", teacher.Designation);
             ViewBag.Gender = new SelectList(db.Lookups.Where(x => x.LookupType.LookupTypeName == "Gender"), "LookupText", "LookupText", teacher.Gender);
-            return View();
+            return View(teacher);
         }
 
         // POST: Teachers/Edit/5

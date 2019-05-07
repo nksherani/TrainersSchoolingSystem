@@ -18,17 +18,24 @@
                     update: {
                         url: "../Fees/PayFee", //specify the URL from which should update the records. This is the Update method of the Products.svc service.
                         contentType: "application/json; charset=utf-8", // tells the web service to serialize JSON
-                        type: "POST" //use HTTP POST request as the default GET is not allowed for svc
+                        type: "POST", //use HTTP POST request as the default GET is not allowed for svc
+                        complete: function () {
+                            $('#grid').data('kendoGrid').dataSource.read();
+                            $('#grid').data('kendoGrid').refresh();
+                        },
+                        error: function () {
+                            alert("error");
+                        }
                     },
                     parameterMap: function (options, operation) {
-                        
+
                         if (operation != "read") {
                             return JSON.stringify({ models: options.models })
                         }
-                        
+
                     }
                 },
-                ServerOperation:false,
+                ServerOperation: false,
                 batch: true,
                 pageSize: 20,
                 schema: {
@@ -53,6 +60,7 @@
                 },
             },
             change: onChange,
+            save: onSave,
             height: 550,
             editable: true,
             groupable: true,
@@ -94,19 +102,26 @@
                     field: "UnpaidAmount",
                     title: "Due Amount",
                     width: 80
-                }, 
+                },
                 {
                     field: "ReceivedAmount",
                     title: "Received Amount",
                     width: 80
                 }]
         });
-       
+
         grid = $('#grid').data('kendoGrid');
-        
+
     });
     function onChange(arg) {
         //if (grid.selectedKeyNames().length > 0)
+    }
+    function onSave(arg) {
+        //console.log("fee paid onsave");
+
+        //$('#grid').data('kendoGrid').dataSource.read();
+
+        //$('#grid').data('kendoGrid').refresh();
     }
     function ReceivedAmountValidation(element) {
         var columnIndex = 0;
@@ -120,18 +135,6 @@
         var Unpaid = $(element).closest("tr").find("td:eq(" + columnIndex + ")").text();
         return (parseInt(Received) <= parseInt(Unpaid));
     }
-    
-    function BulkAjax(formData) {
-        $.ajax({
-            url: "../Fees/PayFee",
-            type: "POST",
-            dataType: "json",
-            data: JSON.stringify(formData),
-            contentType: "application/json;charset=utf-8",
-            success: function (data_) {
-            },
-            error: function (data_) {
-            }
-        });
-    }
+
+
 </script>
