@@ -977,11 +977,31 @@ namespace TrainersSchoolingSystem.Controllers
                     PaidFee admissionFee = new PaidFee();
                     admissionFee.StudentId = std.StudentId;
                     admissionFee.Description = "AdmissionFee";
-                    admissionFee.CalculatedAmount = GlobalData.feeSetup.AdmissionFee;
+                    admissionFee.CalculatedAmount = enrolment.AdmissionFee;
+                    admissionFee.Month = DateTime.Today.AddDays(-DateTime.Today.Day+1);
                     admissionFee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
                     admissionFee.CreatedDate = DateTime.Now;
-
                     db.PaidFees.Add(admissionFee);
+
+                    PaidFee annualfee = new PaidFee();
+                    annualfee.StudentId = std.StudentId;
+                    annualfee.Description = "AnnualFee";
+                    annualfee.CalculatedAmount = enrolment.AnnualFee;
+                    annualfee.Month = DateTime.Today.AddDays(-DateTime.Today.Day+1);
+                    annualfee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                    annualfee.CreatedDate = DateTime.Now;
+                    db.PaidFees.Add(annualfee);
+
+                    PaidFee monthlyfee = new PaidFee();
+                    monthlyfee.StudentId = std.StudentId;
+                    monthlyfee.ChallanNo = db.PaidFees.Select(x => x.ChallanNo.HasValue?x.ChallanNo:0).Max() + 1;
+                    monthlyfee.Description = "MonthlyFee";
+                    monthlyfee.CalculatedAmount = enrolment.MonthlyFee;
+                    monthlyfee.Month = DateTime.Today.AddDays(-DateTime.Today.Day + 1);
+                    monthlyfee.CreatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;
+                    monthlyfee.CreatedDate = DateTime.Now;
+                    db.PaidFees.Add(monthlyfee);
+
                     db.SaveChanges();
 
                     return RedirectToAction("Students");

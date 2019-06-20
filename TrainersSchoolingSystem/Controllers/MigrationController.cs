@@ -740,11 +740,11 @@ namespace TrainersSchoolingSystem.Controllers
                             fee.CreatedDate = DateTime.Now;
                             fee.CreatedBy = userid;
                         }
-                        fee.ChallanNo = db.PaidFees.Select(x => x.ChallanNo).Max();
+                        fee.ChallanNo = db.PaidFees.Select(x => x.ChallanNo.HasValue?x.ChallanNo:0).Max();
                         if (!fee.ChallanNo.HasValue)
                             fee.ChallanNo = 1;
                         else
-                            fee.ChallanNo = fee.ChallanNo + 1;
+                            fee.ChallanNo = (fee.ChallanNo.HasValue?fee.ChallanNo:0) + 1;
                         fee.CalculatedAmount = Convert.ToDecimal(workSheet.Cells[i, 3].Text);
                         fee.ReceivedAmount = fee.CalculatedAmount;
                         db.PaidFees.AddOrUpdate(fee);

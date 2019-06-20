@@ -92,7 +92,7 @@ namespace TrainersSchoolingSystem.Controllers
                 return HttpNotFound();
             }
             ViewBag.StudentId = new SelectList(db.Students, "StudentId", "FirstName", paidFee.StudentId);
-            ViewBag.Month = new SelectList(Constants.months, "Key", "Value",paidFee.Month);
+            ViewBag.Month = new SelectList(Constants.months, "Key", "Value",paidFee.Month.HasValue?paidFee.Month.Value.Month:0);
             return View(paidFee);
         }
 
@@ -107,6 +107,8 @@ namespace TrainersSchoolingSystem.Controllers
             {
                 var paidfeedb = db.PaidFees.Find(paidFee.PaidFeeId);
                 paidfeedb.PaidFeeId = paidFee.PaidFeeId;
+                paidfeedb.ChallanNo = paidFee.ChallanNo;
+                paidfeedb.Description = paidFee.Description;
                 paidfeedb.CalculatedAmount = paidFee.CalculatedAmount;
                 paidfeedb.PaymentDate = paidFee.PaymentDate;
                 paidfeedb.UpdatedBy = db.TrainerUsers.Where(x => x.Username.ToString() == User.Identity.Name.ToString()).FirstOrDefault().TrainerUserId;

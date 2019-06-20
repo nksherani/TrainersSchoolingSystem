@@ -24,6 +24,9 @@
             @Html.DisplayNameFor(model => model.ReceivedAmount)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Month)
         </th>
         <th>
@@ -46,44 +49,47 @@
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ChallanNo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Student.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CalculatedAmount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReceivedAmount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => Constants.months[(item.Month.HasValue ? item.Month.Value : 1) - 1].Value)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PaymentDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UpdatedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TrainerUser.Username)
-        </td>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.ChallanNo)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Student.FirstName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CalculatedAmount)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ReceivedAmount)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Description)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => Constants.months[(item.Month.HasValue ? item.Month.Value.Month : 1) - 1].Value)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.PaymentDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CreatedDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.UpdatedDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.TrainerUser.Username)
+    </td>
 
-        <td>
-            @Html.DisplayFor(modelItem => item.TrainerUser1.Username)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.PaidFeeId }) |
-            @Html.ActionLink("Details", "Details", new { id = item.PaidFeeId }) |
-            @*@Html.ActionLink("Delete", "Delete", new { id = item.PaidFeeId })*@
-        </td>
-    </tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.TrainerUser1.Username)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.PaidFeeId }) |
+        @Html.ActionLink("Details", "Details", new { id = item.PaidFeeId }) |
+        @*@Html.ActionLink("Delete", "Delete", new { id = item.PaidFeeId })*@
+    </td>
+</tr>
 }
 
 </table>

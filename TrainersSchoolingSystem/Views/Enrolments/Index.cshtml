@@ -31,7 +31,13 @@
             @Html.DisplayNameFor(model => model.LastInstitude)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Fee)
+            @Html.DisplayNameFor(model => model.AdmissionFee)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MonthlyFee)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AnnualFee)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.PaymentMode)
@@ -54,52 +60,58 @@
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Student1.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RollNo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.GRNo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Class1.ClassName)
-            @Html.DisplayFor(modelItem => item.Class1.Section)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastClass)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastInstitude)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Fee)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PaymentMode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UpdatedDate)
-        </td>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Student1.FirstName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.RollNo)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.GRNo)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Class1.ClassName)
+        @Html.DisplayFor(modelItem => item.Class1.Section)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.LastClass)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.LastInstitude)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AdmissionFee)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.MonthlyFee)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AnnualFee)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.PaymentMode)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CreatedDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.UpdatedDate)
+    </td>
 
-        <td>
-            @Html.DisplayFor(modelItem => item.TrainerUser.Username)
-        </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.TrainerUser.Username)
+    </td>
 
-        <td>
-            @Html.DisplayFor(modelItem => item.TrainerUser1.Username)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.EnrolmentId }) |
-            @Html.ActionLink("Details", "Details", new { id = item.EnrolmentId }) |
-            @*@Html.ActionLink("Delete", "Delete", new { id = item.EnrolmentId })*@
-        </td>
-    </tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.TrainerUser1.Username)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.EnrolmentId }) |
+        @Html.ActionLink("Details", "Details", new { id = item.EnrolmentId }) |
+        @*@Html.ActionLink("Delete", "Delete", new { id = item.EnrolmentId })*@
+    </td>
+</tr>
 }
 
 </table>
