@@ -143,7 +143,16 @@ namespace TrainersSchoolingSystem.Controllers
                 FeeSlipData.RollNo = enr.RollNo;
                 FeeSlipData.Class = enr.Class1.ClassName + "-" + enr.Class1.Section;
                 FeeSlipData.MonthlyFee = enr.MonthlyFee.Value;
-                var challan = db.PaidFees.Select(x => x.ChallanNo.HasValue ? x.ChallanNo.Value : 0).Max();
+                var paidfees_ = db.PaidFees.Select(x => x.ChallanNo).ToList();
+                int challan = 0;
+                if(paidfees_.Count==0)
+                {
+                    challan = 0;
+                }
+                else
+                {
+                    challan = db.PaidFees.Select(x => x.ChallanNo.HasValue ? x.ChallanNo.Value : 0).Max();
+                }
                 FeeSlipData.ChallanNo = Convert.ToInt32(challan + 1);
                 FeeSlipData.FatherName = std.Parent.Name;
                 if (month.ToString() == GlobalData.configuration.FirstMonth)
