@@ -37,11 +37,31 @@ namespace TrainersSchoolingSystem.Controllers
             }
             return View(arrear);
         }
+        class StudentModel
+        {
+            public int StudentId { get; set; }
+            public string Name { get; set; }
+            public StudentModel(int id, string name)
+            {
+                StudentId = id;
+                Name = name;
+            }
+            public StudentModel()
+            {
 
+            }
+        }
         // GET: Arrears/Create
         public ActionResult Create()
         {
-            ViewBag.StudentId = new SelectList(db.Students, "StudentId", "FirstName");
+            var stds = db.Students.ToList();
+            List<StudentModel> stdlist = new List<StudentModel>();
+            foreach (var item in stds)
+            {
+                StudentModel std = new StudentModel(item.StudentId, item.Enrolments.FirstOrDefault().GRNo + " - " + item.FirstName + " "+item.LastName);
+                stdlist.Add(std);
+            }
+            ViewBag.StudentId = new SelectList(stdlist, "StudentId", "Name");
             return View();
         }
 
